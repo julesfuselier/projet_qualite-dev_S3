@@ -1,1 +1,1 @@
-# project_qualite-dev
+# Projet de qualité de développement
