@@ -36,7 +36,3 @@ jobs:
           files: target/surefire-reports/*.xml
           # On utilise le token GitHub pour que l'action ait les permissions de publier les résultats
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      # Optionnel : Update dependency graph (déjà dans votre fichier)
-      - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
