@@ -1,0 +1,46 @@
+# Définit l'image de base (environnement d'exécution)
+# Ici, une image Docker contenant Maven et Java est utilisée.
+image: maven:3.8.7-openjdk-17-slim 
+
+# --- Définition des Étapes du Pipeline ---
+stages:
+  - build    # Compilation
+  - test     # Tests unitaires
+  - package  # Création de l'artefact
+
+# --- Job 1 : Construction (Build) ---
+maven-build:
+  stage: build
+  script:
+    - echo "Démarrage de la compilation..."
+    - mvn compile 
+  # Mise en cache pour accélérer les builds futurs (téléchargement des dépendances)
+  cache:
+    paths:
+      - .m2/repository
+
+# --- Job 2 : Tests (Test) ---
+maven-test:
+  stage: test
+  script:
+    - echo "Démarrage des tests..."
+    - mvn test
+  cache:
+    paths:
+      - .m2/repository
+    policy: pull # On tire les dépendances mises en cache par le job précédent
+
+# --- Job 3 : Packaging (Création de l'Artefact) ---
+maven-package:
+  stage: package
+  script:
+    - echo "Création du JAR/WAR..."
+    - mvn package -DskipTests
+  cache:
+    paths:
+      - .m2/repository
+    policy: pull
+  # Indique que le fichier créé (l'artefact .jar/.war) doit être conservé
+  artifacts:
+    paths:
+      - target/*.jar # Ajustez si c'est un .war
