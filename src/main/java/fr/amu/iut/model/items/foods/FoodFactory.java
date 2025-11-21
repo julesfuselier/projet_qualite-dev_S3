@@ -5,7 +5,6 @@ public class FoodFactory {
     public Food createFood(FoodType type) {
         switch (type) {
             case FISH:
-                // Ajout de 'type' (ou FoodType.FISH) en 5ème argument
                 return new Food("Fish", 50, true, FreshnessStatus.FRESH, type);
             case CLOVER:
                 return new Food("Clover", 20, true, FreshnessStatus.FRESH, type);

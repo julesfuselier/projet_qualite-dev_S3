@@ -1,4 +1,7 @@
-package fr.amu.iut.model.characters;
+package fr.amu.iut.model.characters.jobs;
+
+import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.characters.Warrior;
 
 /**
  * La classe Legionary représente un personnage de type légionnaire dans le jeu.

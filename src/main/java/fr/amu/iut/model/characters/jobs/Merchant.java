@@ -1,4 +1,8 @@
-package fr.amu.iut.model.characters;
+package fr.amu.iut.model.characters.jobs;
+
+import fr.amu.iut.model.characters.Character;
+import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.characters.Worker;
 
 public class Merchant extends Character implements Worker {
 
