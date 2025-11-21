@@ -12,8 +12,8 @@ public class General extends Warrior implements Leader {
      * @param strength  La force du guerrier.
      * @param endurance L'endurance du guerrier.
      */
-    public General(String name, char sex, int size, int age, int strength, int endurance) {
-        super(name, sex, size, age, strength, endurance);
+    public General(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
+        super(name, sex, size, age, strength, endurance, faction);
     }
 
     @Override
