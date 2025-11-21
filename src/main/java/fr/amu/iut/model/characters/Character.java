@@ -1,6 +1,9 @@
 package fr.amu.iut.model.characters;
 
 import fr.amu.iut.model.Statistics;
+import fr.amu.iut.model.items.foods.Food;
+import fr.amu.iut.model.items.foods.FoodType;
+import fr.amu.iut.model.items.foods.FreshnessStatus;
 
 public abstract class Character {
 
@@ -11,6 +14,7 @@ public abstract class Character {
     private int strength;
     private int endurance;
     private Faction faction;
+    private FoodType lastEatenFoodType = null;
 
     // Indicators
     private Statistics health = new Statistics(100, 0, 100);
@@ -38,11 +42,55 @@ public abstract class Character {
 
     // TODO  : ADD FOOD HERE
     /**
-     * Permet de nourrir le personnage pour augmenter l'indicateur de faim.
-     * @param hungerAmount La quantité de nourriture à ajouter.
+     * Méthode principale pour manger en respectant les règles du PDF.
      */
-    public void eat(int hungerAmount) {
-        this.hunger.add(hungerAmount);
+    public void eat(Food food) {
+        if (!canEat(food)) {
+            System.out.println(getName() + " (" + getFaction() + ") refuse de manger : " + food.getName());
+            return;
+        }
+        this.hunger.add(food.getNutritionValue());
+        System.out.println(getName() + " mange " + food.getName());
+
+        if (food.getType() == FoodType.FISH && food.getStatus() != FreshnessStatus.FRESH) {
+            this.health.add(-10);
+            System.out.println("Beurk ! Le poisson n'était pas frais ! " + getName() + " perd de la vie.");
+        }
+
+        if (isVegetable(food.getType()) && isVegetable(lastEatenFoodType)) {
+            this.health.add(-5);
+            System.out.println("Encore des légumes ?! " + getName() + " ne se sent pas bien.");
+        }
+
+        this.lastEatenFoodType = food.getType();
+    }
+
+    /**
+     * Définit le régime alimentaire selon la faction.
+     */
+    private boolean canEat(Food food) {
+        FoodType type = food.getType();
+
+        if (getFaction() == Faction.GAULOIS) {
+            // Les Gaulois : Sanglier, Poisson, Vin
+            return type == FoodType.WILD_BOAR || type == FoodType.FISH || type == FoodType.WINE;
+        } else if (getFaction() == Faction.ROMAIN) {
+            // Les Romains : Sanglier, Miel, Vin, Hydromel
+            return type == FoodType.WILD_BOAR || type == FoodType.HONEY || type == FoodType.WINE || type == FoodType.MEAD;
+        }
+        return false;
+    }
+
+    /**
+     * Helper pour identifier les végétaux (Carottes, Trèfles, etc.)
+     */
+    private boolean isVegetable(FoodType type) {
+        if (type == null) return false;
+        return type == FoodType.CARROT
+                || type == FoodType.CLOVER
+                || type == FoodType.BEET_JUICE
+                || type == FoodType.MISTLETOE
+                || type == FoodType.STRAWBERRY; // fruits = végétaux ?
     }
 
     /**
