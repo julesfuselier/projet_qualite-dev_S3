@@ -1,9 +1,9 @@
 package fr.amu.iut.model.characters;
 
-public abstract class Innkeeper extends Character implements Worker{
+public class Innkeeper extends Character implements Worker{
 
-    public Innkeeper(String name, char sex, int size, int age, int strength, int endurance) {
-        super(name, sex, size, age, strength, endurance);
+    public Innkeeper(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
+        super(name, sex, size, age, strength, endurance, faction);
     }
 
     @Override

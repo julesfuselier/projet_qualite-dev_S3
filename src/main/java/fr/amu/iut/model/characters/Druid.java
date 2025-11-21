@@ -1,9 +1,9 @@
 package fr.amu.iut.model.characters;
 
-public abstract class Druid extends Character implements Leader, Worker {
+public class Druid extends Character implements Leader, Worker, Fighter {
 
-    public Druid(String name, char sex, int size, int age, int strength, int endurance) {
-        super(name, sex, size, age, strength, endurance);
+    public Druid(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
+        super(name, sex, size, age, strength, endurance, faction );
     }
 
     @Override
@@ -14,5 +14,10 @@ public abstract class Druid extends Character implements Leader, Worker {
     @Override
     public void work() {
 
+    }
+
+    @Override
+    public void fight(Character character) {
+        System.out.println(this.getName() + " is fighting " + character.getName());
     }
 }

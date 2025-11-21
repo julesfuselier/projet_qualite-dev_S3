@@ -10,6 +10,7 @@ public abstract class Character {
     private int age;
     private int strength;
     private int endurance;
+    private Faction faction;
 
     // Indicators
     private Statistics health = new Statistics(100, 0, 100);
@@ -17,13 +18,14 @@ public abstract class Character {
     private Statistics belligerence = new Statistics(100, 0, 100);
     private Statistics magicPotion = new Statistics(0, 0, 100);
 
-    public Character(String name, char sex, int size, int age, int strength, int endurance) {
+    public Character(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
         this.name = name;
         this.sex = sex;
         this.size = size;
         this.age = age;
         this.strength = strength;
         this.endurance = endurance;
+        this.faction = faction;
     }
 
     /**
@@ -91,6 +93,10 @@ public abstract class Character {
     public int getEndurance() {return endurance;}
     public void setEndurance(int endurance) {
         this.endurance = endurance;
+    }
+    public Faction getFaction() {return faction;}
+    public void setFaction(Faction faction) {
+        this.faction = faction;
     }
 
     // Indicators Getters & Setters

@@ -6,15 +6,17 @@ public abstract class Warrior extends Character implements Fighter {
 
     /**
      * Constructeur de la classe Warrior.
-     * @param name Le nom du guerrier.
-     * @param sex Le sexe du guerrier.
-     * @param size La taille du guerrier.
-     * @param age L'âge du guerrier.
-     * @param strength La force du guerrier.
+     *
+     * @param name      Le nom du guerrier.
+     * @param sex       Le sexe du guerrier.
+     * @param size      La taille du guerrier.
+     * @param age       L'âge du guerrier.
+     * @param strength  La force du guerrier.
      * @param endurance L'endurance du guerrier.
+     * @param faction  La faction du guerrier.
      */
-    public Warrior(String name, char sex, int size, int age, int strength, int endurance) {
-        super(name, sex, size, age, strength, endurance);
+    public Warrior(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
+        super(name, sex, size, age, strength, endurance, faction);
     }
 
     /**
