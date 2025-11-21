@@ -1,5 +1,6 @@
 package fr.amu.iut.model.characters;
 
+import fr.amu.iut.model.Inventory;
 import fr.amu.iut.model.Statistics;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
@@ -22,6 +23,8 @@ public abstract class Character {
     private Statistics belligerence = new Statistics(100, 0, 100);
     private Statistics magicPotion = new Statistics(0, 0, 100);
 
+    protected Inventory inventory;
+
     public Character(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
         this.name = name;
         this.sex = sex;
@@ -30,6 +33,7 @@ public abstract class Character {
         this.strength = strength;
         this.endurance = endurance;
         this.faction = faction;
+        this.inventory = new Inventory();
     }
 
     /**
@@ -40,29 +44,43 @@ public abstract class Character {
         this.health.add(healAmount);
     }
 
-    // TODO  : ADD FOOD HERE
     /**
      * Méthode principale pour manger en respectant les règles du PDF.
      */
     public void eat(Food food) {
+
+        if(food == null) {
+            System.out.println(getName() + " ne peut pas manger de la nourriture inexistante.");
+            return;
+        }
+
         if (!canEat(food)) {
             System.out.println(getName() + " (" + getFaction() + ") refuse de manger : " + food.getName());
             return;
         }
-        this.hunger.add(food.getNutritionValue());
-        System.out.println(getName() + " mange " + food.getName());
 
-        if (food.getType() == FoodType.FISH && food.getStatus() != FreshnessStatus.FRESH) {
-            this.health.add(-10);
-            System.out.println("Beurk ! Le poisson n'était pas frais ! " + getName() + " perd de la vie.");
+        if(inventory.contains(food.getType())) {
+
+            this.hunger.add(food.getNutritionValue());
+            System.out.println(getName() + " mange " + food.getName());
+
+            if (food.getType() == FoodType.FISH && food.getStatus() != FreshnessStatus.FRESH) {
+                this.health.add(-10);
+                System.out.println("Beurk ! Le poisson n'était pas frais ! " + getName() + " perd de la vie.");
+            }
+
+            if (isVegetable(food.getType()) && isVegetable(lastEatenFoodType)) {
+                this.health.add(-5);
+                System.out.println("Encore des légumes ?! " + getName() + " ne se sent pas bien.");
+            }
+
+            this.lastEatenFoodType = food.getType();
+
+        }
+        else {
+            System.out.println(getName() + " n'a pas " + food.getName() + " dans son inventaire.");
         }
 
-        if (isVegetable(food.getType()) && isVegetable(lastEatenFoodType)) {
-            this.health.add(-5);
-            System.out.println("Encore des légumes ?! " + getName() + " ne se sent pas bien.");
-        }
-
-        this.lastEatenFoodType = food.getType();
     }
 
     /**
@@ -93,6 +111,14 @@ public abstract class Character {
                 || type == FoodType.STRAWBERRY; // fruits = végétaux ?
     }
 
+    public void pickUpItem(Food item) {
+        this.inventory.add(item);
+    }
+
+    public void drinkMagicPotion() {
+        // TODO : Effets de la potion magique
+    }
+
     /**
      * Permet de diminuer l'indicateur de faim du personnage.
      * @param hungerAmount La quantité de faim à diminuer.
@@ -118,6 +144,7 @@ public abstract class Character {
     }
 
     // Getters & Setters for Attributes
+    public Inventory getInventory() {return inventory;}
     public String getName() {return name;}
     public void setName(String name) {
         this.name = name;
