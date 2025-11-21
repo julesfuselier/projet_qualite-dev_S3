@@ -1,6 +1,6 @@
 package fr.amu.iut.model.characters;
 
-public class General extends Warrior implements Leader {
+public abstract class General extends Warrior implements Leader {
 
     /**
      * Constructeur de la classe General.

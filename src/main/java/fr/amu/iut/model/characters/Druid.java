@@ -1,6 +1,6 @@
 package fr.amu.iut.model.characters;
 
-public class Druid extends Character implements Leader, Worker {
+public abstract class Druid extends Character implements Leader, Worker {
 
     public Druid(String name, char sex, int size, int age, int strength, int endurance) {
         super(name, sex, size, age, strength, endurance);

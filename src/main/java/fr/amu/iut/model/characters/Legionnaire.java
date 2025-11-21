@@ -4,7 +4,7 @@ package fr.amu.iut.model.characters;
  * La classe Legionnaire représente un personnage de type légionnaire dans le jeu.
  * Un légionnaire est un combattant spécialisé avec des attributs spécifiques.
  */
-public class Legionnaire extends Warrior {
+public abstract class Legionnaire extends Warrior {
 
     /**
      * Constructeur de la classe Legionnaire.
