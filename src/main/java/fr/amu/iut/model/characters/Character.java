@@ -32,6 +32,13 @@ public abstract class Character {
         this.faction = faction;
     }
 
+    // Second Character constructor suitable for ClanLeader
+    public Character(String name, char sex, int age) {
+        this.name = name;
+        this.sex = sex;
+        this.age = age;
+    }
+
     /**
      * Permet de soigner le personnage pour augmenter l'indicateur de santé.
      * @param healAmount La quantité de soins à ajouter.
