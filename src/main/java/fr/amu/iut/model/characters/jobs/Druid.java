@@ -26,4 +26,9 @@ public class Druid extends fr.amu.iut.model.characters.Character implements Lead
     public void fight(Character character) {
         System.out.println(this.getName() + " is fighting " + character.getName());
     }
+
+    // Method for asking the druid to make a magic potion
+    public void makeMagicPotion() {
+        System.out.println(getName() + " prepares a powerful magic potion !");
+    }
 }
