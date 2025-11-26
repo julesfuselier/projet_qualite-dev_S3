@@ -22,7 +22,14 @@ public abstract class Space {
         foods = new ArrayList<>();
     }
 
-    public abstract void authorized(Character c);
+    public Space(String name, double surface) {
+        this.name = name;
+        this.surface = surface;
+        characters = new ArrayList<>();
+        foods = new ArrayList<>();
+    }
+
+    public abstract boolean authorized(Character c);
 
     public boolean addCharacter(Character c) {
         if (!authorized(c)){
