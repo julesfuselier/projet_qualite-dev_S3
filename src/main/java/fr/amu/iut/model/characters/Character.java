@@ -46,52 +46,82 @@ public abstract class Character {
     }
 
     /**
-     * Méthode principale pour manger en respectant les règles du PDF.
+     * Méthode principale pour manger.
+     * Gère la faim, les restrictions de faction, et les pénalités de santé.
+     * @param food La nourriture à consommer.
      */
     public void eat(Food food) {
+        if (food == null) {
+            System.out.println("Il n'y a rien à manger ici.");
+            return;
+        }
 
-        if(food == null) {
-            System.out.println(getName() + " ne peut pas manger de la nourriture inexistante.");
+        if (!inventory.removeItem(food)) {
+            System.out.println(getName() + " ne possède pas cet aliment (" + food.getName() + ").");
             return;
         }
 
         if (!canEat(food)) {
-            System.out.println(getName() + " (" + getFaction() + ") refuse de manger : " + food.getName());
+            System.out.println(getName() + " (" + getFaction() + ") refuse de manger : " + food.getName() + " !");
+            inventory.addItem(food);
             return;
         }
 
+        this.hunger.add(food.getNutritionValue());
+        System.out.println(getName() + " mange " + food.getName() + ". (Faim : " + hunger.get() + "/" + hunger.getMax() + ")");
 
+        int healthDamage = 0;
 
+        if (food.getType() == FoodType.FISH && food.getStatus() == FreshnessStatus.STALE) {
+            System.out.println("Beurk ! Ce poisson n'est pas frais...");
+            healthDamage += 20;
+        }
 
+        if (isVegetable(food.getType()) && isVegetable(this.lastEatenFoodType)) {
+            System.out.println("Encore de la verdure ?! J'ai mal au ventre...");
+            healthDamage += 15;
+        }
 
+        if (healthDamage > 0) {
+            this.health.add(-healthDamage);
+            System.out.println(getName() + " perd " + healthDamage + " points de vie à cause d'une mauvaise alimentation.");
+        }
+
+        this.lastEatenFoodType = food.getType();
     }
 
     /**
-     * Définit le régime alimentaire selon la faction.
+     * Vérifie si le personnage accepte de manger cet aliment selon sa faction.
      */
     private boolean canEat(Food food) {
         FoodType type = food.getType();
 
         if (getFaction() == Faction.GAULOIS) {
-            // Les Gaulois : Sanglier, Poisson, Vin
-            return type == FoodType.WILD_BOAR || type == FoodType.FISH || type == FoodType.WINE;
-        } else if (getFaction() == Faction.ROMAIN) {
-            // Les Romains : Sanglier, Miel, Vin, Hydromel
-            return type == FoodType.WILD_BOAR || type == FoodType.HONEY || type == FoodType.WINE || type == FoodType.MEAD;
+            if (type == FoodType.WILD_BOAR || type == FoodType.WINE) return true;
+            if (type == FoodType.FISH) return true;
+        }
+
+        else if (getFaction() == Faction.ROMAIN) {
+            return type == FoodType.WILD_BOAR ||
+                    type == FoodType.HONEY ||
+                    type == FoodType.WINE ||
+                    type == FoodType.MEAD;
         }
         return false;
     }
 
     /**
      * Helper pour identifier les végétaux (Carottes, Trèfles, etc.)
+     * Important pour la règle des "2 fois consécutivement".
      */
     private boolean isVegetable(FoodType type) {
         if (type == null) return false;
+
         return type == FoodType.CARROT
                 || type == FoodType.CLOVER
                 || type == FoodType.BEET_JUICE
                 || type == FoodType.MISTLETOE
-                || type == FoodType.STRAWBERRY; // fruits = végétaux ?
+                || type == FoodType.STRAWBERRY;
     }
 
     public void pickUpItem(Item item) {

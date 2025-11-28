@@ -4,19 +4,13 @@ import fr.amu.iut.model.items.Item;
 
 public class MagicPotion extends Item {
     private int doses;
-    private boolean hasUnicornMilk;
-    private boolean hasIdefixHair;
-    private boolean isFresh;
+    private PotionType type;
 
-    public MagicPotion(boolean hasUnicornMilk, boolean hasIdefixHair) {
-        super(hasIdefixHair && hasUnicornMilk ? "Potion of Ultimate Magic" :
-              hasUnicornMilk ? "Potion of Unicorn Magic" :
-              hasIdefixHair ? "Potion of Lycanthrope Magic" :
-              "Ordinary Magic Potion");
+    // Le constructeur prend désormais le type demandé en paramètre
+    public MagicPotion(PotionType type) {
+        super("Potion Magique (" + type + ")");
         this.doses = 5;
-        this.hasUnicornMilk = hasUnicornMilk;
-        this.hasIdefixHair = hasIdefixHair;
-        this.isFresh = true;
+        this.type = type;
     }
 
     public boolean takeDose() {
@@ -27,7 +21,6 @@ public class MagicPotion extends Item {
         return false;
     }
 
-    public boolean hasUnicornEffect() { return hasUnicornMilk; }
-    public boolean hasLycanthropeEffect() { return hasIdefixHair; }
+    public PotionType getType() { return type; }
     public int getDoses() { return doses; }
 }
