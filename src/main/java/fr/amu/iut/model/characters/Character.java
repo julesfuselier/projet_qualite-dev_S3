@@ -2,6 +2,7 @@ package fr.amu.iut.model.characters;
 
 import fr.amu.iut.model.Inventory;
 import fr.amu.iut.model.Statistics;
+import fr.amu.iut.model.items.Item;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
@@ -59,27 +60,9 @@ public abstract class Character {
             return;
         }
 
-        if(inventory.contains(food.getType())) {
 
-            this.hunger.add(food.getNutritionValue());
-            System.out.println(getName() + " mange " + food.getName());
 
-            if (food.getType() == FoodType.FISH && food.getStatus() != FreshnessStatus.FRESH) {
-                this.health.add(-10);
-                System.out.println("Beurk ! Le poisson n'était pas frais ! " + getName() + " perd de la vie.");
-            }
 
-            if (isVegetable(food.getType()) && isVegetable(lastEatenFoodType)) {
-                this.health.add(-5);
-                System.out.println("Encore des légumes ?! " + getName() + " ne se sent pas bien.");
-            }
-
-            this.lastEatenFoodType = food.getType();
-
-        }
-        else {
-            System.out.println(getName() + " n'a pas " + food.getName() + " dans son inventaire.");
-        }
 
     }
 
@@ -111,8 +94,8 @@ public abstract class Character {
                 || type == FoodType.STRAWBERRY; // fruits = végétaux ?
     }
 
-    public void pickUpItem(Food item) {
-        this.inventory.add(item);
+    public void pickUpItem(Item item) {
+        this.inventory.addItem(item);
     }
 
     public void drinkMagicPotion() {

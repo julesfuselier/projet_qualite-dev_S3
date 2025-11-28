@@ -1,15 +1,10 @@
 package fr.amu.iut.model.characters.jobs;
 
-import fr.amu.iut.model.Inventory;
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Fighter;
 import fr.amu.iut.model.characters.Leader;
 import fr.amu.iut.model.characters.Worker;
-import fr.amu.iut.model.items.foods.Food;
-import fr.amu.iut.model.items.foods.FoodType;
-import fr.amu.iut.model.items.foods.FreshnessStatus;
-import fr.amu.iut.model.items.potion.MagicPotion;
 
 public class Druid extends fr.amu.iut.model.characters.Character implements Leader, Worker, Fighter {
 
@@ -33,6 +28,8 @@ public class Druid extends fr.amu.iut.model.characters.Character implements Lead
     }
 
     public void craftMagicPotion() {
-        // TODO : implement method to craft magic potion
+
+
+
     }
 }
