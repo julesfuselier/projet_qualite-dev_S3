@@ -1,12 +1,18 @@
 package fr.amu.iut.model.items.potion;
 
-public class MagicPotion {
-    private int doses; // Une marmite contient plusieurs doses [cite: 50]
-    private boolean hasUnicornMilk; // Pouvoir de dédoublement
-    private boolean hasIdefixHair;  // Pouvoir de métamorphosis
-    private boolean isFresh;        // Pour gérer la qualité globale
+import fr.amu.iut.model.items.Item;
+
+public class MagicPotion extends Item {
+    private int doses;
+    private boolean hasUnicornMilk;
+    private boolean hasIdefixHair;
+    private boolean isFresh;
 
     public MagicPotion(boolean hasUnicornMilk, boolean hasIdefixHair) {
+        super(hasIdefixHair && hasUnicornMilk ? "Potion of Ultimate Magic" :
+              hasUnicornMilk ? "Potion of Unicorn Magic" :
+              hasIdefixHair ? "Potion of Lycanthrope Magic" :
+              "Ordinary Magic Potion");
         this.doses = 5;
         this.hasUnicornMilk = hasUnicornMilk;
         this.hasIdefixHair = hasIdefixHair;
