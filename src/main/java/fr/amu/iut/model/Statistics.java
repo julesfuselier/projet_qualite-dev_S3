@@ -31,4 +31,8 @@ public class Statistics {
 
     public int get() { return value; }
     public int getMax() { return max; }
+
+    public void decreaseStats(int amount) {
+        value -= amount;
+    }
 }

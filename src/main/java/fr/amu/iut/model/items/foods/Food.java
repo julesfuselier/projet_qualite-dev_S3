@@ -21,4 +21,10 @@ public class Food extends Item {
     public int getNutritionValue() { return nutritionValue; }
     public FreshnessStatus getStatus() { return status; }
     public FoodType getType() { return type; }
+
+    public boolean isFresh() { return status == FreshnessStatus.FRESH; }
+
+    public void setFreshnessStatus(FreshnessStatus status) {
+        this.status = status;
+    }
 }
