@@ -6,6 +6,7 @@ import fr.amu.iut.model.characters.Character;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class Space {
     private final String name;
@@ -13,6 +14,7 @@ public abstract class Space {
     private Character leader;
     private final List<Character> characters;
     private final List<Food> foods;
+    private Random random;
 
     public Space(String name, double surface, Character leader) {
         this.name = name;
@@ -119,5 +121,55 @@ public abstract class Space {
         }
         c.eat(f);
         foods.remove(f);
+    }
+
+    public void resolveCombat() {
+        // Déterminez si un combat est possible (plusieurs factions)
+        if (getCharacters().size() < 2 || !isBattlefield()) {
+            return;
+        }
+
+        System.out.println("Bataille en cours à : " + getName());
+
+        // Logique de combat
+        List<Character> fighters = new ArrayList<>(getCharacters());
+
+        if (fighters.size() >= 2) {
+            // Sélectionner deux combattants aléatoires
+            Character fighter1 = fighters.get(this.random.nextInt(fighters.size()));
+            Character fighter2 = fighters.get(this.random.nextInt(fighters.size()));
+
+            // S'assurer qu'ils sont différents et de factions différentes
+            if (fighter1 != fighter2 && fighter1.getFaction() != fighter2.getFaction()) {
+
+                // Augmentation de la bellicosité
+                fighter1.getBelligerence().add(10);
+                fighter2.getBelligerence().add(10);
+
+                // Perte de vie aléatoire
+                int damage1 = this.random.nextInt(11) + 5;
+                int damage2 = this.random.nextInt(11) + 5;
+
+                fighter1.getHealth().add(-damage1);
+                fighter2.getHealth().add(-damage2);
+
+                System.out.println("  -> " + fighter1.getName() + " vs " + fighter2.getName() +
+                        " (Dégâts: " + damage2 + " et " + damage1 + ")");
+            }
+        }
+        removeDeadCharacters();
+    }
+
+    /**
+     * Méthode helper pour retirer les personnages dont la santé est inférieure ou égale à 0.
+     */
+    private void removeDeadCharacters() {
+        getCharacters().removeIf(c -> {
+            if (c.isDead()) {
+                System.out.println(c.getName() + " est tombé au combat à " + getName() + " !");
+                return true;
+            }
+            return false;
+        });
     }
 }
