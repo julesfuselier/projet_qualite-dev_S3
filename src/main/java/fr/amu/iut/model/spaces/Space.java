@@ -43,7 +43,7 @@ public abstract class Space {
         characters.remove(c);
     }
 
-    public void showcharacteristics(){
+    public void showCharacteristics(){
         System.out.println("Name: " + name);
         System.out.println("Surface : " + surface);
         if(!(this instanceof Battlefield)){
@@ -66,7 +66,7 @@ public abstract class Space {
         c.beHealed(amount);
     }
 
-    public  void healFood(Character c, Food f, int amount){
+    public void healFood(Character c, Food f, int amount){
         if(!(foods.contains(f))){
             return;
         } else if (!(characters.contains(c))) {

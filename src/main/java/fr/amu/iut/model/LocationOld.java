@@ -6,13 +6,13 @@ import fr.amu.iut.model.items.foods.Food;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Location {
+public class LocationOld {
     private String name;
     private List<Character> characters;
     private List<Food> foods;
 
     // Village Constructor
-    public Location(String name) {
+    public LocationOld(String name) {
         this.name = name;
         this.characters = new ArrayList<>();
         this.foods = new ArrayList<>();

@@ -5,6 +5,7 @@ import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
+import fr.amu.iut.model.spaces.Space;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class InvasionTheatre {
 
     private String name;
     private int maxLocations;
-    private List<Location> existingLocations;
+    private List<Space> existingLocations;
     private List<ClanLeader> clanChiefs;
     private Random random = new Random();
 
@@ -30,7 +31,7 @@ public class InvasionTheatre {
     public void showLocations() {
         if (existingLocations != null) {
             System.out.println("Theatre venues " + name);
-            for (Location location : existingLocations) {
+            for (Space location : existingLocations) {
                 System.out.println(location);
             }
         }
@@ -40,7 +41,7 @@ public class InvasionTheatre {
     public void showTotalCharacterCount() {
         int total = 0;
         if (existingLocations != null) {
-            for (Location loc : existingLocations) {
+            for (Space loc : existingLocations) {
                 total += loc.getCharacters().size();
             }
         }
@@ -50,7 +51,7 @@ public class InvasionTheatre {
     // Displays characters from all locations
     public void showAllCharacters() {
         if (existingLocations != null) {
-            for (Location loc : existingLocations) {
+            for (Space loc : existingLocations) {
                 System.out.println("In the place: " + loc.getName());
                 for (Character c : loc.getCharacters()) {
                     System.out.println(" - " + c.toString());
@@ -63,7 +64,7 @@ public class InvasionTheatre {
     private void handleBattles() {
         if (existingLocations == null) return;
 
-        for (Location loc : existingLocations) {
+        for (Space loc : existingLocations) {
             if (loc.isBattlefield()) {
                 loc.resolveCombat();
             }
@@ -74,7 +75,7 @@ public class InvasionTheatre {
     private void updateRandomCharacterStates() {
         if (existingLocations == null) return;
 
-        for (Location loc : existingLocations) {
+        for (Space loc : existingLocations) {
             for (Character c : loc.getCharacters()) {
                 // Exemple : 10% de chance d'avoir faim
                 if (random.nextInt(100) < 10) {
@@ -93,7 +94,7 @@ public class InvasionTheatre {
     private void spawnFood() {
         if (existingLocations == null) return;
 
-        for (Location loc : existingLocations) {
+        for (Space loc : existingLocations) {
             // Food does not appear on battlefields.
             if (!loc.isBattlefield()) {
             //if (!(this instanceof Battlefield)) {
@@ -111,7 +112,7 @@ public class InvasionTheatre {
     private void updateFoodFreshness() {
         if (existingLocations == null) return;
 
-        for (Location loc : existingLocations) {
+        for (Space loc : existingLocations) {
             for (Food food : loc.getFoods()) {
                 if (food.isFresh()) {
                     food.setFreshnessStatus(FreshnessStatus.valueOf("NOT_FRESH"));

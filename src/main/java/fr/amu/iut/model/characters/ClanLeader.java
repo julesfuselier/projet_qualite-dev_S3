@@ -1,16 +1,16 @@
 package fr.amu.iut.model.characters;
 
-import fr.amu.iut.model.Location;
+import fr.amu.iut.model.LocationOld;
 import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.items.foods.Food;
 
 public class ClanLeader extends Character implements Leader {
 
-    private final Location managedLocation;
+    private final LocationOld managedLocation;
     private CharacterFactory characterFactory = new CharacterFactory();
 
     // ClanLeader constructor
-    public ClanLeader(String name, char sex, int age, Location location) {
+    public ClanLeader(String name, char sex, int age, LocationOld location) {
         super(name, sex, age);
         this.managedLocation = location;
     }
