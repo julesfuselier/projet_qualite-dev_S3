@@ -1,5 +1,6 @@
 package fr.amu.iut.model.characters;
 
+import fr.amu.iut.model.InvasionTheatre;
 import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.spaces.Space;

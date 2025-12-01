@@ -75,16 +75,22 @@ public class InvasionTheatre {
     private void updateRandomCharacterStates() {
         if (existingLocations == null) return;
 
+        final int MAX_HUNGER_INCREASE = 5;
+        final int MAX_POTION_DECREASE = 2;
+
         for (Space loc : existingLocations) {
             for (Character c : loc.getCharacters()) {
-                // Exemple : 10% de chance d'avoir faim
+
+                // Gestion de la Faim
                 if (random.nextInt(100) < 10) {
-                    c.setHungry(true);
+                    int randomIncrease = random.nextInt(MAX_HUNGER_INCREASE) + 1;
+                    c.getHunger().add(-randomIncrease);
                 }
 
-                // Decrease potion effect of the character
-                if (c.hasMagicPotionEffect()) {
-                    c.decreasePotionDuration();
+                // Gestion de l'effet de Potion
+                if (c.getMagicPotion().get() > 0) {
+                    int randomDecrease = random.nextInt(MAX_POTION_DECREASE) + 1;
+                    c.getMagicPotion().add(-randomDecrease);
                 }
             }
         }
@@ -97,7 +103,6 @@ public class InvasionTheatre {
         for (Space loc : existingLocations) {
             // Food does not appear on battlefields.
             if (!loc.isBattlefield()) {
-            //if (!(this instanceof Battlefield)) {
                 // 20% chance of a wild boar or fruit appearing
                 if (random.nextInt(100) < 20) {
                     loc.addFood(new Food("Test food", 10, true, FreshnessStatus.FRESH, FoodType.FISH));
@@ -124,6 +129,6 @@ public class InvasionTheatre {
     // Hand over to a clan chief
     private void handleClanChiefTurn(ClanLeader chief) {
         System.out.println("It's the chef's turn : " + chief.getName());
-        chief.takeTurn();
+        // TODO : Ajouter une fonction TakeTurn pour réellement donner la main au chef de clan
     }
 }
