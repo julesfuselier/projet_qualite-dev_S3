@@ -1,16 +1,16 @@
 package fr.amu.iut.model.characters;
 
-import fr.amu.iut.model.LocationOld;
 import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.items.foods.Food;
+import fr.amu.iut.model.spaces.Space;
 
 public class ClanLeader extends Character implements Leader {
 
-    private final LocationOld managedLocation;
+    private final Space managedLocation;
     private CharacterFactory characterFactory = new CharacterFactory();
 
     // ClanLeader constructor
-    public ClanLeader(String name, char sex, int age, LocationOld location) {
+    public ClanLeader(String name, char sex, int age, Space location) {
         super(name, sex, age);
         this.managedLocation = location;
     }
@@ -22,7 +22,7 @@ public class ClanLeader extends Character implements Leader {
 
     // Displays the characteristics of the managed location
     public void examineLocation() {
-        managedLocation.displayCharacteristics();
+        managedLocation.showCharacteristics();
     }
 
     // Create a new character in the village
@@ -87,6 +87,6 @@ public class ClanLeader extends Character implements Leader {
 
     // Transfer a character from their location to a battlefield or enclosure
     public void transferCharacter(Character character) {
-
+        // TODO : Transférer un personnage de son lieu à un champ de bataille ou un enclos
     }
 }
