@@ -44,8 +44,7 @@ public class Druid extends fr.amu.iut.model.characters.Character implements Lead
      */
     private Item findIngredient(List<Item> items, FoodType type, FreshnessStatus requiredStatus) {
         for (Item item : items) {
-            if (item instanceof Food) {
-                Food food = (Food) item;
+            if (item instanceof Food food) {
                 if (food.getType() == type) {
                     if (requiredStatus == null || food.getStatus() == requiredStatus) {
                         return item;

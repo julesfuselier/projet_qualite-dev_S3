@@ -12,12 +12,10 @@ public class Inventory {
         this.items = new java.util.ArrayList<>();
     }
 
-    public boolean addItem(Item item) {
+    public void addItem(Item item) {
         if (items.size() < MAX_CAPACITY) {
             items.add(item);
-            return true;
         }
-        return false;
     }
 
     public boolean removeItem(Item item) {

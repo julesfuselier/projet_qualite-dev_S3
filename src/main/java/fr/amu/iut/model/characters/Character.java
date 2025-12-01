@@ -104,7 +104,7 @@ public abstract class Character implements Cloneable {
 
         if (getFaction() == Faction.GAULOIS) {
             if (type == FoodType.WILD_BOAR || type == FoodType.WINE) return true;
-            if (type == FoodType.FISH) return true;
+            return type == FoodType.FISH;
         }
 
         else if (getFaction() == Faction.ROMAIN) {
@@ -294,8 +294,7 @@ public abstract class Character implements Cloneable {
     @Override
     public Character clone() {
         try {
-            Character clone = (Character) super.clone();
-            return clone;
+            return (Character) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
