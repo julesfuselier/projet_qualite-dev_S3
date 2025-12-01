@@ -164,7 +164,6 @@ public abstract class Character implements Cloneable {
             inventory.removeItem(potion);
 
         } else {
-            // Boire une dose
             if (potion.takeDose()) {
                 System.out.println(getName() + " boit une gorgée de potion magique.");
                 this.magicPotion.add(20);
