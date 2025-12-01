@@ -2,6 +2,7 @@ package fr.amu.iut.model.characters;
 
 import fr.amu.iut.model.Inventory;
 import fr.amu.iut.model.Statistics;
+import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import fr.amu.iut.model.items.Item;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
@@ -153,7 +154,22 @@ public abstract class Character {
      * @return true si le personnage est considéré comme mort, false sinon.
      */
     public boolean isDead() {
-        return this.health.get() <= 0; // TODO : très critique = 0 ?
+        return this.health.get() <= 0;
+    }
+
+    /**
+     * Permet de dupliquer un personnage en utilisant le mécanisme de clonage.
+     * @param character Le personnage à dupliquer.
+     * @return Une nouvelle instance de Character identique à l'original.
+     * @throws CloneNotSupportedException Si le clonage échoue.
+     */
+    public Character duplicateCharacter(Character character) throws CloneNotSupportedException {
+        return (Character) character.clone();
+    }
+
+    public Lycanthrope transformToLycanthrope() {
+        // TODO : Implémenter la transformation en Loup-Garou
+        return null;
     }
 
     // Getters & Setters for Attributes

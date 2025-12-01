@@ -6,7 +6,6 @@ public class MagicPotion extends Item {
     private int doses;
     private PotionType type;
 
-    // Le constructeur prend désormais le type demandé en paramètre
     public MagicPotion(PotionType type) {
         super("Potion Magique (" + type + ")");
         this.doses = 5;

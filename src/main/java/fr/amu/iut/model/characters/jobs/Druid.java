@@ -36,67 +36,61 @@ public class Druid extends fr.amu.iut.model.characters.Character implements Lead
     }
 
     /**
-     * Tente de créer une potion du type spécifié.
-     * @param desiredType Le type de potion que le druide veut créer.
+     * Méthode utilitaire pour trouver un ingrédient spécifique dans l'inventaire.
+     * @param items La liste des objets de l'inventaire.
+     * @param type Le type de nourriture recherché.
+     * @param requiredStatus Le statut requis (ex: FRESH). Si null, on ignore la fraîcheur.
+     * @return L'objet trouvé, ou null s'il n'existe pas.
      */
-    public void craftMagicPotion(PotionType desiredType) {
-        List<Item> inventoryItems = this.getInventory().getItems();
-
-        // 1. Identification des ingrédients dans l'inventaire
-        Item mistletoe = null;
-        Item carrot = null;
-        Item salt = null;
-        Item freshClover = null;
-        Item freshFish = null;
-        Item honey = null;
-        Item mead = null;
-        Item secretIngredient = null;
-        Item oilOrBeet = null; // Huile de roche OU Jus de betterave
-
-        Item specialIngredient = null; // Lait de licorne OU Poils d'Idéfix selon le besoin
-
-        for (Item item : inventoryItems) {
+    private Item findIngredient(List<Item> items, FoodType type, FreshnessStatus requiredStatus) {
+        for (Item item : items) {
             if (item instanceof Food) {
                 Food food = (Food) item;
-                FoodType fType = food.getType();
-                FreshnessStatus status = food.getStatus();
-
-                if (fType == FoodType.MISTLETOE && mistletoe == null) mistletoe = item;
-                else if (fType == FoodType.CARROT && carrot == null) carrot = item;
-                else if (fType == FoodType.SALT && salt == null) salt = item;
-                else if (fType == FoodType.CLOVER && status == FreshnessStatus.FRESH && freshClover == null) freshClover = item;
-                else if (fType == FoodType.FISH && status == FreshnessStatus.FRESH && freshFish == null) freshFish = item;
-                else if (fType == FoodType.HONEY && honey == null) honey = item;
-                else if (fType == FoodType.MEAD && mead == null) mead = item;
-                else if (fType == FoodType.SECRET_INGREDIENT && secretIngredient == null) secretIngredient = item;
-
-                else if ((fType == FoodType.ROCK_OIL || fType == FoodType.BEET_JUICE) && oilOrBeet == null) {
-                    oilOrBeet = item;
-                }
-
-                // Recherche de l'ingrédient spécial SEULEMENT si c'est celui requis par le type demandé
-                else if (desiredType == PotionType.SPLITTING && fType == FoodType.TWO_HEADED_UNICORNN_MILK && specialIngredient == null) {
-                    specialIngredient = item;
-                }
-                else if (desiredType == PotionType.METAMORPHOSIS && fType == FoodType.IDEFIX_HAIR && specialIngredient == null) {
-                    specialIngredient = item;
+                if (food.getType() == type) {
+                    if (requiredStatus == null || food.getStatus() == requiredStatus) {
+                        return item;
+                    }
                 }
             }
         }
+        return null;
+    }
 
-        // 2. Vérification de la disponibilité des ingrédients
+    public void craftMagicPotion(PotionType desiredType) {
+        List<Item> inventoryItems = this.getInventory().getItems();
+
+        Item mistletoe = findIngredient(inventoryItems, FoodType.MISTLETOE, null);
+        Item carrot = findIngredient(inventoryItems, FoodType.CARROT, null);
+        Item salt = findIngredient(inventoryItems, FoodType.SALT, null);
+        Item honey = findIngredient(inventoryItems, FoodType.HONEY, null);
+        Item mead = findIngredient(inventoryItems, FoodType.MEAD, null);
+        Item secretIngredient = findIngredient(inventoryItems, FoodType.SECRET_INGREDIENT, null);
+
+        Item freshClover = findIngredient(inventoryItems, FoodType.CLOVER, FreshnessStatus.FRESH);
+        Item freshFish = findIngredient(inventoryItems, FoodType.FISH, FreshnessStatus.FRESH);
+
+        Item oilOrBeet = findIngredient(inventoryItems, FoodType.ROCK_OIL, null);
+        if (oilOrBeet == null) {
+            oilOrBeet = findIngredient(inventoryItems, FoodType.BEET_JUICE, null);
+        }
+
+        Item specialIngredient = null;
+        if (desiredType == PotionType.SPLITTING) {
+            specialIngredient = findIngredient(inventoryItems, FoodType.TWO_HEADED_UNICORNN_MILK, null);
+        } else if (desiredType == PotionType.METAMORPHOSIS) {
+            specialIngredient = findIngredient(inventoryItems, FoodType.IDEFIX_HAIR, null);
+        }
+
         boolean hasBaseIngredients = mistletoe != null && carrot != null && salt != null &&
                 freshClover != null && freshFish != null && honey != null &&
                 mead != null && secretIngredient != null && oilOrBeet != null;
 
-        boolean hasSpecialIngredient = true; // Par défaut vrai pour BASIC
+        boolean hasSpecialIngredient = true;
         if (desiredType == PotionType.SPLITTING || desiredType == PotionType.METAMORPHOSIS) {
             hasSpecialIngredient = (specialIngredient != null);
         }
 
-        // 3. Consommation et Création
         if (hasBaseIngredients && hasSpecialIngredient) {
-            // Retrait des ingrédients de base
             this.getInventory().removeItem(mistletoe);
             this.getInventory().removeItem(carrot);
             this.getInventory().removeItem(salt);
@@ -107,12 +101,10 @@ public class Druid extends fr.amu.iut.model.characters.Character implements Lead
             this.getInventory().removeItem(secretIngredient);
             this.getInventory().removeItem(oilOrBeet);
 
-            // Retrait de l'ingrédient spécial si nécessaire
             if (specialIngredient != null) {
                 this.getInventory().removeItem(specialIngredient);
             }
 
-            // Création de la potion demandée
             MagicPotion newPotion = new MagicPotion(desiredType);
             this.getInventory().addItem(newPotion);
 
