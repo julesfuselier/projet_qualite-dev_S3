@@ -53,6 +53,15 @@ public class Location {
         this.foods.remove(food);
     }
 
+    // True if location istanceof battlefield
+    public boolean isBattlefield() {
+        if (!(this instanceof Battlefield)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     // Displays the characteristics of the village
     public void displayCharacteristics() {
         System.out.println("Location information : " + name);
