@@ -1,4 +1,9 @@
-package fr.amu.iut.model.characters;
+package fr.amu.iut.model.characters.jobs;
+
+import fr.amu.iut.model.characters.Character;
+import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.characters.Leader;
+import fr.amu.iut.model.characters.Warrior;
 
 public class General extends Warrior implements Leader {
 

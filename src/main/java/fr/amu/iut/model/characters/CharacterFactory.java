@@ -1,5 +1,8 @@
 package fr.amu.iut.model.characters;
 
+import fr.amu.iut.model.characters.jobs.*;
+
+
 import java.util.Random;
 
 public class CharacterFactory {
