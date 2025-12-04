@@ -3,6 +3,8 @@ package fr.amu.iut.model.characters;
 import fr.amu.iut.model.InvasionTheatre;
 import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.items.foods.Food;
+import fr.amu.iut.model.items.potion.MagicPotion;
+import fr.amu.iut.model.items.potion.PotionType;
 import fr.amu.iut.model.spaces.Space;
 
 public class ClanLeader extends Character implements Leader {
@@ -67,9 +69,9 @@ public class ClanLeader extends Character implements Leader {
     }
 
     // Ask the druid to make a potion
-    public void askDruidForMagicPotion(Druid druid) {
+    public void askDruidForMagicPotion(Druid druid, PotionType potionType) {
         if (managedLocation.getCharacters().contains(druid)) {
-            druid.makeMagicPotion();
+            druid.craftMagicPotion(potionType);
             System.out.println(getName() + " ask to " + druid.getName() + " to make a magic potion.");
         } else {
             System.out.println("The druid " + druid.getName() + " is not in the villag.");
@@ -77,17 +79,27 @@ public class ClanLeader extends Character implements Leader {
     }
 
     // Give a magic potion to a character in the village
-    public void giveMagicPotionToCharacterInVillage(Character character, int amount) {
+    public void giveMagicPotionToCharacterInVillage(Character character, MagicPotion magicPotion) {
         if (managedLocation.getCharacters().contains(character)) {
-            character.drinkMagicPotion(amount);
+            character.drinkMagicPotion(magicPotion, false);
             System.out.println(getName() + " give the magic potion to " + character.getName() + ".");
         } else {
             System.out.println(character.getName() + " is not in the village of " + getName() + ".");
         }
     }
 
-    // Transfer a character from their location to a battlefield or enclosure
-    public void transferCharacter(Character character) {
-        // TODO : Transférer un personnage de son lieu à un champ de bataille ou un enclos
+    // Transférer un personnage de son lieu à un autre (Champ de bataille ou Enclos)
+    public void transferCharacter(Character character, Space destination) {
+        if (managedLocation.getCharacters().contains(character)) {
+            if (destination.authorized(character)) {
+                managedLocation.removeCharacter(character);
+                destination.addCharacter(character);
+                System.out.println(getName() + " a transféré " + character.getName() + " vers " + destination.getName());
+            } else {
+                System.out.println("Transfert impossible : " + character.getName() + " n'est pas autorisé dans " + destination.getName());
+            }
+        } else {
+            System.out.println(character.getName() + " n'est pas dans le lieu géré par " + getName());
+        }
     }
 }

@@ -2,11 +2,11 @@ package fr.amu.iut.model.spaces;
 
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.characters.Character;
-
-
+import fr.amu.iut.model.characters.Fighter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import static java.util.Collections.shuffle;
 
 public abstract class Space {
     private final String name;
@@ -89,18 +89,18 @@ public abstract class Space {
 
     // Show characteristics of the space
     public void showCharacteristics(){
-        System.out.println("Name: " + name);
+        System.out.println("Nom: " + name);
         System.out.println("Surface : " + surface);
         if(!(this instanceof Battlefield)){
-            System.out.println("Character leader: " + leader);
+            System.out.println("Personnage principal: " + leader);
         }
-        System.out.println("Characters: " + characters.size());
+        System.out.println("Personnages: " + characters.size());
         for(Character c : characters){
-            System.out.println("Character: " + c.getName());
+            System.out.println("Personnages: " + c.getName());
         }
 
         for(Food f : foods){
-            System.out.println("Foods available : " + f.getName());
+            System.out.println("Nourriture disponible : " + f.getName());
         }
     }
 
@@ -124,37 +124,30 @@ public abstract class Space {
     }
 
     public void resolveCombat() {
-        // Déterminez si un combat est possible (plusieurs factions)
         if (getCharacters().size() < 2 || !isBattlefield()) {
             return;
         }
-
         System.out.println("Bataille en cours à : " + getName());
+        List<Character> fightersList = new ArrayList<>(getCharacters());
 
-        // Logique de combat
-        List<Character> fighters = new ArrayList<>(getCharacters());
+        // Melanger la liste des combattants
+        shuffle(fightersList);
 
-        if (fighters.size() >= 2) {
-            // Sélectionner deux combattants aléatoires
-            Character fighter1 = fighters.get(this.random.nextInt(fighters.size()));
-            Character fighter2 = fighters.get(this.random.nextInt(fighters.size()));
+        if (fightersList.size() >= 2) {
+            Character c1 = fightersList.get(0);
+            Character c2 = fightersList.get(1);
 
-            // S'assurer qu'ils sont différents et de factions différentes
-            if (fighter1 != fighter2 && fighter1.getFaction() != fighter2.getFaction()) {
+            if (c1.getFaction() != c2.getFaction()
+                    && c1 instanceof Fighter
+                    && c2 instanceof Fighter) {
 
-                // Augmentation de la bellicosité
-                fighter1.getBelligerence().add(10);
-                fighter2.getBelligerence().add(10);
+                c1.getBelligerence().add(10);
+                c2.getBelligerence().add(10);
 
-                // Perte de vie aléatoire
-                int damage1 = this.random.nextInt(11) + 5;
-                int damage2 = this.random.nextInt(11) + 5;
+                ((Fighter) c1).fight(c2);
+                ((Fighter) c2).fight(c1);
 
-                fighter1.getHealth().add(-damage1);
-                fighter2.getHealth().add(-damage2);
-
-                System.out.println("  -> " + fighter1.getName() + " vs " + fighter2.getName() +
-                        " (Dégâts: " + damage2 + " et " + damage1 + ")");
+                System.out.println("  -> Combat entre " + c1.getName() + " et " + c2.getName());
             }
         }
         removeDeadCharacters();

@@ -1,6 +1,6 @@
 package fr.amu.iut.model.spaces;
 
-import fr.amu.iut.model.characters.*;
+import fr.amu.iut.model.characters.jobs.*;
 import fr.amu.iut.model.characters.Character;
 
 public class GallicVillage extends Space{

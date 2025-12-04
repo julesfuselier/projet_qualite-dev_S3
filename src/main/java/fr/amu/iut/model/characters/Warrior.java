@@ -20,20 +20,19 @@ public abstract class Warrior extends Character implements Fighter {
     }
 
     /**
-     * Permet à un légionnaire de combattre un autre personnage.
-     * Le combat diminue la santé des deux personnages en fonction de leur force et endurance.
-     * @param opponent Le personnage adversaire.
+     * Méthode pour combattre un adversaire.
+     *
+     * @param opponent L'adversaire à combattre.
      */
     @Override
     public void fight(Character opponent) {
-        int damageToOpponent = this.getStrength() - opponent.getEndurance();
-        if (damageToOpponent > 0) {
-            opponent.getHealth().add(-damageToOpponent);
-        }
-
-        int damageToSelf = opponent.getStrength() - this.getEndurance();
-        if (damageToSelf > 0) {
-            this.getHealth().add(-damageToSelf);
+        if (opponent.isActivePotion()) {
+            System.out.println(opponent.getName() + " est invincible grâce à la potion !");
+        } else {
+            int damageToOpponent = this.getStrength() - opponent.getEndurance();
+            if (damageToOpponent > 0) {
+                opponent.getHealth().add(-damageToOpponent);
+            }
         }
     }
 

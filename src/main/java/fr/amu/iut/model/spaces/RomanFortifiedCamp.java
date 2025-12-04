@@ -1,9 +1,9 @@
 package fr.amu.iut.model.spaces;
 
 import fr.amu.iut.model.characters.Character;
-import fr.amu.iut.model.characters.General;
-import fr.amu.iut.model.characters.Legionnaire;
-import fr.amu.iut.model.characters.Lycanthrope;
+import fr.amu.iut.model.characters.jobs.General;
+import fr.amu.iut.model.characters.jobs.Legionary;
+import fr.amu.iut.model.characters.jobs.Lycanthrope;
 
 
 public class RomanFortifiedCamp extends Space{
@@ -13,6 +13,6 @@ public class RomanFortifiedCamp extends Space{
 
     @Override
     public boolean authorized(Character c) {
-        return (c instanceof Legionnaire || c instanceof General || c instanceof Lycanthrope);
+        return (c instanceof Legionary || c instanceof General || c instanceof Lycanthrope);
     }
 }
