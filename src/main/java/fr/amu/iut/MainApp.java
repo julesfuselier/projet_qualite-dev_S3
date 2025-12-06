@@ -66,21 +66,26 @@ public class MainApp {
     /**
      * Exécute les événements automatiques du tour (Sujet PDF Section 7)
      */
+    /**
+     * Exécute les événements automatiques du tour (Sujet PDF Section 7)
+     */
     private static void runNextTurn() {
         turnCount++;
         System.out.println(YELLOW + "\n>>> DÉROULEMENT DU TOUR " + turnCount + " <<<" + RESET);
 
-        System.out.println("⚔️  Gestion des batailles...");
-        theatre.handleBattles(); //
+        theatre.handleAutonomousMovements();
 
-        System.out.println("✨ Mise à jour des états (Faim, Potion)...");
-        theatre.updateRandomCharacterStates(); //
+        System.out.println("⚔Gestion des batailles...");
+        theatre.handleBattles();
 
-        System.out.println("🍎 Apparition de nourriture...");
-        theatre.spawnFood(); //
+        System.out.println("Mise à jour des états (Faim, Potion)...");
+        theatre.updateRandomCharacterStates();
 
-        System.out.println("🤢 Vérification de la fraîcheur des aliments...");
-        theatre.updateFoodFreshness(); //
+        System.out.println("Apparition de nourriture...");
+        theatre.spawnFood();
+
+        System.out.println("Vérification de la fraîcheur des aliments...");
+        theatre.updateFoodFreshness();
 
         System.out.println(YELLOW + ">>> FIN DES ÉVÉNEMENTS AUTOMATIQUES <<<" + RESET);
     }
@@ -181,10 +186,70 @@ public class MainApp {
     }
 
     public static void initSimulation() {
-        System.out.println(BLUE + "Initialisation de la simulation..." + RESET);
+        System.out.println(BLUE + "=== BIENVENUE DANS LA SIMULATION ===" + RESET);
         theatre = new InvasionTheatre("Armorique", 20);
-        initPlaces();
-        initCharacters();
+
+        System.out.println("Comment voulez-vous commencer ?");
+        System.out.println("1. 🚀 Mode DÉMO (Configuration automatique)");
+        System.out.println("2. 🛠️ Mode MANUEL (Créer ses propres lieux et persos)");
+        int choice = getIntInput(1, 2);
+
+        if (choice == 1) {
+            initDemo();
+        } else {
+            initPlaces();
+            initCharacters();
+        }
+    }
+
+    private static void initDemo() {
+        System.out.println(GREEN + "Chargement de la démo..." + RESET);
+
+        ClanLeader abraracourcix = new ClanLeader("Abraracourcix", 'M', 50, null);
+        GallicVillage village = new GallicVillage("Village des Irréductibles", 1000, abraracourcix);
+        abraracourcix.setLocation(village);
+        village.addCharacter(abraracourcix);
+
+        RomanFortifiedCamp camp = new RomanFortifiedCamp("Babaorum", 1000, null);
+
+        Battlefield battlefield = new Battlefield("Plaine des baffes", 2000);
+
+        theatre.addLocation(village);
+        theatre.addLocation(camp);
+        theatre.addLocation(battlefield);
+
+        // 2. Création des Personnages via la Factory
+        try {
+            // --- Les Gaulois ---
+            Character panoramix = characterFactory.createCharacter(Faction.GAULOIS, "druide", "Panoramix");
+            Character cetautomatix = characterFactory.createCharacter(Faction.GAULOIS, "forgeron", "Cétautomatix");
+            Character ordralphabetix = characterFactory.createCharacter(Faction.GAULOIS, "marchand", "Ordralphabétix");
+            Character bonemine = characterFactory.createCharacter(Faction.GAULOIS, "aubergiste", "Bonemine"); // Pas de classe femme de chef, on improvise
+
+            // On ajoute tout ce beau monde au village
+            village.addCharacter(panoramix);
+            village.addCharacter(cetautomatix);
+            village.addCharacter(ordralphabetix);
+            village.addCharacter(bonemine);
+
+            // --- Les Romains ---
+            Character caiusBonus = characterFactory.createCharacter(Faction.ROMAIN, "général", "Caius Bonus");
+            Character minus = characterFactory.createCharacter(Faction.ROMAIN, "legionnaire", "Minus");
+            Character chorus = characterFactory.createCharacter(Faction.ROMAIN, "legionnaire", "Chorus");
+            Character brutus = characterFactory.createCharacter(Faction.ROMAIN, "préfet", "Brutus");
+
+            // On ajoute les Romains au camp
+            camp.addCharacter(caiusBonus);
+            camp.addCharacter(minus);
+            camp.addCharacter(chorus);
+            camp.addCharacter(brutus);
+
+            System.out.println(GREEN + "Monde généré avec succès !" + RESET);
+            theatre.showTotalCharacterCount();
+
+        } catch (Exception e) {
+            System.out.println(RED + "Erreur lors de la démo : " + e.getMessage() + RESET);
+        }
     }
 
     public static void initPlaces() {

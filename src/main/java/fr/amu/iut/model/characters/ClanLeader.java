@@ -9,7 +9,7 @@ import fr.amu.iut.model.spaces.Space;
 
 public class ClanLeader extends Character implements Leader {
 
-    private final Space managedLocation;
+    private Space managedLocation;
     private CharacterFactory characterFactory = new CharacterFactory();
 
     // ClanLeader constructor
@@ -41,7 +41,6 @@ public class ClanLeader extends Character implements Leader {
 
     // Heal a character from the village
     public void healCharacterInVillage(Character character, int healAmountToHeal) {
-        // If the character concerned is in the managed location
         if (managedLocation.getCharacters().contains(character)) {
             character.beHealed(healAmountToHeal);
             System.out.println(getName() + " treat " + character.getName() + ". His health is now " + character.getHealth().get() + ".");
@@ -88,7 +87,6 @@ public class ClanLeader extends Character implements Leader {
         }
     }
 
-    // Transférer un personnage de son lieu à un autre (Champ de bataille ou Enclos)
     public void transferCharacter(Character character, Space destination) {
         if (managedLocation.getCharacters().contains(character)) {
             if (destination.authorized(character)) {
@@ -101,5 +99,9 @@ public class ClanLeader extends Character implements Leader {
         } else {
             System.out.println(character.getName() + " n'est pas dans le lieu géré par " + getName());
         }
+    }
+
+    public void setLocation(Space location) {
+        this.managedLocation = location;
     }
 }

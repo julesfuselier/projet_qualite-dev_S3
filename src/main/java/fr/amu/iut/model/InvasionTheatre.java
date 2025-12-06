@@ -6,6 +6,11 @@ import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
 import fr.amu.iut.model.spaces.Space;
+import fr.amu.iut.model.characters.Fighter;
+import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.spaces.Battlefield;
+import fr.amu.iut.model.spaces.GallicVillage;
+import fr.amu.iut.model.spaces.RomanFortifiedCamp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,5 +144,68 @@ public class InvasionTheatre {
 
     public List<Space> getExistingLocations() {
         return this.existingLocations;
+    }
+
+    // --- INTELLIGENCE ARTIFICIELLE (Déplacements autonomes) ---
+
+    public void handleAutonomousMovements() {
+        if (existingLocations == null) return;
+
+        System.out.println("Mouvements autonomes des troupes...");
+
+        for (Space currentSpace : existingLocations) {
+            // IMPORTANT : On fait une copie de la liste pour pouvoir modifier l'originale sans planter la boucle
+            List<Character> charactersSnapshot = new ArrayList<>(currentSpace.getCharacters());
+
+            for (Character c : charactersSnapshot) {
+                Space destination = null;
+
+                // Si blessé ou affamé ET sur un champ de bataille, chercher un lieu sûr
+                boolean isInjured = c.getHealth().get() < 30;
+                boolean isStarving = c.getHunger().get() < 20;
+
+                if ((isInjured || isStarving) && currentSpace.isBattlefield()) {
+                    destination = findSafeHaven(c.getFaction());
+                }
+
+                // Guerre si combattant (bonne santé) et pas sur un champ de bataille, chercher un champ de bataille
+                else if (c instanceof Fighter && !currentSpace.isBattlefield()) {
+                    if (!isInjured && !isStarving) {
+                        destination = findBattlefield();
+                    }
+                }
+
+                // Exécution du mouvement si une destination valide est trouvée
+                if (destination != null && destination != currentSpace) {
+                    moveCharacter(c, currentSpace, destination);
+                }
+            }
+        }
+    }
+
+    // Trouve un lieu sûr (Village ou Camp) selon la faction
+    private Space findSafeHaven(Faction faction) {
+        for (Space s : existingLocations) {
+            if (faction == Faction.GAULOIS && s instanceof GallicVillage) return s;
+            if (faction == Faction.ROMAIN && s instanceof RomanFortifiedCamp) return s;
+        }
+        return null;
+    }
+
+    // Trouve le premier champ de bataille disponible
+    private Space findBattlefield() {
+        for (Space s : existingLocations) {
+            if (s instanceof Battlefield) return s;
+        }
+        return null;
+    }
+
+    // Déplace physiquement le personnage
+    private void moveCharacter(Character c, Space from, Space to) {
+        if (to.authorized(c)) {
+            from.removeCharacter(c);
+            to.addCharacter(c);
+            System.out.println("   -> " + c.getName() + " quitte " + from.getName() + " pour " + to.getName());
+        }
     }
 }
