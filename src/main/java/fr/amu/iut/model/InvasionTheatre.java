@@ -132,7 +132,12 @@ public class InvasionTheatre {
         // TODO : Ajouter une fonction TakeTurn pour réellement donner la main au chef de clan
     }
 
-    public void addLocation(Space location) {
-        this.existingLocations.add(location);
+    public void addLocation(Space space) {
+        if (existingLocations == null) existingLocations = new ArrayList<>();
+        this.existingLocations.add(space);
+    }
+
+    public List<Space> getExistingLocations() {
+        return this.existingLocations;
     }
 }
