@@ -2,9 +2,13 @@ package fr.amu.iut.model;
 
 import fr.amu.iut.model.characters.ClanLeader;
 import fr.amu.iut.model.characters.Character;
+import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.items.foods.Food;
+import fr.amu.iut.model.items.foods.FoodFactory;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
+import fr.amu.iut.model.items.potion.MagicPotion;
+import fr.amu.iut.model.items.potion.PotionType;
 import fr.amu.iut.model.spaces.Space;
 import fr.amu.iut.model.characters.Fighter;
 import fr.amu.iut.model.characters.Faction;
@@ -32,7 +36,7 @@ public class InvasionTheatre {
         this.clanChiefs = new ArrayList<>();
     }
 
-    // Displays the locations in the theatre
+    // Displays the locations in the theater
     public void showLocations() {
         if (existingLocations != null) {
             System.out.println("Theatre venues " + name);
@@ -101,18 +105,24 @@ public class InvasionTheatre {
         }
     }
 
-    // Bringing food out of the battlefield
     public void spawnFood() {
         if (existingLocations == null) return;
 
+        FoodFactory factory = new FoodFactory();
+        // Liste des types de nourriture possibles
+        FoodType[] types = FoodType.values();
+
         for (Space loc : existingLocations) {
-            // Food does not appear on battlefields.
+            // Pas de nourriture sur le champ de bataille
             if (!loc.isBattlefield()) {
-                // 20% chance of a wild boar or fruit appearing
-                if (random.nextInt(100) < 20) {
-                    loc.addFood(new Food("Test food", 10, true, FreshnessStatus.FRESH, FoodType.FISH));
-                    loc.addFood(loc.getFoods().get(random.nextInt(loc.getFoods().size())));
-                    System.out.println("Food appeared at : " + loc.getName());
+                // 30% de chance de faire apparaître un truc à manger
+                if (random.nextInt(100) < 30) {
+                    // On choisit un type au hasard (Sanglier, Poisson, etc.)
+                    FoodType randomType = types[random.nextInt(types.length)];
+                    Food newFood = factory.createFood(randomType);
+
+                    loc.addFood(newFood);
+                    System.out.println("[FOOD] " + newFood.getName() + " est apparu à : " + loc.getName());
                 }
             }
         }
@@ -146,15 +156,12 @@ public class InvasionTheatre {
         return this.existingLocations;
     }
 
-    // --- INTELLIGENCE ARTIFICIELLE (Déplacements autonomes) ---
-
     public void handleAutonomousMovements() {
         if (existingLocations == null) return;
 
         System.out.println("Mouvements autonomes des troupes...");
 
         for (Space currentSpace : existingLocations) {
-            // IMPORTANT : On fait une copie de la liste pour pouvoir modifier l'originale sans planter la boucle
             List<Character> charactersSnapshot = new ArrayList<>(currentSpace.getCharacters());
 
             for (Character c : charactersSnapshot) {
@@ -175,7 +182,6 @@ public class InvasionTheatre {
                     }
                 }
 
-                // Exécution du mouvement si une destination valide est trouvée
                 if (destination != null && destination != currentSpace) {
                     moveCharacter(c, currentSpace, destination);
                 }
@@ -206,6 +212,24 @@ public class InvasionTheatre {
             from.removeCharacter(c);
             to.addCharacter(c);
             System.out.println("   -> " + c.getName() + " quitte " + from.getName() + " pour " + to.getName());
+        }
+    }
+
+    public void handleDruidActivity() {
+        if (existingLocations == null) return;
+
+        for ( Space loc : existingLocations) {
+            if(!loc.isBattlefield()) {
+                for (Character c : loc.getCharacters()) {
+                    if (c instanceof Druid) {
+                        if(random.nextInt(3) == 0) { // 1 chance sur 3 de fabriquer une potion
+                            MagicPotion potion = new MagicPotion(PotionType.BASIC);
+                            c.getInventory().addItem(potion);
+                            System.out.println("[POTION] Le druide " + c.getName() + " a fabriqué une potion magique de type " + potion.getType());
+                        }
+                    }
+                }
+            }
         }
     }
 }

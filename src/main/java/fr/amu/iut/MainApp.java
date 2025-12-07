@@ -5,7 +5,10 @@ import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.CharacterFactory;
 import fr.amu.iut.model.characters.ClanLeader;
 import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.characters.jobs.Druid;
+import fr.amu.iut.model.items.Item;
 import fr.amu.iut.model.items.foods.Food;
+import fr.amu.iut.model.items.potion.MagicPotion;
 import fr.amu.iut.model.spaces.*;
 
 import java.util.ArrayList;
@@ -128,9 +131,10 @@ public class MainApp {
             System.out.println("1. Examiner le lieu");
             System.out.println("2. Soigner un personnage");
             System.out.println("3. Nourrir un personnage");
-            System.out.println("4. Retour au menu principal");
+            System.out.println("4. Distribuer une potion magique");
+            System.out.println("5. Retour au menu principal");
 
-            int action = getIntInput(1, 4);
+            int action = getIntInput(1, 5);
             Space currentSpace = findSpaceOfCharacter(selectedLeader); // Helper pour trouver où est le chef
 
             if (currentSpace == null) {
@@ -140,7 +144,7 @@ public class MainApp {
 
             switch (action) {
                 case 1:
-                    selectedLeader.examineLocation(); //
+                    selectedLeader.examineLocation();
                     break;
                 case 2: // Soigner
                     Character targetToHeal = selectCharacterInSpace(currentSpace);
@@ -158,9 +162,40 @@ public class MainApp {
                     }
                     break;
                 case 4:
+                    Character druidWithPotion = null;
+                    MagicPotion potionFound = null;
+
+                    for (Character c : currentSpace.getCharacters()) {
+                        if (c instanceof Druid) {
+                            for (Item item: c.getInventory().getItems()) {
+                                if (item instanceof MagicPotion) {
+                                    druidWithPotion = c;
+                                    potionFound = (MagicPotion) item;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (druidWithPotion != null && potionFound != null) {
+                        System.out.println("Le Druide " + druidWithPotion.getName() + " a une potion ! À qui la donner ?");
+                        Character target = selectCharacterInSpace(currentSpace);
+                        if (target != null) {
+                            druidWithPotion.getInventory().removeItem(potionFound);
+                            target.drinkMagicPotion(potionFound, false);
+                        }
+
+
+                    } else {
+                        System.out.println(RED + "Pas de Druide avec une potion disponible ici !" + RESET);
+                    }
+                    break;
+
+                case 5:
                     acting = false;
                     break;
             }
+
         }
     }
 
