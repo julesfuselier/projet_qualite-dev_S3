@@ -20,7 +20,7 @@ public abstract class Character implements Cloneable {
     private Faction faction;
     private FoodType lastEatenFoodType = null;
 
-    // Indicators
+    // Indicateurs
     private Statistics health = new Statistics(100, 0, 100);
     private Statistics hunger = new Statistics(100, 0, 100);
     private Statistics belligerence = new Statistics(100, 0, 100);
@@ -43,7 +43,7 @@ public abstract class Character implements Cloneable {
         this.inventory = new Inventory();
     }
 
-    // Second Character constructor suitable for ClanLeader
+    // Deuxième constructeur de personnage adapté à ClanLeader
     public Character(String name, char sex, int age) {
         this.name = name;
         this.sex = sex;
@@ -257,7 +257,7 @@ public abstract class Character implements Cloneable {
         this.inventory = inventory;
     }
 
-    // Getters & Setters for Attributes
+    // Getters et Setters pour les attributs
     public Inventory getInventory() {return inventory;}
     public String getName() {return name;}
     public void setName(String name) {
@@ -288,7 +288,7 @@ public abstract class Character implements Cloneable {
         this.faction = faction;
     }
 
-    // Indicators Getters & Setters
+    // Getters & Setters des indicateurs
     public Statistics getHealth() { return health; }
     public void setHealth(Statistics health) {this.health = health;}
     public Statistics getHunger() { return hunger; }
