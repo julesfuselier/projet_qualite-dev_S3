@@ -69,9 +69,6 @@ public class MainApp {
     /**
      * Exécute les événements automatiques du tour (Sujet PDF Section 7)
      */
-    /**
-     * Exécute les événements automatiques du tour (Sujet PDF Section 7)
-     */
     private static void runNextTurn() {
         turnCount++;
         System.out.println(YELLOW + "\n>>> DÉROULEMENT DU TOUR " + turnCount + " <<<" + RESET);
@@ -195,7 +192,6 @@ public class MainApp {
 
         }
     }
-
 
     private static Space findSpaceOfCharacter(Character c) {
         for (Space s : theatre.getExistingLocations()) {
