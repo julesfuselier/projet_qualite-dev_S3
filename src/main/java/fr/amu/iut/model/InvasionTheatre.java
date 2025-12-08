@@ -16,6 +16,8 @@ import fr.amu.iut.model.spaces.Battlefield;
 import fr.amu.iut.model.spaces.GallicVillage;
 import fr.amu.iut.model.spaces.RomanFortifiedCamp;
 
+import java.util.Comparator;
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -62,7 +64,10 @@ public class InvasionTheatre {
         if (existingLocations != null) {
             for (Space loc : existingLocations) {
                 System.out.println("In the place: " + loc.getName());
-                for (Character c : loc.getCharacters()) {
+                List<Character> sortedChars = new ArrayList<>(loc.getCharacters());
+                // Trier les personnages par nom ( ordre alphabétique )
+                sortedChars.sort(Comparator.comparing(Character::getName));
+                for (Character c : sortedChars) {
                     System.out.println(" - " + c.toString());
                 }
             }
@@ -70,7 +75,7 @@ public class InvasionTheatre {
     }
 
     // Faites combattre les belligérants et renvoyez les survivants
-    private void handleBattles() {
+    public void handleBattles() {
         if (existingLocations == null) return;
 
         for (Space loc : existingLocations) {
@@ -81,7 +86,7 @@ public class InvasionTheatre {
     }
 
     // Modifier aléatoirement l'état de certains personnages (faim, potion magique, etc.)
-    private void updateRandomCharacterStates() {
+    public void updateRandomCharacterStates() {
         if (existingLocations == null) return;
 
         final int MAX_HUNGER_INCREASE = 5;
@@ -106,7 +111,7 @@ public class InvasionTheatre {
     }
 
     // Sortir la nourriture du champ de bataille
-    private void spawnFood() {
+    public void spawnFood() {
         if (existingLocations == null) return;
 
         FoodFactory factory = new FoodFactory();
@@ -127,7 +132,7 @@ public class InvasionTheatre {
     }
 
     // Transformer des aliments frais en aliments non frais
-    private void updateFoodFreshness() {
+    public void updateFoodFreshness() {
         if (existingLocations == null) return;
 
         for (Space loc : existingLocations) {
@@ -140,7 +145,7 @@ public class InvasionTheatre {
     }
 
     // Donner la main au chef de clan
-    private void handleClanChiefTurn(ClanLeader chief) {
+    public void handleClanChiefTurn(ClanLeader chief) {
         System.out.println("It's the chef's turn : " + chief.getName());
         // TODO : Ajouter une fonction TakeTurn pour réellement donner la main au chef de clan
     }
