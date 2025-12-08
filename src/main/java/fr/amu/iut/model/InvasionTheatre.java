@@ -70,7 +70,7 @@ public class InvasionTheatre {
     }
 
     // Faites combattre les belligérants et renvoyez les survivants
-    private void handleBattles() {
+    public void handleBattles() {
         if (existingLocations == null) return;
 
         for (Space loc : existingLocations) {
@@ -81,7 +81,7 @@ public class InvasionTheatre {
     }
 
     // Modifier aléatoirement l'état de certains personnages (faim, potion magique, etc.)
-    private void updateRandomCharacterStates() {
+    public void updateRandomCharacterStates() {
         if (existingLocations == null) return;
 
         final int MAX_HUNGER_INCREASE = 5;
@@ -106,7 +106,7 @@ public class InvasionTheatre {
     }
 
     // Sortir la nourriture du champ de bataille
-    private void spawnFood() {
+    public void spawnFood() {
         if (existingLocations == null) return;
 
         FoodFactory factory = new FoodFactory();
@@ -127,7 +127,7 @@ public class InvasionTheatre {
     }
 
     // Transformer des aliments frais en aliments non frais
-    private void updateFoodFreshness() {
+    public void updateFoodFreshness() {
         if (existingLocations == null) return;
 
         for (Space loc : existingLocations) {
@@ -140,7 +140,7 @@ public class InvasionTheatre {
     }
 
     // Donner la main au chef de clan
-    private void handleClanChiefTurn(ClanLeader chief) {
+    public void handleClanChiefTurn(ClanLeader chief) {
         System.out.println("It's the chef's turn : " + chief.getName());
         // TODO : Ajouter une fonction TakeTurn pour réellement donner la main au chef de clan
     }
