@@ -7,7 +7,7 @@ import fr.amu.iut.model.characters.jobs.Legionary;
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
 
 
-public class RomanFortifiedCamp extends Space{
+public final class RomanFortifiedCamp extends Space{
     public RomanFortifiedCamp(String name, double surface, Character leader) {
         super(name, surface, leader);
     }

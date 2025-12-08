@@ -16,6 +16,8 @@ import fr.amu.iut.model.spaces.Battlefield;
 import fr.amu.iut.model.spaces.GallicVillage;
 import fr.amu.iut.model.spaces.RomanFortifiedCamp;
 
+import java.util.Comparator;
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -62,7 +64,10 @@ public class InvasionTheatre {
         if (existingLocations != null) {
             for (Space loc : existingLocations) {
                 System.out.println("In the place: " + loc.getName());
-                for (Character c : loc.getCharacters()) {
+                List<Character> sortedChars = new ArrayList<>(loc.getCharacters());
+                // Trier les personnages par nom ( ordre alphabétique )
+                sortedChars.sort(Comparator.comparing(Character::getName));
+                for (Character c : sortedChars) {
                     System.out.println(" - " + c.toString());
                 }
             }

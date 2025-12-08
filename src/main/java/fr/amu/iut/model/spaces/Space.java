@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 import static java.util.Collections.shuffle;
 
-public abstract class Space {
+public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage, GalloRomanVillage, RomanCity, RomanFortifiedCamp {
     private final String name;
     private double surface;
     private Character leader;
