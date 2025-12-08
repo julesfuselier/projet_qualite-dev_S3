@@ -28,7 +28,7 @@ public class InvasionTheatre {
     private List<ClanLeader> clanChiefs;
     private Random random = new Random();
 
-    // Constructor
+    // Constructeur
     public InvasionTheatre(String name, int maxLocations) {
         this.name = name;
         this.maxLocations = maxLocations;
@@ -36,7 +36,7 @@ public class InvasionTheatre {
         this.clanChiefs = new ArrayList<>();
     }
 
-    // Displays the locations in the theater
+    // Affiche les emplacements dans le théâtre
     public void showLocations() {
         if (existingLocations != null) {
             System.out.println("Theatre venues " + name);
@@ -46,7 +46,7 @@ public class InvasionTheatre {
         }
     }
 
-    // Displays the total number of characters present
+    // Affiche le nombre total de caractères présents
     public void showTotalCharacterCount() {
         int total = 0;
         if (existingLocations != null) {
@@ -57,7 +57,7 @@ public class InvasionTheatre {
         System.out.println("Total number of characters in play : " + total);
     }
 
-    // Displays characters from all locations
+    // Affiche les caractères de tous les emplacements
     public void showAllCharacters() {
         if (existingLocations != null) {
             for (Space loc : existingLocations) {
@@ -69,8 +69,8 @@ public class InvasionTheatre {
         }
     }
 
-    // Make the belligerents fight and send back the survivors
-    public void handleBattles() {
+    // Faites combattre les belligérants et renvoyez les survivants
+    private void handleBattles() {
         if (existingLocations == null) return;
 
         for (Space loc : existingLocations) {
@@ -80,8 +80,8 @@ public class InvasionTheatre {
         }
     }
 
-    // Randomly alter the status of certain characters (hunger, magic potion, etc.)
-    public void updateRandomCharacterStates() {
+    // Modifier aléatoirement l'état de certains personnages (faim, potion magique, etc.)
+    private void updateRandomCharacterStates() {
         if (existingLocations == null) return;
 
         final int MAX_HUNGER_INCREASE = 5;
@@ -105,7 +105,8 @@ public class InvasionTheatre {
         }
     }
 
-    public void spawnFood() {
+    // Sortir la nourriture du champ de bataille
+    private void spawnFood() {
         if (existingLocations == null) return;
 
         FoodFactory factory = new FoodFactory();
@@ -113,23 +114,20 @@ public class InvasionTheatre {
         FoodType[] types = FoodType.values();
 
         for (Space loc : existingLocations) {
-            // Pas de nourriture sur le champ de bataille
+            // La nourriture n'apparaît pas sur les champs de bataille.
             if (!loc.isBattlefield()) {
-                // 30% de chance de faire apparaître un truc à manger
-                if (random.nextInt(100) < 30) {
-                    // On choisit un type au hasard (Sanglier, Poisson, etc.)
-                    FoodType randomType = types[random.nextInt(types.length)];
-                    Food newFood = factory.createFood(randomType);
-
-                    loc.addFood(newFood);
-                    System.out.println("[FOOD] " + newFood.getName() + " est apparu à : " + loc.getName());
+                // 20 % de chances qu'un sanglier ou un fruit apparaisse
+                if (random.nextInt(100) < 20) {
+                    loc.addFood(new Food("Test food", 10, true, FreshnessStatus.FRESH, FoodType.FISH));
+                    loc.addFood(loc.getFoods().get(random.nextInt(loc.getFoods().size())));
+                    System.out.println("Food appeared at : " + loc.getName());
                 }
             }
         }
     }
 
-    // Changing fresh food into non-fresh food
-    public void updateFoodFreshness() {
+    // Transformer des aliments frais en aliments non frais
+    private void updateFoodFreshness() {
         if (existingLocations == null) return;
 
         for (Space loc : existingLocations) {
@@ -141,7 +139,7 @@ public class InvasionTheatre {
         }
     }
 
-    // Hand over to a clan chief
+    // Donner la main au chef de clan
     private void handleClanChiefTurn(ClanLeader chief) {
         System.out.println("It's the chef's turn : " + chief.getName());
         // TODO : Ajouter une fonction TakeTurn pour réellement donner la main au chef de clan

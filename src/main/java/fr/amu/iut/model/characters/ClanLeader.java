@@ -12,7 +12,7 @@ public class ClanLeader extends Character implements Leader {
     private Space managedLocation;
     private CharacterFactory characterFactory = new CharacterFactory();
 
-    // ClanLeader constructor
+    // Constructeur de ClanLeader
     public ClanLeader(String name, char sex, int age, Space location) {
         super(name, sex, age);
         this.managedLocation = location;
@@ -23,12 +23,12 @@ public class ClanLeader extends Character implements Leader {
         System.out.println(getName() + " leads " + character.getName());
     }
 
-    // Displays the characteristics of the managed location
+    // Affiche les informations concernant l'emplacement geré
     public void examineLocation() {
         managedLocation.showCharacteristics();
     }
 
-    // Create a new character in the village
+    // Crée un nouveau personnage dans le village
     public void createNewCharacterInVillage(Faction faction, String role, String name) {
         Character newCharacter = characterFactory.createCharacter(faction, role, name);
         if (newCharacter != null) {
@@ -39,8 +39,9 @@ public class ClanLeader extends Character implements Leader {
         }
     }
 
-    // Heal a character from the village
+    // Soigne un personnage du village
     public void healCharacterInVillage(Character character, int healAmountToHeal) {
+        // Si le personnage concerné est dans l'emplacement geré
         if (managedLocation.getCharacters().contains(character)) {
             character.beHealed(healAmountToHeal);
             System.out.println(getName() + " treat " + character.getName() + ". His health is now " + character.getHealth().get() + ".");
@@ -49,26 +50,26 @@ public class ClanLeader extends Character implements Leader {
         }
     }
 
-    // Feel a character from the village
+    // Nourrit un personnage du village
     public void feedCharacterInVillage(Character character, Food food) {
-        // If the character concerned is in the managed location & that food exists
+        // Si le personnage concerné est dans l'emplacement géré et que la nourriture existe
         if (managedLocation.getCharacters().contains(character) && managedLocation.getFoods().contains(food)) {
             character.eat(food);
             managedLocation.removeFood(food);
             System.out.println(getName() + " feeds " + character.getName() + " with " + food.getName() + ".");
         }
-        // If the character concerned is not in the managed location
+        // Si le personnage concerné n'est pas dans l'emplacement geré
         else if (!managedLocation.getCharacters().contains(character)) {
             System.out.println(character.getName() + " is not in the village of " + getName() + ".");
         }
-        // If food is not available in this village
+        // Si la nouriture est dusponible dans le village
         else {
             System.out.println(food.getName() + " is not available in the village of " + getName() + ".");
         }
     }
 
-    // Ask the druid to make a potion
-    public void askDruidForMagicPotion(Druid druid, PotionType potionType) {
+    // Demander au druide de faire une potion
+    public void askDruidForMagicPotion(Druid druid) {
         if (managedLocation.getCharacters().contains(druid)) {
             druid.craftMagicPotion(potionType);
             System.out.println(getName() + " ask to " + druid.getName() + " to make a magic potion.");
@@ -77,8 +78,8 @@ public class ClanLeader extends Character implements Leader {
         }
     }
 
-    // Give a magic potion to a character in the village
-    public void giveMagicPotionToCharacterInVillage(Character character, MagicPotion magicPotion) {
+    // Donner une potion magique à un personnage du village
+    public void giveMagicPotionToCharacterInVillage(Character character, int amount) {
         if (managedLocation.getCharacters().contains(character)) {
             character.drinkMagicPotion(magicPotion, false);
             System.out.println(getName() + " give the magic potion to " + character.getName() + ".");
