@@ -11,6 +11,11 @@ public class ClanLeader extends Character implements Leader {
 
     private Space managedLocation;
     private CharacterFactory characterFactory = new CharacterFactory();
+    private MagicPotion magicPotion;
+    // Permet au chef de clan de recevoir une potion magique (ex: du druide)
+    public void receiveMagicPotion(MagicPotion potion) {
+        this.magicPotion = potion;
+    }
 
     // Constructeur de ClanLeader
     public ClanLeader(String name, char sex, int age, Space location) {
@@ -69,7 +74,7 @@ public class ClanLeader extends Character implements Leader {
     }
 
     // Demander au druide de faire une potion
-    public void askDruidForMagicPotion(Druid druid) {
+    public void askDruidForMagicPotion(Druid druid, PotionType potionType) {
         if (managedLocation.getCharacters().contains(druid)) {
             druid.craftMagicPotion(potionType);
             System.out.println(getName() + " ask to " + druid.getName() + " to make a magic potion.");
@@ -81,8 +86,13 @@ public class ClanLeader extends Character implements Leader {
     // Donner une potion magique à un personnage du village
     public void giveMagicPotionToCharacterInVillage(Character character, int amount) {
         if (managedLocation.getCharacters().contains(character)) {
-            character.drinkMagicPotion(magicPotion, false);
-            System.out.println(getName() + " give the magic potion to " + character.getName() + ".");
+            if (magicPotion != null) {
+                character.drinkMagicPotion(magicPotion, false);
+                System.out.println(getName() + " give the magic potion to " + character.getName() + ".");
+                magicPotion = null; // La potion a été utilisée
+            } else {
+                System.out.println(getName() + " n'a pas de potion magique à donner.");
+            }
         } else {
             System.out.println(character.getName() + " is not in the village of " + getName() + ".");
         }
