@@ -97,7 +97,6 @@ public class MainApp {
      * Gère l'interaction avec les Chefs de Clan (Sujet PDF Section 6)
      */
     private static void handleClanLeaderActions() {
-        // 1. Trouver les chefs disponibles
         List<ClanLeader> leaders = new ArrayList<>();
         for (Space space : theatre.getExistingLocations()) {
             for (Character c : space.getCharacters()) {
@@ -112,7 +111,6 @@ public class MainApp {
             return;
         }
 
-        // 2. Choisir un chef
         System.out.println("\n--- SÉLECTION DU CHEF ---");
         for (int i = 0; i < leaders.size(); i++) {
             System.out.println((i + 1) + ". " + leaders.get(i).getName());
@@ -125,7 +123,6 @@ public class MainApp {
         ClanLeader selectedLeader = leaders.get(choice - 1);
         boolean acting = true;
 
-        // 3. Menu d'actions du chef
         while (acting) {
             System.out.println(GREEN + "\n--- ACTION : " + selectedLeader.getName() + " ---" + RESET);
             System.out.println("1. Examiner le lieu");
@@ -225,8 +222,8 @@ public class MainApp {
         theatre = new InvasionTheatre("Armorique", 20);
 
         System.out.println("Comment voulez-vous commencer ?");
-        System.out.println("1. 🚀 Mode DÉMO (Configuration automatique)");
-        System.out.println("2. 🛠️ Mode MANUEL (Créer ses propres lieux et persos)");
+        System.out.println("1. Mode DÉMO (Configuration automatique)");
+        System.out.println("2. Mode MANUEL (Créer ses propres lieux et persos)");
         int choice = getIntInput(1, 2);
 
         if (choice == 1) {
@@ -253,7 +250,6 @@ public class MainApp {
         theatre.addLocation(camp);
         theatre.addLocation(battlefield);
 
-        // 2. Création des Personnages via la Factory
         try {
             // --- Les Gaulois ---
             Character panoramix = characterFactory.createCharacter(Faction.GAULOIS, "druide", "Panoramix");
@@ -407,7 +403,7 @@ public class MainApp {
             System.out.println("2. Forgeron");
             System.out.println("3. Aubergiste");
             System.out.println("4. Marchand");
-            System.out.println("5. CHEF DE CLAN (Abraracourcix)"); // Nouvelle option
+            System.out.println("5. Chef de clan");
 
             int c = getIntInput(1, 5);
             return switch (c) {
