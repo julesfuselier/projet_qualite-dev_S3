@@ -3,11 +3,13 @@ package fr.amu.iut.model.characters;
 import fr.amu.iut.model.InvasionTheatre;
 import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.items.foods.Food;
+import fr.amu.iut.model.items.potion.MagicPotion;
+import fr.amu.iut.model.items.potion.PotionType;
 import fr.amu.iut.model.spaces.Space;
 
 public class ClanLeader extends Character implements Leader {
 
-    private final Space managedLocation;
+    private Space managedLocation;
     private CharacterFactory characterFactory = new CharacterFactory();
 
     // Constructeur de ClanLeader
@@ -69,7 +71,7 @@ public class ClanLeader extends Character implements Leader {
     // Demander au druide de faire une potion
     public void askDruidForMagicPotion(Druid druid) {
         if (managedLocation.getCharacters().contains(druid)) {
-            druid.makeMagicPotion();
+            druid.craftMagicPotion(potionType);
             System.out.println(getName() + " ask to " + druid.getName() + " to make a magic potion.");
         } else {
             System.out.println("The druid " + druid.getName() + " is not in the villag.");
@@ -79,15 +81,28 @@ public class ClanLeader extends Character implements Leader {
     // Donner une potion magique à un personnage du village
     public void giveMagicPotionToCharacterInVillage(Character character, int amount) {
         if (managedLocation.getCharacters().contains(character)) {
-            character.drinkMagicPotion(amount);
+            character.drinkMagicPotion(magicPotion, false);
             System.out.println(getName() + " give the magic potion to " + character.getName() + ".");
         } else {
             System.out.println(character.getName() + " is not in the village of " + getName() + ".");
         }
     }
 
-    // Transfere un character de son emplacement à un champ de bataille ou une enceinte
-    public void transferCharacter(Character character) {
-        // TODO : Transférer un personnage de son lieu à un champ de bataille ou un enclos
+    public void transferCharacter(Character character, Space destination) {
+        if (managedLocation.getCharacters().contains(character)) {
+            if (destination.authorized(character)) {
+                managedLocation.removeCharacter(character);
+                destination.addCharacter(character);
+                System.out.println(getName() + " a transféré " + character.getName() + " vers " + destination.getName());
+            } else {
+                System.out.println("Transfert impossible : " + character.getName() + " n'est pas autorisé dans " + destination.getName());
+            }
+        } else {
+            System.out.println(character.getName() + " n'est pas dans le lieu géré par " + getName());
+        }
+    }
+
+    public void setLocation(Space location) {
+        this.managedLocation = location;
     }
 }

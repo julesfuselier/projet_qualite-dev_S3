@@ -306,4 +306,16 @@ public abstract class Character implements Cloneable {
             throw new AssertionError();
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("%-15s [%-12s] | PV: %-3d/%-3d | Force: %-3d | Faim: %d",
+                getName(),
+                this.getClass().getSimpleName(),
+                health.get(),
+                health.getMax(),
+                getStrength(),
+                hunger.get()
+        );
+    }
 }

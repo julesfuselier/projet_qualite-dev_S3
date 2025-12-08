@@ -2,10 +2,19 @@ package fr.amu.iut.model;
 
 import fr.amu.iut.model.characters.ClanLeader;
 import fr.amu.iut.model.characters.Character;
+import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.items.foods.Food;
+import fr.amu.iut.model.items.foods.FoodFactory;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
+import fr.amu.iut.model.items.potion.MagicPotion;
+import fr.amu.iut.model.items.potion.PotionType;
 import fr.amu.iut.model.spaces.Space;
+import fr.amu.iut.model.characters.Fighter;
+import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.spaces.Battlefield;
+import fr.amu.iut.model.spaces.GallicVillage;
+import fr.amu.iut.model.spaces.RomanFortifiedCamp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +109,10 @@ public class InvasionTheatre {
     private void spawnFood() {
         if (existingLocations == null) return;
 
+        FoodFactory factory = new FoodFactory();
+        // Liste des types de nourriture possibles
+        FoodType[] types = FoodType.values();
+
         for (Space loc : existingLocations) {
             // La nourriture n'apparaît pas sur les champs de bataille.
             if (!loc.isBattlefield()) {
@@ -130,5 +143,91 @@ public class InvasionTheatre {
     private void handleClanChiefTurn(ClanLeader chief) {
         System.out.println("It's the chef's turn : " + chief.getName());
         // TODO : Ajouter une fonction TakeTurn pour réellement donner la main au chef de clan
+    }
+
+    public void addLocation(Space space) {
+        if (existingLocations == null) existingLocations = new ArrayList<>();
+        this.existingLocations.add(space);
+    }
+
+    public List<Space> getExistingLocations() {
+        return this.existingLocations;
+    }
+
+    public void handleAutonomousMovements() {
+        if (existingLocations == null) return;
+
+        System.out.println("Mouvements autonomes des troupes...");
+
+        for (Space currentSpace : existingLocations) {
+            List<Character> charactersSnapshot = new ArrayList<>(currentSpace.getCharacters());
+
+            for (Character c : charactersSnapshot) {
+                Space destination = null;
+
+                // Si blessé ou affamé ET sur un champ de bataille, chercher un lieu sûr
+                boolean isInjured = c.getHealth().get() < 30;
+                boolean isStarving = c.getHunger().get() < 20;
+
+                if ((isInjured || isStarving) && currentSpace.isBattlefield()) {
+                    destination = findSafeHaven(c.getFaction());
+                }
+
+                // Guerre si combattant (bonne santé) et pas sur un champ de bataille, chercher un champ de bataille
+                else if (c instanceof Fighter && !currentSpace.isBattlefield()) {
+                    if (!isInjured && !isStarving) {
+                        destination = findBattlefield();
+                    }
+                }
+
+                if (destination != null && destination != currentSpace) {
+                    moveCharacter(c, currentSpace, destination);
+                }
+            }
+        }
+    }
+
+    // Trouve un lieu sûr (Village ou Camp) selon la faction
+    private Space findSafeHaven(Faction faction) {
+        for (Space s : existingLocations) {
+            if (faction == Faction.GAULOIS && s instanceof GallicVillage) return s;
+            if (faction == Faction.ROMAIN && s instanceof RomanFortifiedCamp) return s;
+        }
+        return null;
+    }
+
+    // Trouve le premier champ de bataille disponible
+    private Space findBattlefield() {
+        for (Space s : existingLocations) {
+            if (s instanceof Battlefield) return s;
+        }
+        return null;
+    }
+
+    // Déplace physiquement le personnage
+    private void moveCharacter(Character c, Space from, Space to) {
+        if (to.authorized(c)) {
+            from.removeCharacter(c);
+            to.addCharacter(c);
+            System.out.println("   -> " + c.getName() + " quitte " + from.getName() + " pour " + to.getName());
+        }
+    }
+
+    public void handleDruidActivity() {
+        if (existingLocations == null) return;
+
+        for ( Space loc : existingLocations) {
+            if(!loc.isBattlefield()) {
+                for (Character c : loc.getCharacters()) {
+                    if (c instanceof Druid) {
+                        if(random.nextInt(3) == 0) { // 1 chance sur 3 de fabriquer une potion
+                            MagicPotion potion = new MagicPotion(PotionType.BASIC);
+                            c.getInventory().addItem(potion);
+                            System.out.println("[POTION] Le druide " + c.getName() + " a fabriqué une potion magique de type " + potion.getType());
+                        }
+                    }
+                }
+            }
+        }
     }
 }

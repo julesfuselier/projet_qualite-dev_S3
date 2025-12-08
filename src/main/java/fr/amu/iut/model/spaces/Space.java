@@ -1,12 +1,13 @@
 package fr.amu.iut.model.spaces;
 
+import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.characters.Character;
-
-
+import fr.amu.iut.model.characters.Fighter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import static java.util.Collections.shuffle;
 
 public abstract class Space {
     private final String name;
@@ -89,18 +90,18 @@ public abstract class Space {
 
     // Show characteristics of the space
     public void showCharacteristics(){
-        System.out.println("Name: " + name);
+        System.out.println("Nom: " + name);
         System.out.println("Surface : " + surface);
         if(!(this instanceof Battlefield)){
-            System.out.println("Character leader: " + leader);
+            System.out.println("Personnage principal: " + leader);
         }
-        System.out.println("Characters: " + characters.size());
+        System.out.println("Personnages: " + characters.size());
         for(Character c : characters){
-            System.out.println("Character: " + c.getName());
+            System.out.println("Personnages: " + c.getName());
         }
 
         for(Food f : foods){
-            System.out.println("Foods available : " + f.getName());
+            System.out.println("Nourriture disponible : " + f.getName());
         }
     }
 
@@ -123,38 +124,54 @@ public abstract class Space {
         foods.remove(f);
     }
 
+    /*
+     * Résout les combats entre les personnages de factions opposées présents dans cet espace.
+     * Les combats sont organisés en duels aléatoires entre membres des deux factions.
+     * Les personnages morts sont retirés de l'espace après les combats.
+     */
     public void resolveCombat() {
-        // Déterminez si un combat est possible (plusieurs factions)
-        if (getCharacters().size() < 2 || !isBattlefield()) {
+        if (!isBattlefield() || getCharacters().size() < 2) {
             return;
         }
 
-        System.out.println("Bataille en cours à : " + getName());
+        List<Character> teamGaulois = new ArrayList<>();
+        List<Character> teamRomain = new ArrayList<>();
 
-        // Logique de combat
-        List<Character> fighters = new ArrayList<>(getCharacters());
+        for (Character c : getCharacters()) {
+            if (c instanceof Fighter) {
+                if (c.getFaction() == Faction.GAULOIS) {
+                    teamGaulois.add(c);
+                } else if (c.getFaction() == Faction.ROMAIN) {
+                    teamRomain.add(c);
+                }
+            }
+        }
 
-        if (fighters.size() >= 2) {
-            // Sélectionner deux combattants aléatoires
-            Character fighter1 = fighters.get(this.random.nextInt(fighters.size()));
-            Character fighter2 = fighters.get(this.random.nextInt(fighters.size()));
+        if (teamGaulois.isEmpty() || teamRomain.isEmpty()) {
+            return;
+        }
 
-            // S'assurer qu'ils sont différents et de factions différentes
-            if (fighter1 != fighter2 && fighter1.getFaction() != fighter2.getFaction()) {
+        System.out.println( "--- BASTON GÉNÉRALE à " + getName() + " ---");
 
-                // Augmentation de la bellicosité
-                fighter1.getBelligerence().add(10);
-                fighter2.getBelligerence().add(10);
+        // Duel aléatoire
+        shuffle(teamGaulois);
+        shuffle(teamRomain);
 
-                // Perte de vie aléatoire
-                int damage1 = this.random.nextInt(11) + 5;
-                int damage2 = this.random.nextInt(11) + 5;
+        // Former des duos et les faire se battre
+        int fightsCount = Math.min(teamGaulois.size(), teamRomain.size());
 
-                fighter1.getHealth().add(-damage1);
-                fighter2.getHealth().add(-damage2);
+        for (int i = 0; i < fightsCount; i++) {
+            Character gaulois = teamGaulois.get(i);
+            Character romain = teamRomain.get(i);
 
-                System.out.println("  -> " + fighter1.getName() + " vs " + fighter2.getName() +
-                        " (Dégâts: " + damage2 + " et " + damage1 + ")");
+            if (!gaulois.isDead() && !romain.isDead()) {
+                System.out.println("   Duel : " + gaulois.getName() + " VS " + romain.getName());
+
+                ((Fighter) gaulois).fight(romain);
+
+                if (!romain.isDead()) {
+                    ((Fighter) romain).fight(gaulois);
+                }
             }
         }
         removeDeadCharacters();
