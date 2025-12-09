@@ -32,12 +32,12 @@ public class Pack {
         return members;
     }
 
-    // Récupérer le male le plus fort (basé sur la force, force max)
+    // Récupérer le male le plus fort
     public Lycanthrope getAlphaMale() {
         return alphaMale;
     }
 
-    // Récupérer la femelle la plus forte (basé sur le niveau, niveau max)
+    // Récupérer la femelle la plus forte
     public Lycanthrope getAlphaFemale() {
         return alphaFemale;
     }
@@ -54,20 +54,45 @@ public class Pack {
         // TODO : Tri par rang, force, etc. à implémenter
     }
 
-    // Créer le couple alpha (male et femelle les plus forts)
+    // Créer le couple alpha (male et femelle adultes les plus forts)
     public void setAlphaCouple() {
-        // Trouver le mâle adulte le plus fort et la femelle adulte au plus haut niveau
         Lycanthrope bestMale = null;
         Lycanthrope bestFemale = null;
+
         for (Lycanthrope l : members) {
-            if (l.getSex() == 'M' && (bestMale == null || l.getStrength() > bestMale.getStrength())) {
-                bestMale = l;
-            }
-            if (l.getSex() == 'F' && (bestFemale == null || l.getLevel() > bestFemale.getLevel())) {
-                bestFemale = l;
+            if ("adulte".equals(l.getAgeGroup())) {
+                if (l.getSex() == 'M' && (bestMale == null || l.getStrength() > bestMale.getStrength())) {
+                    bestMale = l;
+                }
+                if (l.getSex() == 'F' && (bestFemale == null || l.getStrength() > bestFemale.getStrength())) {
+                    bestFemale = l;
+                }
             }
         }
         this.alphaMale = bestMale;
         this.alphaFemale = bestFemale;
+    }
+
+    /**
+     * Met à jour le couple Alpha après une domination.
+     * Le nouveau mâle Alpha est le vainqueur du combat.
+     * La nouvelle femelle Alpha est la femelle adulte avec le plus haut niveau.
+     * @param newAlphaMale Le lycanthrope qui est devenu le nouveau mâle Alpha.
+     */
+    public void updateAlphasAfterDomination(Lycanthrope newAlphaMale) {
+        System.out.println("Le couple Alpha de la meute est en train de changer !");
+        this.alphaMale = newAlphaMale;
+
+        Lycanthrope newAlphaFemale = null;
+        for (Lycanthrope l : members) {
+            // On ne cherche que parmi les femelles adultes
+            if (l.getSex() == 'F' && "adulte".equals(l.getAgeGroup())) {
+                if (newAlphaFemale == null || l.getLevel() > newAlphaFemale.getLevel()) {
+                    newAlphaFemale = l;
+                }
+            }
+        }
+        this.alphaFemale = newAlphaFemale;
+        System.out.println("Le nouveau couple Alpha est : " + this.alphaMale.getName() + " et " + (this.alphaFemale != null ? this.alphaFemale.getName() : "personne"));
     }
 }

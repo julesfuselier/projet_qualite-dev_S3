@@ -88,6 +88,22 @@ public class Lycanthrope extends Character implements Fighter {
             this.level = computeLevel();
             target.level = target.computeLevel();
 
+            // Vérifier si la cible était un mâle Alpha
+            Pack pack = target.getPack();
+            if (pack != null && target == pack.getAlphaMale()) {
+                System.out.println(target.getName() + " a été détrôné de sa place de Mâle Alpha !");
+                Lycanthrope oldAlphaFemale = pack.getAlphaFemale();
+
+                // Mettre à jour le couple Alpha dans la meute
+                pack.updateAlphasAfterDomination(this);
+
+                // L'ancienne femelle Alpha prend le rang de son ancien conjoint déchu
+                if (oldAlphaFemale != null && oldAlphaFemale != pack.getAlphaFemale()) {
+                    System.out.println(oldAlphaFemale.getName() + " a perdu sa place de Femelle Alpha.");
+                    oldAlphaFemale.setRank(target.getRank()); // target est l'ancien mâle alpha avec son nouveau rang
+                }
+            }
+
         } else {
             System.out.println("Domination échouée !");
             // La cible se montre agressive
