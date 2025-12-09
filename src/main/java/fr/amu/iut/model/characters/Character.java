@@ -231,6 +231,14 @@ public abstract class Character implements Cloneable {
         }
     }
 
+    public void beHealed(int amount) {
+        if (isDead()) {
+            return;
+        }
+        this.health.add(amount);
+        System.out.println(getName() + " est soigné de " + amount + " PV.");
+    }
+
     public void getHungry(int hungerAmount) {
         this.hunger.add(-hungerAmount);
     }
