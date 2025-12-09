@@ -14,6 +14,8 @@ public class Lycanthrope extends Character implements Fighter {
     private Pack pack;
     private boolean lone;
 
+    private static final int DOMINATION_THRESHOLD = -5;
+
     // Constructeur
     public Lycanthrope(String name, char sex, int size, int age, int strength, int endurance, String ageGroup,
             String rank, int dominationFactor, double impulsiveness, Pack pack, boolean lone) {
@@ -197,17 +199,53 @@ public class Lycanthrope extends Character implements Fighter {
         leavePack();
     }
 
+    /**
+     * Vérifie si le facteur de domination est tombé en dessous d'un seuil
+     * et dégrade le rang du lycanthrope si nécessaire.
+     */
+    public void updateRankFromDominationFactor() {
+        if (this.dominationFactor < DOMINATION_THRESHOLD) {
+            demoteRank();
+        }
+    }
+
+    // Dégrade le rang du lycanthrope s'il n'est pas le dernier de son sexe à avoir ce rang.
+    private void demoteRank() {
+        // On ne peut pas dégrader les alphas ou les omegas de cette manière
+        if ("α".equals(this.rank) || "ω".equals(this.rank)) {
+            return;
+        }
+
+        // Vérifier si le lycanthrope est le dernier de son rang pour son sexe
+        if (this.pack != null && !this.pack.isLastOfRank(this.rank, this.getSex())) {
+            String nextRank = getNextRank(this.rank);
+            if (nextRank != null) {
+                System.out.println(getName() + " a un facteur de domination trop bas et est dégradé au rang " + nextRank);
+                this.setRank(nextRank);
+                this.setDominationFactor(0);
+            }
+        }
+    }
+
+    //Renvoie le rang immédiatement inférieur.
+    private String getNextRank(String currentRank) {
+        return switch (currentRank) {
+            case "β" -> "γ";
+            case "γ" -> "δ";
+            case "δ" -> "ε";
+            default -> null; // Pas de dégradation depuis ε ou autre
+        };
+    }
+
     // Getters & Setters
     public void setAgeGroup(String ageGroup) {
         this.ageGroup = ageGroup;
         this.level = computeLevel();
     }
-
     public void setRank(String rank) {
         this.rank = rank;
         this.level = computeLevel();
     }
-
     public String getAgeGroup() {
         return ageGroup;
     }
