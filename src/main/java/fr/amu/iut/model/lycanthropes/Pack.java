@@ -95,4 +95,20 @@ public class Pack {
         this.alphaFemale = newAlphaFemale;
         System.out.println("Le nouveau couple Alpha est : " + this.alphaMale.getName() + " et " + (this.alphaFemale != null ? this.alphaFemale.getName() : "personne"));
     }
+
+    /**
+     * Vérifie si un lycanthrope est le dernier de son rang et de son sexe dans la meute.
+     * @param rank Le rang à vérifier.
+     * @param sex Le sexe à vérifier.
+     * @return true si c'est le dernier, false sinon.
+     */
+    public boolean isLastOfRank(String rank, char sex) {
+        int count = 0;
+        for (Lycanthrope member : members) {
+            if (member.getSex() == sex && rank.equals(member.getRank())) {
+                count++;
+            }
+        }
+        return count <= 1;
+    }
 }
