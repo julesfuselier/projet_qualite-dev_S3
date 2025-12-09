@@ -12,6 +12,7 @@ public class ClanLeader extends Character implements Leader {
     private Space managedLocation;
     private CharacterFactory characterFactory = new CharacterFactory();
     private MagicPotion magicPotion;
+
     // Permet au chef de clan de recevoir une potion magique (ex: du druide)
     public void receiveMagicPotion(MagicPotion potion) {
         this.magicPotion = potion;
@@ -38,7 +39,8 @@ public class ClanLeader extends Character implements Leader {
         Character newCharacter = characterFactory.createCharacter(faction, role, name);
         if (newCharacter != null) {
             managedLocation.addCharacter(newCharacter);
-            System.out.println(getName() + " has created a new character : " + newCharacter.getName() + " in the village.");
+            System.out.println(
+                    getName() + " has created a new character : " + newCharacter.getName() + " in the village.");
         } else {
             System.out.println("Failure to create character.");
         }
@@ -49,7 +51,8 @@ public class ClanLeader extends Character implements Leader {
         // Si le personnage concerné est dans l'emplacement geré
         if (managedLocation.getCharacters().contains(character)) {
             character.beHealed(healAmountToHeal);
-            System.out.println(getName() + " treat " + character.getName() + ". His health is now " + character.getHealth().get() + ".");
+            System.out.println(getName() + " treat " + character.getName() + ". His health is now "
+                    + character.getHealth().get() + ".");
         } else {
             System.out.println(character.getName() + " is not in the village of " + getName() + ".");
         }
@@ -57,7 +60,8 @@ public class ClanLeader extends Character implements Leader {
 
     // Nourrit un personnage du village
     public void feedCharacterInVillage(Character character, Food food) {
-        // Si le personnage concerné est dans l'emplacement géré et que la nourriture existe
+        // Si le personnage concerné est dans l'emplacement géré et que la nourriture
+        // existe
         if (managedLocation.getCharacters().contains(character) && managedLocation.getFoods().contains(food)) {
             character.eat(food);
             managedLocation.removeFood(food);
@@ -103,9 +107,11 @@ public class ClanLeader extends Character implements Leader {
             if (destination.authorized(character)) {
                 managedLocation.removeCharacter(character);
                 destination.addCharacter(character);
-                System.out.println(getName() + " a transféré " + character.getName() + " vers " + destination.getName());
+                System.out
+                        .println(getName() + " a transféré " + character.getName() + " vers " + destination.getName());
             } else {
-                System.out.println("Transfert impossible : " + character.getName() + " n'est pas autorisé dans " + destination.getName());
+                System.out.println("Transfert impossible : " + character.getName() + " n'est pas autorisé dans "
+                        + destination.getName());
             }
         } else {
             System.out.println(character.getName() + " n'est pas dans le lieu géré par " + getName());
