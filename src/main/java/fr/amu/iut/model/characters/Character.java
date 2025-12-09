@@ -52,15 +52,9 @@ public abstract class Character implements Cloneable {
 
     /**
      * Permet de soigner le personnage pour augmenter l'indicateur de santé.
-     * @param healAmount La quantité de soins à ajouter.
-     */
-    public void beHealed(int healAmount) {
-        this.health.add(healAmount);
-    }
-
-    /**
      * Méthode principale pour manger.
      * Gère la faim, les restrictions de faction, et les pénalités de santé.
+     * 
      * @param food La nourriture à consommer.
      */
     public void eat(Food food) {
@@ -81,7 +75,8 @@ public abstract class Character implements Cloneable {
         }
 
         this.hunger.add(food.getNutritionValue());
-        System.out.println(getName() + " mange " + food.getName() + ". (Faim : " + hunger.get() + "/" + hunger.getMax() + ")");
+        System.out.println(
+                getName() + " mange " + food.getName() + ". (Faim : " + hunger.get() + "/" + hunger.getMax() + ")");
 
         int healthDamage = 0;
 
@@ -97,7 +92,8 @@ public abstract class Character implements Cloneable {
 
         if (healthDamage > 0) {
             this.health.add(-healthDamage);
-            System.out.println(getName() + " perd " + healthDamage + " points de vie à cause d'une mauvaise alimentation.");
+            System.out.println(
+                    getName() + " perd " + healthDamage + " points de vie à cause d'une mauvaise alimentation.");
         }
 
         this.lastEatenFoodType = food.getType();
@@ -110,7 +106,8 @@ public abstract class Character implements Cloneable {
         FoodType type = food.getType();
 
         if (getFaction() == Faction.GAULOIS) {
-            if (type == FoodType.WILD_BOAR || type == FoodType.WINE) return true;
+            if (type == FoodType.WILD_BOAR || type == FoodType.WINE)
+                return true;
             return type == FoodType.FISH;
         }
 
@@ -128,7 +125,8 @@ public abstract class Character implements Cloneable {
      * Important pour la règle des "2 fois consécutivement".
      */
     private boolean isVegetable(FoodType type) {
-        if (type == null) return false;
+        if (type == null)
+            return false;
 
         return type == FoodType.CARROT
                 || type == FoodType.CLOVER
@@ -143,9 +141,12 @@ public abstract class Character implements Cloneable {
 
     /**
      * Fait boire de la potion au personnage.
-     * @param potion L'objet potion (la marmite).
-     * @param drinkAll Si true, boit toute la marmite d'un coup. Sinon, une seule dose.
-     * @return Un nouvel objet si transformation (Lycanthrope), sinon this ou null si mort/statue.
+     * 
+     * @param potion   L'objet potion (la marmite).
+     * @param drinkAll Si true, boit toute la marmite d'un coup. Sinon, une seule
+     *                 dose.
+     * @return Un nouvel objet si transformation (Lycanthrope), sinon this ou null
+     *         si mort/statue.
      */
     public Object drinkMagicPotion(MagicPotion potion, boolean drinkAll) {
         if (isStatue || isDead()) {
@@ -167,7 +168,8 @@ public abstract class Character implements Cloneable {
             this.magicPotion.setMax(100);
             this.magicPotion.add(100);
 
-            while(potion.takeDose());
+            while (potion.takeDose())
+                ;
             inventory.removeItem(potion);
 
         } else {
@@ -197,7 +199,6 @@ public abstract class Character implements Cloneable {
 
             }
         }
-
         return this;
     }
 
@@ -219,7 +220,8 @@ public abstract class Character implements Cloneable {
     }
 
     public void updatePotionDuration() {
-        if (permanentPotion || isStatue) return;
+        if (permanentPotion || isStatue)
+            return;
 
         if (magicPotion.get() > 0) {
             magicPotion.add(-1);
@@ -245,11 +247,13 @@ public abstract class Character implements Cloneable {
                 this.age,
                 this.strength + 50,
                 this.endurance + 50,
-                this.faction
-        );
-
-        wolf.inventory = this.inventory;
-
+                "adulte",
+                "ω",
+                0,
+                1.0,
+                null,
+                true);
+        wolf.setInventory(this.inventory);
         return wolf;
     }
 
@@ -258,45 +262,72 @@ public abstract class Character implements Cloneable {
     }
 
     // Getters et Setters pour les attributs
-    public Inventory getInventory() {return inventory;}
-    public String getName() {return name;}
+    public Inventory getInventory() {
+        return inventory;
+    }
+    public String getName() {
+        return name;
+    }
     public void setName(String name) {
         this.name = name;
     }
-    public char getSex() {return sex;}
+    public char getSex() {
+        return sex;
+    }
     public void setSex(char sex) {
         this.sex = sex;
     }
-    public int getSize() {return size;}
+    public int getSize() {
+        return size;
+    }
     public void setSize(int size) {
         this.size = size;
     }
-    public int getAge() {return age;}
+    public int getAge() {
+        return age;
+    }
     public void setAge(int age) {
         this.age = age;
     }
-
     public void setStrength(int strength) {
         this.strength = strength;
     }
-    public int getEndurance() {return endurance;}
+    public int getEndurance() {
+        return endurance;
+    }
     public void setEndurance(int endurance) {
         this.endurance = endurance;
     }
-    public Faction getFaction() {return faction;}
+    public Faction getFaction() {
+        return faction;
+    }
     public void setFaction(Faction faction) {
         this.faction = faction;
     }
-
-    // Getters & Setters des indicateurs
-    public Statistics getHealth() { return health; }
-    public void setHealth(Statistics health) {this.health = health;}
-    public Statistics getHunger() { return hunger; }
-    public void setHunger(Statistics hunger) {this.hunger = hunger;}
-    public Statistics getBelligerence() { return belligerence; }
-    public void setBelligerence(Statistics belligerence) {this.belligerence = belligerence;}
-    public Statistics getMagicPotion() { return magicPotion;}
-    public void setMagicPotion(Statistics magicPotion) {this.magicPotion = magicPotion;}
+    public Statistics getHealth() {
+        return health;
+    }
+    public void setHealth(Statistics health) {
+        this.health = health;
+    }
+    public Statistics getHunger() {
+        return hunger;
+    }
+    public void setHunger(Statistics hunger) {
+        this.hunger = hunger;
+    }
+    public Statistics getBelligerence() {
+        return belligerence;
+    }
+    public void setBelligerence(Statistics belligerence) {
+        this.belligerence = belligerence;
+    }
+    public Statistics getMagicPotion() {
+        return magicPotion;
+    }
+    public void setMagicPotion(Statistics magicPotion) {
+        this.magicPotion = magicPotion;
+    }
 
     @Override
     public Character clone() {
@@ -315,7 +346,6 @@ public abstract class Character implements Cloneable {
                 health.get(),
                 health.getMax(),
                 getStrength(),
-                hunger.get()
-        );
+                hunger.get());
     }
 }
