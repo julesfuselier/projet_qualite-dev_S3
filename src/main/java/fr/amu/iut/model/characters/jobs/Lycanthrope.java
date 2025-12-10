@@ -34,13 +34,13 @@ public class Lycanthrope extends Character implements Fighter {
         int damage = (this.getStrength() * 2) - opponent.getEndurance();
         if (damage > 0) {
             opponent.getHealth().add(-damage);
-            //empèche les lycanthropes de se tuer entre eux
+            // Empêche les lycanthropes de se tuer entre eux
             if (opponent instanceof Lycanthrope && opponent.getHealth().get() <1){
                 opponent.getHealth().add(1);
             }
             System.out.println(getName() + " attaque sauvagement " + opponent.getName() + " (-" + damage + " HP)");
         } else {
-            System.out.println(getName() + " tries to attack " + opponent.getName() + " but fails.");
+            System.out.println(getName() + " essaie d'attaquer " + opponent.getName() + " mais échoue.");
         }
     }
 
@@ -218,19 +218,17 @@ public class Lycanthrope extends Character implements Fighter {
         };
     }
 
-
-
-    // Affiche les charactéristiques dy lycanthrope
+    // Affiche les caractéristiques du lycanthrope
     public void printCharacteristics() {
-        System.out.println("Name: " + getName());
-        System.out.println("Sex: " + getSex());
-        System.out.println("Age group: " + ageGroup);
-        System.out.println("Strength: " + getStrength());
-        System.out.println("Domination factor: " + dominationFactor);
-        System.out.println("Rank: " + rank);
-        System.out.println("Level: " + level);
-        System.out.println("Impulsiveness: " + impulsiveness);
-        System.out.println("Pack: " + (lone ? "Lone" : (pack != null ? "Member of a pack" : "None")));
+        System.out.println("Nom : " + getName());
+        System.out.println("Sexe : " + getSex());
+        System.out.println("Groupe d'âge : " + ageGroup);
+        System.out.println("Force : " + getStrength());
+        System.out.println("Facteur de domination : " + dominationFactor);
+        System.out.println("Rang : " + rank);
+        System.out.println("Niveau : " + level);
+        System.out.println("Impulsivité : " + impulsiveness);
+        System.out.println("Meute : " + (lone ? "Solitaire" : (pack != null ? "Membre d'une meute" : "Aucune")));
     }
 
     // Faire crier un lycanthrope
