@@ -26,6 +26,14 @@ Pour compiler et exécuter ce projet, vous aurez besoin de :
 
 L'application se lancera directement dans votre terminal.
 
+## Comment lancer les tests
+
+Pour vous assurer que tout fonctionne correctement, vous pouvez lancer la suite de tests automatisés avec la commande Maven suivante :
+
+```bash
+mvn test
+```
+
 ## Manuel d'utilisation
 
 ### 1. Démarrage de la simulation
@@ -55,10 +63,11 @@ Le jeu est structuré en tours. Le menu principal vous offre plusieurs options :
 
 ### 3. Factions et Personnages
 
-Le monde est peuplé de deux factions principales :
+Le monde est peuplé de trois factions principales :
 
 -   **Gaulois** : Peuvent avoir les métiers de Druide, Forgeron, Aubergiste, Marchand, et Chef de clan.
 -   **Romains** : Peuvent être Légionnaire, Général, Préfet, ou Chef de clan.
+-   **Lycanthropes** : Une faction sauvage avec sa propre structure sociale et ses propres règles.
 
 Chaque rôle a des spécificités qui influencent le déroulement du jeu.
 
@@ -71,3 +80,12 @@ En choisissant l'option "Actions de Chef de Clan", vous pouvez sélectionner un 
 -   **Nourrir un personnage** : Permet de donner de la nourriture à un personnage pour calmer sa faim.
 -   **Distribuer une potion magique** : Si un druide avec une potion se trouve sur le même lieu, le chef peut ordonner de donner la potion à un autre personnage pour le renforcer.
 -   **Retour au menu principal**.
+
+### 5. Les Lycanthropes : Une Faction à Part
+
+En plus des Gaulois et des Romains, une faction mystérieuse et puissante peuple le monde : les **Lycanthropes**.
+
+-   **Structure sociale** : Les lycanthropes vivent en **meutes**. Chaque meute est dirigée par un **couple Alpha** (un mâle et une femelle).
+-   **Hiérarchie (Rangs)** : La meute est organisée selon une hiérarchie stricte basée sur un facteur de domination. Les rangs vont de **Omega** (le plus bas) à **Alpha** (le plus haut).
+-   **Reproduction** : Le couple Alpha peut se reproduire pour donner naissance à de jeunes lycanthropes, assurant la croissance de la meute.
+-   **Transformation** : Les lycanthropes ont la capacité de se transformer en humains. Selon leur niveau, cette transformation peut être risquée et les amener à quitter définitivement leur meute.
