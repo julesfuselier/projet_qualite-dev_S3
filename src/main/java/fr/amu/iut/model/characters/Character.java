@@ -8,6 +8,8 @@ import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
 import fr.amu.iut.model.items.potion.MagicPotion;
+import fr.amu.iut.model.fight.CombatStrategy;
+import fr.amu.iut.model.fight.StandardCombatStrategy;
 
 public abstract class Character implements Cloneable {
 
@@ -25,6 +27,8 @@ public abstract class Character implements Cloneable {
     private Statistics hunger = new Statistics(100, 0, 100);
     private Statistics belligerence = new Statistics(100, 0, 100);
     private Statistics magicPotion = new Statistics(0, 0, 100);
+
+    private CombatStrategy combatStrategy = new StandardCombatStrategy();
 
     protected Inventory<Item> inventory;
     
@@ -61,7 +65,6 @@ public abstract class Character implements Cloneable {
     /**
      * Méthode principale pour manger.
      * Gère la faim, les restrictions de faction, et les pénalités de santé.
-     * @param food La nourriture à consommer.
      */
     public void eat(Food food) {
         if (food == null) {
@@ -69,17 +72,17 @@ public abstract class Character implements Cloneable {
             return;
         }
 
-        if (!inventory.removeItem(food)) {
+        if (!inventory.getItems().contains(food)) {
             System.out.println(getName() + " ne possède pas cet aliment (" + food.getName() + ").");
             return;
         }
 
         if (!canEat(food)) {
             System.out.println(getName() + " (" + getFaction() + ") refuse de manger : " + food.getName() + " !");
-            inventory.addItem(food);
             return;
         }
 
+        inventory.removeItem(food);
         this.hunger.add(food.getNutritionValue());
         System.out.println(getName() + " mange " + food.getName() + ". (Faim : " + hunger.get() + "/" + hunger.getMax() + ")");
 
@@ -317,5 +320,14 @@ public abstract class Character implements Cloneable {
                 getStrength(),
                 hunger.get()
         );
+    }
+
+    public void setCombatStrategy(CombatStrategy combatStrategy) {
+        this.combatStrategy = combatStrategy;
+    }
+
+    public void performAttack(Character opponent) {
+        if (this.isDead() || opponent.isDead()) return;
+        this.combatStrategy.executeAttack(this, opponent);
     }
 }

@@ -12,12 +12,7 @@ public class Lycanthrope extends Character implements Fighter {
 
     @Override
     public void fight(Character opponent) {
-        // Combat féroce
-        int damage = (this.getStrength() * 2) - opponent.getEndurance();
-        if (damage > 0) {
-            opponent.getHealth().add(-damage);
-            System.out.println("GRAOU ! " + getName() + " lacère " + opponent.getName() + " (-" + damage + " PV)");
-        }
+        this.performAttack(opponent);
     }
 
     public int getStrength() {

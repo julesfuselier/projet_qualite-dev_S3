@@ -3,13 +3,13 @@ package fr.amu.iut.model.items.foods;
 import fr.amu.iut.model.items.Item;
 
 public class Food extends Item {
-    private String name;
+
     private int nutritionValue;
     private boolean isPerishable;
     private FreshnessStatus status;
-    private FoodType type; // Important pour les règles
+    private FoodType type;
 
-    public Food(String name,int nutritionValue, boolean isPerishable, FreshnessStatus status, FoodType type) {
+    public Food(String name, int nutritionValue, boolean isPerishable, FreshnessStatus status, FoodType type) {
         super(name);
         this.nutritionValue = nutritionValue;
         this.isPerishable = isPerishable;
@@ -17,7 +17,6 @@ public class Food extends Item {
         this.type = type;
     }
 
-    public String getName() { return name; }
     public int getNutritionValue() { return nutritionValue; }
     public FreshnessStatus getStatus() { return status; }
     public FoodType getType() { return type; }

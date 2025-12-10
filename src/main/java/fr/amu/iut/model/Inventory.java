@@ -4,20 +4,20 @@ import fr.amu.iut.model.items.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Inventory <T extends Item> {
+public class Inventory<T extends Item> {
 
     private List<T> items;
-    private final int CAPACITY_OF_THE_INVENTORY = 36;
-    private final int capacity = 64;
+    private static final int MAX_CAPACITY = 64;
 
     public Inventory() {
         this.items = new ArrayList<>();
     }
+
     public void addItem(T item) {
-        if (items.size() < CAPACITY_OF_THE_INVENTORY) {
+        if (items.size() < MAX_CAPACITY) {
             items.add(item);
         } else {
-            System.out.println("Inventaire plein !");
+            System.out.println("Inventaire plein ! Impossible d'ajouter " + item.getName());
         }
     }
 
@@ -30,7 +30,7 @@ public class Inventory <T extends Item> {
     }
 
     public int getCapacity() {
-        return capacity;
+        return MAX_CAPACITY;
     }
 
     public int getCurrentSize() {

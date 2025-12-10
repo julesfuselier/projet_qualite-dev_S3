@@ -15,9 +15,9 @@ import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.spaces.Battlefield;
 import fr.amu.iut.model.spaces.GallicVillage;
 import fr.amu.iut.model.spaces.RomanFortifiedCamp;
+import fr.amu.iut.GameConfig;
+import fr.amu.iut.util.CharacterSorter;
 
-import java.util.Comparator;
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -30,8 +30,6 @@ public class InvasionTheatre {
     private List<ClanLeader> clanChiefs;
     private Random random = new Random();
 
-    private static final int PROBABILITY_HUNGER_EVENT = 10;
-    private static final int PROBABILITY_FOOD_SPAWN = 20;
 
     // Constructeur
     public InvasionTheatre(String name, int maxLocations) {
@@ -66,9 +64,12 @@ public class InvasionTheatre {
     public void showAllCharacters() {
         if (existingLocations != null) {
             for (Space loc : existingLocations) {
-                System.out.println("In the place: " + loc.getName());
+                System.out.println("Lieu : " + loc.getName());
                 List<Character> sortedChars = new ArrayList<>(loc.getCharacters());
-                sortCharactersByName(sortedChars);
+
+                // Utilisation du QuickSort ( cf CharacterSorter )
+                CharacterSorter.quickSortByName(sortedChars);
+
                 for (Character c : sortedChars) {
                     System.out.println(" - " + c.toString());
                 }
@@ -107,21 +108,17 @@ public class InvasionTheatre {
     public void updateRandomCharacterStates() {
         if (existingLocations == null) return;
 
-        final int MAX_HUNGER_INCREASE = 5;
-        final int MAX_POTION_DECREASE = 2;
-
         for (Space loc : existingLocations) {
             for (Character c : loc.getCharacters()) {
 
-                // Gestion de la Faim
-                if (random.nextInt(100) < PROBABILITY_HUNGER_EVENT) {
-                    int randomIncrease = random.nextInt(MAX_HUNGER_INCREASE) + 1;
+                // Utilisation de GameConfig
+                if (random.nextInt(100) < GameConfig.PROBABILITY_HUNGER_EVENT) {
+                    int randomIncrease = random.nextInt(GameConfig.MAX_HUNGER_INCREASE) + 1;
                     c.getHunger().add(-randomIncrease);
                 }
 
-                // Gestion de l'effet de Potion
                 if (c.getMagicPotion().get() > 0) {
-                    int randomDecrease = random.nextInt(MAX_POTION_DECREASE) + 1;
+                    int randomDecrease = random.nextInt(GameConfig.MAX_POTION_DECREASE) + 1;
                     c.getMagicPotion().add(-randomDecrease);
                 }
             }
@@ -133,14 +130,11 @@ public class InvasionTheatre {
         if (existingLocations == null) return;
 
         FoodFactory factory = new FoodFactory();
-        // Liste des types de nourriture possibles
         FoodType[] types = FoodType.values();
 
         for (Space loc : existingLocations) {
-            // La nourriture n'apparaît pas sur les champs de bataille.
             if (!loc.isBattlefield()) {
-                // 20 % de chances qu'un sanglier ou un fruit apparaisse
-                if (random.nextInt(100) < PROBABILITY_FOOD_SPAWN) {
+                if (random.nextInt(100) < GameConfig.PROBABILITY_FOOD_SPAWN) {
                     loc.addFood(new Food("Test food", 10, true, FreshnessStatus.FRESH, FoodType.FISH));
                     loc.addFood(loc.getFoods().get(random.nextInt(loc.getFoods().size())));
                     System.out.println("Food appeared at : " + loc.getName());

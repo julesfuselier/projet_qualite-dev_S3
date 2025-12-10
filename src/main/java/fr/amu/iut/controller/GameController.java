@@ -38,26 +38,45 @@ public class GameController {
      */
     public void start() {
         initSimulation();
+        runGameLoop();
+    }
 
+    private void runGameLoop() {
         boolean running = true;
         while (running) {
-            view.showMainMenu(turnCount);
-            int choice = view.getIntInput(1, 5);
-
-            switch (choice) {
-                case 1 -> runNextTurn();
-                case 2 -> handleClanLeaderActions();
-                case 3 -> {
-                    view.displayTitle("ÉTAT DU MONDE");
-                    theatre.showAllCharacters();
-                }
-                case 4 -> startAutoSimulation();
-                case 5 -> {
-                    running = false;
-                    view.displayMessage("Fin de la simulation. Au revoir !");
-                }
-            }
+            running = handleMainMenuChoice();
         }
+        view.displayMessage("Fin de la simulation. Au revoir !");
+    }
+
+    private boolean handleMainMenuChoice() {
+        view.showMainMenu(turnCount);
+        int choice = view.getIntInput(1, 5);
+
+        return switch (choice) {
+            case 1 -> {
+                runNextTurn();
+                yield true;
+            }
+            case 2 -> {
+                handleClanLeaderActions();
+                yield true;
+            }
+            case 3 -> {
+                view.displayTitle("ÉTAT DU MONDE");
+                theatre.showAllCharacters();
+                yield true;
+            }
+            case 4 -> {
+                startAutoSimulation();
+                yield true;
+            }
+            case 5 -> false;
+            default -> {
+                view.displayError("Choix invalide.");
+                yield true;
+            }
+        };
     }
 
     /**
