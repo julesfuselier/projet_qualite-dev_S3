@@ -118,6 +118,11 @@ public class Lycanthrope extends Character implements Fighter {
             // Un lycanthrope agressé baisse son facteur de domination
             target.dominationFactor--;
             target.level = target.computeLevel();
+
+            //il devient solitaire s'il a perdu la tentative de domination d'un male alpha
+            if("𝞪".equals(target.getRank()) && "M".equals(target.getSex())) {
+                this.becomeSolitary();
+            }
         }
     }
 
@@ -260,6 +265,17 @@ public class Lycanthrope extends Character implements Fighter {
             case "δ" -> "ε";
             default -> null; // Pas de dégradation depuis ε ou autre
         };
+    }
+
+
+    public void becomeSolitary(){
+        if (pack != null) {
+            pack.removeMember(this);
+            this.pack = null;
+        }
+        lone = true;
+        rank = null;
+        System.out.println(getName() + " est devenu solitaire !");
     }
 
     // Getters & Setters
