@@ -1,4 +1,4 @@
-# Simulation Gaulois et Lycanthropes
+# Simulation d'envahissement de l'Armorique
 
 ## À propos du projet
 
