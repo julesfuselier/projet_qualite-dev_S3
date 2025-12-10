@@ -36,6 +36,22 @@ public class Pack {
         }
     }
 
+    //créer une meute avec plusieurs lycanthropes solitaires
+    public static Pack createPackWithSolitary(List<Lycanthrope> l) {
+        Pack pack = new Pack();
+        for (Lycanthrope ls : l) {
+            if ("M".equals(String.valueOf(ls.getSex())) || "F".equals(String.valueOf(ls.getSex()))) {
+                pack.addMember(ls);
+            }
+        }
+        if (pack.getMembers().stream().anyMatch(m -> "M".equals(m.getSex())) && pack.getMembers().stream().anyMatch(f -> "F".equals(f.getSex()))) {
+            pack.createHierarchy();
+            System.out.println("crétion d'une nouvelle hiérarchie à partir de lycanthropes solitaires");
+            return pack;
+        }
+        return null;
+    }
+
     //Récupérer le nom de la meute
     public String getName() {
         return name;

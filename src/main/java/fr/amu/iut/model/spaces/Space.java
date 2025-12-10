@@ -215,5 +215,25 @@ public abstract class Space {
             return false;
         });
     }
-    //
+
+    //creation d'une nouvelle meute s'il n'y en a pas et que les lycanthropes solitaires sont assez nombreux
+    public void NewPack(){
+        if (this.pack != null){
+            return;
+        }
+        List<Lycanthrope> solitarys = new ArrayList<>();
+        for (Character c : characters) {
+            if (c instanceof Lycanthrope l && l.isLone()) {
+                solitarys.add(l);
+            }
+        }
+
+        Pack p = Pack.createPackWithSolitary(solitarys);
+
+        if (p != null) {
+            this.pack = p;
+            System.out.println("la meute " + p.getName() + "vient d'être crée dans " + name);
+        }
+
+    }
 }
