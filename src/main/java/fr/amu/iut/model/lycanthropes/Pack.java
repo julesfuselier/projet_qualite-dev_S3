@@ -5,15 +5,41 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static fr.amu.iut.model.characters.jobs.Lycanthrope.getRankFromValue;
+
 public class Pack {
     private String name;
     private List<Lycanthrope> members = new ArrayList<>();
     private Lycanthrope alphaMale;
     private Lycanthrope alphaFemale;
+    private boolean loveseasons = false;
 
     // Constructeur
     public Pack() {
     }
+
+    //affiche les caractéristiques de la meute
+    public void showCharacteristics(){
+        System.out.println("Nom: " + name);
+        for (Lycanthrope l : members){
+            System.out.println("Nom membre " + l.getName());
+        }
+        System.out.println("Nom du male alpha " + alphaMale.getName());
+        System.out.println("Nom de female alpha " + alphaFemale.getName());
+    }
+
+    //affiche les caractéristiques des membres de la meute
+    public void showMembersCharacteristics(){
+        for (Lycanthrope l : members){
+            System.out.println("Nom membre " + l.getName());
+            System.out.println("age du membre " + l.getAgeGroup());
+            System.out.println("rang du membre " + l.getRank());
+            System.out.println("facteur de domination du membre " + l.getDominationFactor());
+            System.out.println("niveau du membre " + l.getLevel());
+
+        }
+    }
+
 
     // Ajouter un membre à la meute
     public void addMember(Lycanthrope l) {
@@ -153,5 +179,40 @@ public class Pack {
             }
         }
         return count <= 1;
+    }
+
+    //décroit les rangs de domination des Lycanthropes de la meute
+    public void DecreaseDominanceRank(){
+        for  (Lycanthrope member : members) {
+            member.setRank(getRankFromValue(Lycanthrope.getRankValue(member.getRank()) - 1));
+        }
+    }
+
+
+    //déclare les lycanthropes 𝟂
+    public List<Lycanthrope> getLycanthropeOmega() {
+        List<Lycanthrope> omega = new ArrayList<>();
+        for  (Lycanthrope member : members) {
+            if ("𝟂".equals(member.getRank())) {
+                omega.add(member);
+            }
+        }
+        return omega;
+    }
+
+
+    //juste un début de la fonction reproduction
+    public void reproduction(Lycanthrope Male, Lycanthrope Female) {
+        if (this.loveseasons==true) {
+            if ("𝞪".equals(Male.getRank()) && "𝞪".equals(Female.getRank())) {
+                int nb = (int)(Math.random()*8);
+                for (int i = 0; i < nb; i++) {
+                }
+
+            } else {
+                System.out.println("seul un couple 𝞪 peut se reproduire");
+                return;
+            }
+        }
     }
 }
