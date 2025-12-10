@@ -34,6 +34,10 @@ public class Lycanthrope extends Character implements Fighter {
         int damage = (this.getStrength() * 2) - opponent.getEndurance();
         if (damage > 0) {
             opponent.getHealth().add(-damage);
+            //empèche les lycanthropes de se tuer entre eux
+            if (opponent instanceof Lycanthrope && opponent.getHealth().get() <1){
+                opponent.getHealth().add(1);
+            }
             System.out.println(getName() + " attaque sauvagement " + opponent.getName() + " (-" + damage + " HP)");
         } else {
             System.out.println(getName() + " tries to attack " + opponent.getName() + " but fails.");
@@ -139,19 +143,40 @@ public class Lycanthrope extends Character implements Fighter {
     }
 
     // Récupérer la valeur du rang
-    private int getRankValue(String rank) {
+    public static int getRankValue(String rank) {
         if (rank == null)
-            return 10;
+            return 25;
         return switch (rank) {
             case "α" -> 0;
             case "β" -> 1;
             case "γ" -> 2;
             case "δ" -> 3;
             case "ε" -> 4;
-            case "ω" -> 20;
-            default -> 10;
+            case "𝞯" -> 5;
+            case "𝞰" -> 6;
+            case "𝞱" -> 7;
+            case "𝞲" -> 8;
+            case "𝞳" -> 9;
+            case "𝞴" -> 10;
+            case "𝞵" -> 11;
+            case "𝞶" -> 12;
+            case "𝞷" -> 13;
+            case "𝞸" -> 14;
+            case "𝞹" -> 15;
+            case "𝞺" -> 16;
+            case "𝞻" -> 17;
+            case "𝞼" -> 18;
+            case "𝞽" -> 19;
+            case "𝞾" -> 20;
+            case "𝞿" -> 21;
+            case "𝟀" -> 22;
+            case "𝟁" -> 23;
+            case "ω" -> 24;
+            default -> 25;
         };
     }
+
+
 
     // Affiche les charactéristiques dy lycanthrope
     public void printCharacteristics() {

@@ -2,9 +2,11 @@ package fr.amu.iut.model.lycanthropes;
 
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Pack {
+    private String name;
     private List<Lycanthrope> members = new ArrayList<>();
     private Lycanthrope alphaMale;
     private Lycanthrope alphaFemale;
@@ -18,6 +20,8 @@ public class Pack {
         members.add(l);
         l.setPack(this);
         l.setLone(false);
+
+        createHierarchy();
     }
 
     // Supprimer un membre de la meute
@@ -25,6 +29,16 @@ public class Pack {
         members.remove(l);
         l.setPack(null);
         l.setLone(true);
+
+        //recrée la hiérarchie si un 𝞪 ou 𝟂 part
+        if (l.getRank().equals("𝞪") || l.getRank().equals("𝟂")){
+            createHierarchy();
+        }
+    }
+
+    //Récupérer le nom de la meute
+    public String getName() {
+        return name;
     }
 
     // Afficher la liste des membres de la meute
@@ -50,8 +64,21 @@ public class Pack {
         }
     }
 
+    //creation d'une hiérarchie avec au moins un 𝟂 et un couple 𝞪
     public void createHierarchy() {
-        // TODO : Tri par rang, force, etc. à implémenter
+        members.sort(Comparator.comparingInt(l -> Lycanthrope.getRankValue(l.getRank())));
+
+        boolean Omega = members.stream().anyMatch(l ->"𝟂".equals(l.getRank()));
+
+        if (!Omega) {
+            Lycanthrope weakest = members.stream().min(Comparator.comparingInt(Lycanthrope::getStrength)).orElse(null);
+            if (weakest != null) {
+                weakest.setRank("𝟂");
+                System.out.println(weakest.getName() + "devient le souffre douleur de la meute");
+            }
+        }
+
+        setAlphaCouple();
     }
 
     // Créer le couple alpha (male et femelle adultes les plus forts)

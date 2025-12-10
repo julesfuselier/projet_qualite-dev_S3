@@ -1,9 +1,12 @@
 package fr.amu.iut.model.spaces;
 
 import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Fighter;
+import fr.amu.iut.model.lycanthropes.Pack;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,6 +19,16 @@ public abstract class Space {
     private final List<Character> characters;
     private final List<Food> foods;
     private Random random;
+    private Pack pack;
+
+    public Space(String name, double surface, Character leader, Pack pack) {
+        this.name = name;
+        this.surface = surface;
+        this.leader = leader;
+        characters = new ArrayList<>();
+        foods = new ArrayList<>();
+        this.pack = pack;
+    }
 
     public Space(String name, double surface, Character leader) {
         this.name = name;
@@ -78,6 +91,19 @@ public abstract class Space {
     public boolean addCharacter(Character c) {
         if (!authorized(c)){
             return false;
+        }
+        if (c instanceof Lycanthrope l){
+            Pack p = l.getPack();
+            if (p != null) {
+                if (this.pack != null && this.pack != p) {
+                    System.out.println("Une autre meute occupe déjà" + name + "le lycanthrope ne peut donc pas entrer dedans");
+                    return false;
+                }
+                if (this.pack == null){
+                    this.pack = p;
+                    System.out.println("La meute" + p.getName() + "s'installe dans" + name);
+                }
+            }
         }
         characters.add(c);
         return true;
