@@ -2,8 +2,6 @@
 
 ## À propos du projet
 
-"Simulation Gaulois et Lycanthropes" est un jeu de simulation stratégique au tour par tour qui se déroule dans un environnement inspiré de la Gaule antique, avec une touche de fantaisie. Le jeu est entièrement basé sur une interface en console, où le joueur peut gérer des clans, des personnages, et interagir avec un monde dynamique.
-
 Le projet est développé en Java et utilise Maven pour la gestion des dépendances et du build.
 
 ## Prérequis
@@ -42,6 +40,7 @@ Au lancement, le jeu vous propose deux modes de départ :
 Le jeu est structuré en tours. Le menu principal vous offre plusieurs options :
 
 1.  **Lancer la simulation temporelle** : Fait avancer le temps d'un tour. Des événements automatiques se produisent :
+
     -   Déplacements autonomes des personnages.
     -   Déclenchement des batailles entre factions ennemies sur un même lieu.
     -   Gestion de la faim des personnages.
