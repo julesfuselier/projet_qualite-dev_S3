@@ -1,19 +1,25 @@
 package fr.amu.iut.model.spaces;
 
-import fr.amu.iut.model.characters.Faction;
-import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.characters.Character;
+import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Fighter;
+import fr.amu.iut.model.items.foods.Food;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
 import static java.util.Collections.shuffle;
 
 public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage, GalloRomanVillage, RomanCity, RomanFortifiedCamp {
     private final String name;
     private double surface;
     private Character leader;
-    private final List<Character> characters;
+
+    private final Set<Character> characters;
+
     private final List<Food> foods;
     private Random random;
 
@@ -21,74 +27,60 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
         this.name = name;
         this.surface = surface;
         this.leader = leader;
-        characters = new ArrayList<>();
-        foods = new ArrayList<>();
+        this.characters = new HashSet<>();
+        this.foods = new ArrayList<>();
     }
 
     public Space(String name, double surface) {
         this.name = name;
         this.surface = surface;
-        characters = new ArrayList<>();
-        foods = new ArrayList<>();
+        this.characters = new HashSet<>();
+        this.foods = new ArrayList<>();
     }
 
     public Space(String name) {
         this.name = name;
-        this.characters = new ArrayList<>();
+        this.characters = new HashSet<>();
         this.foods = new ArrayList<>();
     }
 
     public abstract boolean authorized(Character c);
 
-    // Get village name
     public String getName() {
         return name;
     }
 
-    // Get characters name
-    public List<Character> getCharacters() {
+    public Set<Character> getCharacters() {
         return characters;
     }
 
-    // Get foods
     public List<Food> getFoods() {
         return foods;
     }
 
-    // Add new food
     public void addFood(Food food) {
         this.foods.add(food);
     }
 
-    // Remove food
     public void removeFood(Food food) {
         this.foods.remove(food);
     }
 
-    // True if location istanceof battlefield
     public boolean isBattlefield() {
-        if (!(this instanceof Battlefield)) {
-            return false;
-        } else {
-            return true;
-        }
+        return this instanceof Battlefield;
     }
 
-    // Add character to the space
     public boolean addCharacter(Character c) {
         if (!authorized(c)){
             return false;
         }
-        characters.add(c);
-        return true;
+        return characters.add(c);
     }
 
-    // Remove character from the space
     public void removeCharacter(Character c) {
         characters.remove(c);
     }
 
-    // Show characteristics of the space
     public void showCharacteristics(){
         System.out.println("Nom: " + name);
         System.out.println("Surface : " + surface);
@@ -97,7 +89,7 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
         }
         System.out.println("Personnages: " + characters.size());
         for(Character c : characters){
-            System.out.println("Personnages: " + c.getName());
+            System.out.println(" - " + c.getName());
         }
 
         for(Food f : foods){
@@ -105,7 +97,6 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
         }
     }
 
-    // Heal character
     public void healCharacter(Character c, int amount){
         if(!(characters.contains(c))){
             return;
@@ -113,7 +104,6 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
         c.beHealed(amount);
     }
 
-    // Faire manger un personnage
     public void eatFood(Character c, Food f){
         if(!(foods.contains(f))){
             return;
@@ -124,11 +114,6 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
         foods.remove(f);
     }
 
-    /*
-     * Résout les combats entre les personnages de factions opposées présents dans cet espace.
-     * Les combats sont organisés en duels aléatoires entre membres des deux factions.
-     * Les personnages morts sont retirés de l'espace après les combats.
-     */
     public void resolveCombat() {
         if (!isBattlefield() || getCharacters().size() < 2) {
             return;
@@ -153,11 +138,9 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
 
         System.out.println( "--- BASTON GÉNÉRALE à " + getName() + " ---");
 
-        // Duel aléatoire
         shuffle(teamGaulois);
         shuffle(teamRomain);
 
-        // Former des duos et les faire se battre
         int fightsCount = Math.min(teamGaulois.size(), teamRomain.size());
 
         for (int i = 0; i < fightsCount; i++) {
@@ -177,9 +160,6 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
         removeDeadCharacters();
     }
 
-    /**
-     * Méthode helper pour retirer les personnages dont la santé est inférieure ou égale à 0.
-     */
     private void removeDeadCharacters() {
         getCharacters().removeIf(c -> {
             if (c.isDead()) {

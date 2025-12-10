@@ -28,6 +28,7 @@ public class MainApp {
     private static final CharacterFactory characterFactory = new CharacterFactory();
     private static final Scanner scanner = new Scanner(System.in);
     private static int turnCount = 0;
+    private static volatile boolean autoModeRunning = false;
 
     public static void main(String[] args) {
         initSimulation();
@@ -35,19 +36,22 @@ public class MainApp {
         boolean running = true;
         while (running) {
             printMenu();
-            int choice = getIntInput(1, 4);
+            int choice = getIntInput(1, 5);
             switch (choice) {
                 case 1:
-                    runNextTurn(); // Lancement du tour temporel
+                    runNextTurn();
                     break;
                 case 2:
-                    handleClanLeaderActions(); // Actions du joueur
+                    handleClanLeaderActions();
                     break;
                 case 3:
                     System.out.println(BLUE + "\n--- ÉTAT DU MONDE ---" + RESET);
                     theatre.showAllCharacters();
                     break;
                 case 4:
+                    startAutoSimulation();
+                    break;
+                case 5:
                     running = false;
                     System.out.println("Fin de la simulation. Au revoir !");
                     break;
@@ -62,8 +66,45 @@ public class MainApp {
         System.out.println("1. Lancer la simulation temporelle (Combats, Faim...)");
         System.out.println("2. Actions de Chef de Clan");
         System.out.println("3. Afficher l'état du monde");
-        System.out.println("4. Quitter");
+        System.out.println("4. MODE AUTO");
+        System.out.println("5. Quitter");
         System.out.print("Votre choix : ");
+    }
+
+    /**
+     * Lance la simulation en arrière-plan (Thread) et attend une entrée utilisateur pour stopper.
+     */
+    private static void startAutoSimulation() {
+        autoModeRunning = true;
+
+        Thread gameThread = new Thread(() -> {
+            System.out.println(GREEN + ">>> Démarrage du Mode Auto (3s / tour) <<<" + RESET);
+            while (autoModeRunning) {
+                try {
+                    runNextTurn();
+
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    System.out.println("Interruption du thread de jeu.");
+                    Thread.currentThread().interrupt();
+                }
+            }
+            System.out.println(GREEN + ">>> Arrêt du Mode Auto <<<" + RESET);
+        });
+
+        gameThread.start();
+
+        System.out.println(RED + "Appuyez sur [ENTRÉE] pour revenir au menu..." + RESET);
+        scanner.nextLine();
+        if (scanner.hasNextLine()) scanner.nextLine();
+
+        autoModeRunning = false;
+
+        try {
+            gameThread.join();
+        } catch (InterruptedException e) {
+            System.out.println("Erreur lors de l'arrêt du thread.");
+        }
     }
 
     /**
@@ -161,7 +202,7 @@ public class MainApp {
 
                     for (Character c : currentSpace.getCharacters()) {
                         if (c instanceof Druid) {
-                            for (Item item: c.getInventory().getItems()) {
+                            for (Object item: c.getInventory().getItems()) {
                                 if (item instanceof MagicPotion) {
                                     druidWithPotion = c;
                                     potionFound = (MagicPotion) item;
@@ -205,12 +246,15 @@ public class MainApp {
             System.out.println("Personne ici !");
             return null;
         }
+        List<Character> charactersList = new ArrayList<>(space.getCharacters());
+
         System.out.println("Choisissez une cible :");
-        for (int i = 0; i < space.getCharacters().size(); i++) {
-            System.out.println((i + 1) + ". " + space.getCharacters().get(i).getName());
+        for (int i = 0; i < charactersList.size(); i++) {
+            System.out.println((i + 1) + ". " + charactersList.get(i).getName());
         }
-        int idx = getIntInput(1, space.getCharacters().size());
-        return space.getCharacters().get(idx - 1);
+
+        int idx = getIntInput(1, charactersList.size());
+        return charactersList.get(idx - 1);
     }
 
     public static void initSimulation() {

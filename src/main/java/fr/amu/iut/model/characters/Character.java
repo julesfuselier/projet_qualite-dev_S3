@@ -26,8 +26,8 @@ public abstract class Character implements Cloneable {
     private Statistics belligerence = new Statistics(100, 0, 100);
     private Statistics magicPotion = new Statistics(0, 0, 100);
 
-    protected Inventory inventory;
-
+    protected Inventory<Item> inventory;
+    
     private boolean isStatue = false; // Indique si le personnage est transformé en statue
     private boolean permanentPotion = false; // Indique si le personnage a un effet permanent de potion magique
     private int potDrunkCount = 0; // Compteur du nombre de potions magiques consommées
