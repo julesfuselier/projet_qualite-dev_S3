@@ -185,6 +185,39 @@ public class Lycanthrope extends Character implements Fighter {
         };
     }
 
+    public static String getRankFromValue(int rank) {
+        if (rank > 24 || rank < 0)
+            return null;
+        return switch (rank) {
+            case 0 -> "𝞪";
+            case 1 -> "𝞫";
+            case 2 -> "𝞬";
+            case 3 -> "𝞭";
+            case 4 -> "𝞮";
+            case 5 -> "𝞯";
+            case 6 -> "𝞰";
+            case 7 -> "𝞱";
+            case 8 -> "𝞲";
+            case 9 -> "𝞳";
+            case 10 -> "𝞴";
+            case 11 -> "𝞵";
+            case 12 -> "𝞶";
+            case 13 -> "𝞷";
+            case 14 -> "𝞸";
+            case 15 -> "𝞹";
+            case 16 -> "𝞺";
+            case 17 -> "𝞻";
+            case 18 -> "𝞼";
+            case 19 -> "𝞽";
+            case 20 -> "𝞾";
+            case 21 -> "𝞿";
+            case 22 -> "𝟀";
+            case 23 -> "𝟁";
+            case 24 -> "𝟂";
+            default -> null;
+        };
+    }
+
 
 
     // Affiche les charactéristiques dy lycanthrope
