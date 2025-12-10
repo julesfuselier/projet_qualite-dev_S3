@@ -45,6 +45,11 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
+    
+    /**
+     * Tente de prendre la place d'un autre Lycanthrope dans la hiérarchie par la force.
+     * @param target Le Lycanthrope à dominer.
+     */
     public void dominate(Lycanthrope target) {
         if (this == target) {
             System.out.println(getName() + " ne peut pas se dominer lui-même.");
@@ -110,12 +115,14 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
+    // Augmente le niveau d'agressivité du lycanthrope
     public void becomeAggressive(Lycanthrope aggressor) {
         System.out.println(getName() + " devient agressif envers " + aggressor.getName() + " !");
         this.howl("AGRESSIVITÉ");
         this.fight(aggressor);
     }
 
+    // Calcul le niveau du lycanthrope
     private double computeLevel() {
         int ageScore = switch (ageGroup != null ? ageGroup.toLowerCase() : "adulte") {
             case "jeune" -> 1;
@@ -129,6 +136,7 @@ public class Lycanthrope extends Character implements Fighter {
         return (ageScore * 2) + (getStrength() * 0.5) + (dominationFactor * 1.5) + (20 - rankScore);
     }
 
+    // Affiche les informations du lycanthrope
     public void printCharacteristics() {
         System.out.println("Nom : " + getName());
         System.out.println("Sexe : " + getSex());
@@ -141,10 +149,12 @@ public class Lycanthrope extends Character implements Fighter {
         System.out.println("Meute : " + (lone ? "Solitaire" : (pack != null ? "Membre d'une meute" : "Aucune")));
     }
 
+    // Le lycanthrope hurle
     public void howl(String type) {
         System.out.println(getName() + " hurle (" + type + ") !");
     }
 
+    // Le lycanthrope entend un hurlement
     public void hearHowl(String type) {
         if (getHealth().get() > 20) {
             System.out.println(getName() + " entend un hurlement : " + type);
@@ -156,6 +166,7 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
+    // Quitter la meute
     public void leavePack() {
         if (pack != null) {
             pack.removeMember(this);
@@ -165,6 +176,7 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
+    // Transformation d'un lycnathrope en humain
     public void transformToHuman() {
         System.out.println(getName() + " se transforme en humain !");
 
@@ -188,12 +200,14 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
+    // Vérifie le facteur de domination
     public void updateRankFromDominationFactor() {
         if (this.dominationFactor < DOMINATION_THRESHOLD) {
             demoteRank();
         }
     }
 
+    // Dégradation d'un lycanthrope
     private void demoteRank() {
         if (this.rank == Rank.ALPHA || this.rank == Rank.OMEGA) {
             return;
@@ -209,6 +223,7 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
+    // Trouve le rang inférieur à celui fourni en paramètre
     private Rank getNextRank(Rank currentRank) {
         if (currentRank == null || currentRank == Rank.OMEGA) {
             return null;
@@ -217,6 +232,7 @@ public class Lycanthrope extends Character implements Fighter {
         return Rank.fromValue(nextRankValue);
     }
 
+    // Transformation d'un membre en loup solitaire
     public void becomeSolitary() {
         if (pack != null) {
             pack.removeMember(this);

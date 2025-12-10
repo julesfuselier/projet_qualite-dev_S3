@@ -15,7 +15,7 @@ public class Pack {
     public Pack() {
     }
 
-    //affiche les caractéristiques de la meute
+    // Affiche les caractéristiques de la meute
     public void showCharacteristics(){
         System.out.println("Nom: " + name);
         for (Lycanthrope l : members){
@@ -25,7 +25,7 @@ public class Pack {
         System.out.println("Nom de female alpha " + alphaCouple.getFemale().getName());
     }
 
-    //affiche les caractéristiques des membres de la meute
+    // Affiche les caractéristiques des membres de la meute
     public void showMembersCharacteristics(){
         for (Lycanthrope l : members){
             System.out.println("Nom membre " + l.getName());
@@ -58,7 +58,7 @@ public class Pack {
         }
     }
 
-    //créer une meute avec plusieurs lycanthropes solitaires
+    // Créer une meute avec plusieurs lycanthropes solitaires
     public static Pack createPackWithSolitary(List<Lycanthrope> l) {
         Pack pack = new Pack();
         for (Lycanthrope ls : l) {
