@@ -57,6 +57,10 @@ public class Lycanthrope extends Character implements Fighter {
             System.out.println(getName() + " ne peut pas se dominer lui-même.");
             return;
         }
+        if (this.rank.equals("𝟂")){
+            System.out.println(getName() + "est un 𝟂, il ne peut donc dominer personne");
+            return;
+        }
 
         // Vérification si la domination est possible
         if (target.getPack() != null && target.getPack().getAlphaFemale() == target) {
@@ -258,7 +262,27 @@ public class Lycanthrope extends Character implements Fighter {
             case "β" -> "γ";
             case "γ" -> "δ";
             case "δ" -> "ε";
-            default -> null; // Pas de dégradation depuis ε ou autre
+            case "𝞮" -> "𝞯";
+            case "𝞯" -> "𝞰";
+            case "𝞰" -> "𝞱";
+            case "𝞱" -> "𝞲";
+            case "𝞲" -> "𝞳";
+            case "𝞳" -> "𝞴";
+            case "𝞴" -> "𝞵";
+            case "𝞵" -> "𝞶";
+            case "𝞶" -> "𝞷";
+            case "𝞷" -> "𝞸";
+            case "𝞸" -> "𝞹";
+            case "𝞹" -> "𝞺";
+            case "𝞺" -> "𝞻";
+            case "𝞻" -> "𝞼";
+            case "𝞼" -> "𝞽";
+            case "𝞽" -> "𝞾";
+            case "𝞾" -> "𝞿";
+            case "𝞿" -> "𝟀";
+            case "𝟀" -> "𝟁";
+            case "𝟁" -> "𝟂";
+            default -> null;
         };
     }
 
