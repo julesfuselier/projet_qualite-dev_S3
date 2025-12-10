@@ -10,8 +10,7 @@ import static fr.amu.iut.model.characters.jobs.Lycanthrope.getRankFromValue;
 public class Pack {
     private String name;
     private List<Lycanthrope> members = new ArrayList<>();
-    private Lycanthrope alphaMale;
-    private Lycanthrope alphaFemale;
+    private AlphaCouple alphaCouple;
     private boolean loveseasons = false;
 
     // Constructeur
@@ -24,8 +23,8 @@ public class Pack {
         for (Lycanthrope l : members){
             System.out.println("Nom membre " + l.getName());
         }
-        System.out.println("Nom du male alpha " + alphaMale.getName());
-        System.out.println("Nom de female alpha " + alphaFemale.getName());
+        System.out.println("Nom du male alpha " + alphaCouple.getMale().getName());
+        System.out.println("Nom de female alpha " + alphaCouple.getFemale().getName());
     }
 
     //affiche les caractéristiques des membres de la meute
@@ -90,17 +89,17 @@ public class Pack {
 
     // Récupérer le male le plus fort
     public Lycanthrope getAlphaMale() {
-        return alphaMale;
+        return alphaCouple != null ? alphaCouple.getMale() : null;
     }
 
     // Récupérer la femelle la plus forte
     public Lycanthrope getAlphaFemale() {
-        return alphaFemale;
+        return alphaCouple != null ? alphaCouple.getFemale() : null;
     }
 
-    // Affiche les membres et les charactéristiques de la meute
+    // Affiche les membres et les caractéristiques de la meute
     public void displayPack() {
-        System.out.println("Pack members:");
+        System.out.println("Membres de la meute :");
         for (Lycanthrope l : members) {
             l.printCharacteristics();
         }
@@ -138,8 +137,11 @@ public class Pack {
                 }
             }
         }
-        this.alphaMale = bestMale;
-        this.alphaFemale = bestFemale;
+        if (bestMale != null && bestFemale != null) {
+            this.alphaCouple = new AlphaCouple(bestMale, bestFemale, this);
+        } else {
+            this.alphaCouple = null;
+        }
     }
 
     /**
@@ -150,7 +152,6 @@ public class Pack {
      */
     public void updateAlphasAfterDomination(Lycanthrope newAlphaMale) {
         System.out.println("Le couple Alpha de la meute est en train de changer !");
-        this.alphaMale = newAlphaMale;
 
         Lycanthrope newAlphaFemale = null;
         for (Lycanthrope l : members) {
@@ -161,8 +162,14 @@ public class Pack {
                 }
             }
         }
-        this.alphaFemale = newAlphaFemale;
-        System.out.println("Le nouveau couple Alpha est : " + this.alphaMale.getName() + " et " + (this.alphaFemale != null ? this.alphaFemale.getName() : "personne"));
+        
+        if (newAlphaMale != null && newAlphaFemale != null) {
+            this.alphaCouple = new AlphaCouple(newAlphaMale, newAlphaFemale, this);
+            System.out.println("Le nouveau couple Alpha est : " + this.alphaCouple.getMale().getName() + " et " + this.alphaCouple.getFemale().getName());
+        } else {
+            this.alphaCouple = null;
+            System.out.println("Impossible de former un nouveau couple Alpha.");
+        }
     }
 
     /**
@@ -183,31 +190,10 @@ public class Pack {
 
     // Créer une portée
     public void createLitter() {
-        if (alphaMale != null && alphaFemale != null) {
-            int numberOfYoung = new java.util.Random().nextInt(7) + 1;
-
-            // Déterminer le rang de la nouvelle portée
-            String youngRank = "γ";
-            boolean betaExists = members.stream().anyMatch(member -> "β".equals(member.getRank()));
-            if (!betaExists) {
-                youngRank = "β";
-            }
-
-            for (int i = 0; i < numberOfYoung; i++) {
-                char sex = new java.util.Random().nextBoolean() ? 'M' : 'F';
-                String name = "Young " + (i + 1);
-                // Statistiques par défaut pour un jeune lycanthrope
-                int size = 150;
-                int age = 0;
-                int strength = 5;
-                int endurance = 5;
-                int dominationFactor = 0;
-                double impulsiveness = 0.5;
-
-                Lycanthrope young = new Lycanthrope(name, sex, size, age, strength, endurance, "jeune", youngRank, dominationFactor, impulsiveness, this, false);
-                addMember(young);
-            }
-            System.out.println(numberOfYoung + " nouveau(x) lycanthrope(s) de rang " + youngRank + " sont nés.");
+        if (alphaCouple != null) {
+            alphaCouple.reproduce();
+        } else {
+            System.out.println("Aucun couple Alpha dans la meute pour se reproduire.");
         }
     }
 }
