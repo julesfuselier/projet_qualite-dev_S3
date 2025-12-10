@@ -1,6 +1,6 @@
 package fr.amu.iut.model.spaces;
 
-import fr.amu.iut.model.characters.ClanLeader;
+import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.jobs.*;
 import fr.amu.iut.model.characters.Character;
 
@@ -11,8 +11,7 @@ public final class GallicVillage extends Space{
     }
 
     @Override
-    public boolean authorized(Character c){
-        return (c instanceof Innkeeper || c instanceof Blacksmith || c instanceof Druid
-                || c instanceof Merchant || c instanceof Lycanthrope || c instanceof ClanLeader);    }
-
+    public boolean authorized(Character c) {
+        return c.getFaction() == Faction.GAULOIS || c instanceof Lycanthrope;
+    }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 public class Inventory {
 
     private List<Item> items;
-    private final int MAX_CAPACITY = 36;
+    private final int CAPACITY_OF_THE_INVENTORY = 36;
     private final int capacity = 64;
 
     public Inventory() {
@@ -13,7 +13,7 @@ public class Inventory {
     }
 
     public void addItem(Item item) {
-        if (items.size() < MAX_CAPACITY) {
+        if (items.size() < CAPACITY_OF_THE_INVENTORY) {
             items.add(item);
         }
     }

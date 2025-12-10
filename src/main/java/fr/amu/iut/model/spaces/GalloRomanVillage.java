@@ -1,6 +1,6 @@
 package fr.amu.iut.model.spaces;
 
-import fr.amu.iut.model.characters.jobs.*;
+import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Character;
 
 public final class GalloRomanVillage extends Space {
@@ -10,6 +10,6 @@ public final class GalloRomanVillage extends Space {
 
     @Override
     public boolean authorized(Character c) {
-        return (c instanceof Innkeeper || c instanceof Blacksmith || c instanceof Druid || c instanceof Merchant ||c instanceof Legionary || c instanceof Prefect || c instanceof General);
+        return c.getFaction() == Faction.GAULOIS || c.getFaction() == Faction.ROMAIN;
     }
 }

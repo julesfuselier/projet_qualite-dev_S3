@@ -8,6 +8,14 @@ import java.util.Random;
 public class CharacterFactory {
     private Random random = new Random();
 
+    // Constantes pour les variations
+    private static final int BASE_SIZE = 160;
+    private static final int SIZE_VARIATION = 40; // Variation max (160 + 0 à 40)
+    private static final int BASE_AGE = 18;
+    private static final int AGE_VARIATION = 60;
+    private static final int BASE_STAT = 50;      // Pour Force et Endurance
+    private static final int STAT_VARIATION = 50;
+
     /**
      * Crée dynamiquement un personnage avec des stats aléatoires adaptées.
      * @param faction La faction (GAULOIS ou ROMAIN)
@@ -15,10 +23,10 @@ public class CharacterFactory {
      * @param name Le nom du personnage
      */
     public Character createCharacter(Faction faction, String role, String name) {
-        int size = 160 + random.nextInt(40);
-        int age = 18 + random.nextInt(60);
-        int strength = 50 + random.nextInt(50);
-        int endurance = 50 + random.nextInt(50);
+        int size = BASE_SIZE + random.nextInt(SIZE_VARIATION);
+        int age = BASE_AGE + random.nextInt(AGE_VARIATION);
+        int strength = BASE_STAT + random.nextInt(STAT_VARIATION);
+        int endurance = BASE_STAT + random.nextInt(STAT_VARIATION);
         char sex = random.nextBoolean() ? 'M' : 'F';
 
         // Switch sur le RÔLE / METIER

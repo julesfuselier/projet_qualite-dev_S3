@@ -59,10 +59,10 @@ public class MainApp {
 
     private static void printMenu() {
         System.out.println("\n" + BLUE + "╔════════ MENU PRINCIPAL (Tour " + turnCount + ") ════════╗" + RESET);
-        System.out.println("1. ⏳ Lancer la simulation temporelle (Combats, Faim...)");
-        System.out.println("2. 👑 Actions de Chef de Clan");
-        System.out.println("3. 🌍 Afficher l'état du monde");
-        System.out.println("4. ❌ Quitter");
+        System.out.println("1. Lancer la simulation temporelle (Combats, Faim...)");
+        System.out.println("2. Actions de Chef de Clan");
+        System.out.println("3. Afficher l'état du monde");
+        System.out.println("4. Quitter");
         System.out.print("Votre choix : ");
     }
 
@@ -251,7 +251,7 @@ public class MainApp {
             Character panoramix = characterFactory.createCharacter(Faction.GAULOIS, "druide", "Panoramix");
             Character cetautomatix = characterFactory.createCharacter(Faction.GAULOIS, "forgeron", "Cétautomatix");
             Character ordralphabetix = characterFactory.createCharacter(Faction.GAULOIS, "marchand", "Ordralphabétix");
-            Character bonemine = characterFactory.createCharacter(Faction.GAULOIS, "aubergiste", "Bonemine"); // Pas de classe femme de chef, on improvise
+            Character bonemine = characterFactory.createCharacter(Faction.GAULOIS, "aubergiste", "Bonemine");
 
             // On ajoute tout ce beau monde au village
             village.addCharacter(panoramix);

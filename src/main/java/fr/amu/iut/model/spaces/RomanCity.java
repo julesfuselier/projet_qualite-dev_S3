@@ -1,6 +1,7 @@
 package fr.amu.iut.model.spaces;
 
-import fr.amu.iut.model.characters.jobs.*;
+import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import fr.amu.iut.model.characters.Character;
 
 public final class RomanCity extends Space {
@@ -11,6 +12,6 @@ public final class RomanCity extends Space {
 
     @Override
     public boolean authorized(Character c) {
-        return (c instanceof Legionary || c instanceof Prefect || c instanceof General || c instanceof Lycanthrope);
+        return c.getFaction() == Faction.ROMAIN || c instanceof Lycanthrope;
     }
 }

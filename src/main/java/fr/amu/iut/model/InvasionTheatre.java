@@ -30,6 +30,9 @@ public class InvasionTheatre {
     private List<ClanLeader> clanChiefs;
     private Random random = new Random();
 
+    private static final int PROBABILITY_HUNGER_EVENT = 10;
+    private static final int PROBABILITY_FOOD_SPAWN = 20;
+
     // Constructeur
     public InvasionTheatre(String name, int maxLocations) {
         this.name = name;
@@ -65,12 +68,27 @@ public class InvasionTheatre {
             for (Space loc : existingLocations) {
                 System.out.println("In the place: " + loc.getName());
                 List<Character> sortedChars = new ArrayList<>(loc.getCharacters());
-                // Trier les personnages par nom ( ordre alphabétique )
-                sortedChars.sort(Comparator.comparing(Character::getName));
+                sortCharactersByName(sortedChars);
                 for (Character c : sortedChars) {
                     System.out.println(" - " + c.toString());
                 }
             }
+        }
+    }
+
+    // Tri des personnages par nom (ordre alphabétique) - méthode d'insertion
+    private void sortCharactersByName(List<Character> characters) {
+        for (int i = 1; i < characters.size(); i++) {
+            Character keyChar = characters.get(i);
+            String keyName = keyChar.getName();
+            int j = i - 1;
+
+            // Déplace les éléments plus grands que la clé vers la droite
+            while (j >= 0 && characters.get(j).getName().compareToIgnoreCase(keyName) > 0) {
+                characters.set(j + 1, characters.get(j));
+                j = j - 1;
+            }
+            characters.set(j + 1, keyChar);
         }
     }
 
@@ -96,7 +114,7 @@ public class InvasionTheatre {
             for (Character c : loc.getCharacters()) {
 
                 // Gestion de la Faim
-                if (random.nextInt(100) < 10) {
+                if (random.nextInt(100) < PROBABILITY_HUNGER_EVENT) {
                     int randomIncrease = random.nextInt(MAX_HUNGER_INCREASE) + 1;
                     c.getHunger().add(-randomIncrease);
                 }
@@ -122,7 +140,7 @@ public class InvasionTheatre {
             // La nourriture n'apparaît pas sur les champs de bataille.
             if (!loc.isBattlefield()) {
                 // 20 % de chances qu'un sanglier ou un fruit apparaisse
-                if (random.nextInt(100) < 20) {
+                if (random.nextInt(100) < PROBABILITY_FOOD_SPAWN) {
                     loc.addFood(new Food("Test food", 10, true, FreshnessStatus.FRESH, FoodType.FISH));
                     loc.addFood(loc.getFoods().get(random.nextInt(loc.getFoods().size())));
                     System.out.println("Food appeared at : " + loc.getName());
