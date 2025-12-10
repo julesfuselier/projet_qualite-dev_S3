@@ -167,7 +167,25 @@ public class Lycanthrope extends Character implements Fighter {
 
     public void transformToHuman() {
         System.out.println(getName() + " se transforme en humain !");
-        leavePack();
+
+        // La probabilité de partir est de niveau * 2%
+        double chanceOfLeaving = getLevel() * 2;
+        double roll = new java.util.Random().nextDouble() * 100;
+
+        if (roll < chanceOfLeaving) {
+            System.out.println(getName() + " profite de sa forme humaine pour quitter la meute et l'enclos !");
+
+            // Quitter la meute
+            leavePack();
+
+            // Quitter l'enclos
+            if (getCurrentSpace() != null) {
+                getCurrentSpace().removeCharacter(this);
+            }
+
+        } else {
+            System.out.println(getName() + " reste sous forme humaine, mais ne quitte pas la meute.");
+        }
     }
 
     public void updateRankFromDominationFactor() {

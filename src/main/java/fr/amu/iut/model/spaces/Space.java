@@ -106,12 +106,15 @@ public abstract class Space {
             }
         }
         characters.add(c);
+        c.setCurrentSpace(this);
         return true;
     }
 
     // Remove character from the space
     public void removeCharacter(Character c) {
-        characters.remove(c);
+        if(characters.remove(c)) {
+            c.setCurrentSpace(null);
+        }
     }
 
     // Show characteristics of the space

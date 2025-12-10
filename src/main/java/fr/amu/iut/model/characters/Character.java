@@ -27,6 +27,7 @@ public abstract class Character implements Cloneable {
     private Statistics magicPotion = new Statistics(0, 0, 100);
 
     protected Inventory inventory;
+    private fr.amu.iut.model.spaces.Space currentSpace;
 
     private boolean isStatue = false; // Indique si le personnage est transformé en statue
     private boolean permanentPotion = false; // Indique si le personnage a un effet permanent de potion magique
@@ -48,6 +49,14 @@ public abstract class Character implements Cloneable {
         this.name = name;
         this.sex = sex;
         this.age = age;
+    }
+
+    public fr.amu.iut.model.spaces.Space getCurrentSpace() {
+        return currentSpace;
+    }
+
+    public void setCurrentSpace(fr.amu.iut.model.spaces.Space currentSpace) {
+        this.currentSpace = currentSpace;
     }
 
     /**
