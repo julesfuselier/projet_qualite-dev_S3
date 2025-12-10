@@ -106,7 +106,7 @@ public class Pack {
         }
     }
 
-    //creation d'une hiérarchie avec au moins un 𝟂 et un couple 𝞪
+    // Creation d'une hiérarchie avec au moins un 𝟂 et un couple 𝞪
     public void createHierarchy() {
         members.sort(Comparator.comparingInt(l -> Lycanthrope.getRankValue(l.getRank())));
 
@@ -181,38 +181,33 @@ public class Pack {
         return count <= 1;
     }
 
-    //décroit les rangs de domination des Lycanthropes de la meute
-    public void DecreaseDominanceRank(){
-        for  (Lycanthrope member : members) {
-            member.setRank(getRankFromValue(Lycanthrope.getRankValue(member.getRank()) - 1));
-        }
-    }
+    // Créer une portée
+    public void createLitter() {
+        if (alphaMale != null && alphaFemale != null) {
+            int numberOfYoung = new java.util.Random().nextInt(7) + 1;
 
-
-    //déclare les lycanthropes 𝟂
-    public List<Lycanthrope> getLycanthropeOmega() {
-        List<Lycanthrope> omega = new ArrayList<>();
-        for  (Lycanthrope member : members) {
-            if ("𝟂".equals(member.getRank())) {
-                omega.add(member);
+            // Déterminer le rang de la nouvelle portée
+            String youngRank = "γ";
+            boolean betaExists = members.stream().anyMatch(member -> "β".equals(member.getRank()));
+            if (!betaExists) {
+                youngRank = "β";
             }
-        }
-        return omega;
-    }
 
+            for (int i = 0; i < numberOfYoung; i++) {
+                char sex = new java.util.Random().nextBoolean() ? 'M' : 'F';
+                String name = "Young " + (i + 1);
+                // Statistiques par défaut pour un jeune lycanthrope
+                int size = 150;
+                int age = 0;
+                int strength = 5;
+                int endurance = 5;
+                int dominationFactor = 0;
+                double impulsiveness = 0.5;
 
-    //juste un début de la fonction reproduction
-    public void reproduction(Lycanthrope Male, Lycanthrope Female) {
-        if (this.loveseasons==true) {
-            if ("𝞪".equals(Male.getRank()) && "𝞪".equals(Female.getRank())) {
-                int nb = (int)(Math.random()*8);
-                for (int i = 0; i < nb; i++) {
-                }
-
-            } else {
-                System.out.println("seul un couple 𝞪 peut se reproduire");
-                return;
+                Lycanthrope young = new Lycanthrope(name, sex, size, age, strength, endurance, "jeune", youngRank, dominationFactor, impulsiveness, this, false);
+                addMember(young);
             }
+            System.out.println(numberOfYoung + " nouveau(x) lycanthrope(s) de rang " + youngRank + " sont nés.");
         }
     }
 }
