@@ -2,6 +2,7 @@ package fr.amu.iut.model.lycanthropes;
 
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import java.util.Random;
+import fr.amu.iut.model.lycanthropes.Rank;
 
 public class AlphaCouple {
 
@@ -32,11 +33,11 @@ public class AlphaCouple {
     public void reproduce() {
         int numberOfYoung = new Random().nextInt(7) + 1;
 
-        // Statistiques par défaut pour un jeune lycanthrope
-        String youngRank = "γ";
-        boolean betaExists = pack.getMembers().stream().anyMatch(member -> "β".equals(member.getRank()));
+        // Détermine le rang de la nouvelle portée
+        Rank youngRank = Rank.GAMMA;
+        boolean betaExists = pack.getMembers().stream().anyMatch(member -> member.getRank() == Rank.BETA);
         if (!betaExists) {
-            youngRank = "β";
+            youngRank = Rank.BETA;
         }
 
         for (int i = 0; i < numberOfYoung; i++) {
@@ -50,10 +51,10 @@ public class AlphaCouple {
             int dominationFactor = 0;
             double impulsiveness = 0.5;
 
-            Lycanthrope young = new Lycanthrope(name, sex, size, age, strength, endurance, "jeune", youngRank, dominationFactor, impulsiveness, pack, false);
+            Lycanthrope young = new Lycanthrope(name, sex, size, age, strength, endurance, "jeune", youngRank.getDisplay(), dominationFactor, impulsiveness, pack, false);
             pack.addMember(young);
         }
-        System.out.println(numberOfYoung + " nouveau(x) lycanthrope(s) de rang " + youngRank + " sont nés du couple alpha.");
+        System.out.println(numberOfYoung + " nouveau(x) lycanthrope(s) de rang " + youngRank.getDisplay() + " sont nés du couple alpha.");
     }
 
     // Getters & Setters

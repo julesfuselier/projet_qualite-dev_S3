@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static fr.amu.iut.model.characters.jobs.Lycanthrope.getRankFromValue;
-
 public class Pack {
     private String name;
     private List<Lycanthrope> members = new ArrayList<>();
@@ -39,7 +37,6 @@ public class Pack {
         }
     }
 
-
     // Ajouter un membre à la meute
     public void addMember(Lycanthrope l) {
         members.add(l);
@@ -55,8 +52,8 @@ public class Pack {
         l.setPack(null);
         l.setLone(true);
 
-        //recrée la hiérarchie si un 𝞪 ou 𝟂 part
-        if (l.getRank().equals("𝞪") || l.getRank().equals("𝟂")){
+        //recrée la hiérarchie si un Alpha ou Omega part
+        if (l.getRank() == Rank.ALPHA || l.getRank() == Rank.OMEGA){
             createHierarchy();
         }
     }
@@ -69,7 +66,7 @@ public class Pack {
                 pack.addMember(ls);
             }
         }
-        if (pack.getMembers().stream().anyMatch(m -> "M".equals(m.getSex())) && pack.getMembers().stream().anyMatch(f -> "F".equals(f.getSex()))) {
+        if (pack.getMembers().stream().anyMatch(m -> "M".equals(String.valueOf(m.getSex()))) && pack.getMembers().stream().anyMatch(f -> "F".equals(String.valueOf(f.getSex())))) {
             pack.createHierarchy();
             System.out.println("crétion d'une nouvelle hiérarchie à partir de lycanthropes solitaires");
             return pack;
@@ -105,24 +102,24 @@ public class Pack {
         }
     }
 
-    // Creation d'une hiérarchie avec au moins un 𝟂 et un couple 𝞪
+    // Création d'une hiérarchie avec au moins un Omega et un couple Alpha
     public void createHierarchy() {
-        members.sort(Comparator.comparingInt(l -> Lycanthrope.getRankValue(l.getRank())));
+        members.sort(Comparator.comparingInt(l -> (l.getRank() != null) ? l.getRank().getValue() : 25));
 
-        boolean Omega = members.stream().anyMatch(l ->"𝟂".equals(l.getRank()));
+        boolean hasOmega = members.stream().anyMatch(l -> l.getRank() == Rank.OMEGA);
 
-        if (!Omega) {
+        if (!hasOmega) {
             Lycanthrope weakest = members.stream().min(Comparator.comparingInt(Lycanthrope::getStrength)).orElse(null);
             if (weakest != null) {
-                weakest.setRank("𝟂");
-                System.out.println(weakest.getName() + "devient le souffre douleur de la meute");
+                weakest.setRank(Rank.OMEGA);
+                System.out.println(weakest.getName() + " devient le souffre douleur de la meute");
             }
         }
 
         setAlphaCouple();
     }
 
-    // Créer le couple alpha (male et femelle adultes les plus forts)
+    // Créer le couple alpha (mâle et femelle adultes les plus forts)
     public void setAlphaCouple() {
         Lycanthrope bestMale = null;
         Lycanthrope bestFemale = null;
@@ -178,10 +175,10 @@ public class Pack {
      * @param sex Le sexe à vérifier.
      * @return true si c'est le dernier, false sinon.
      */
-    public boolean isLastOfRank(String rank, char sex) {
+    public boolean isLastOfRank(Rank rank, char sex) {
         int count = 0;
         for (Lycanthrope member : members) {
-            if (member.getSex() == sex && rank.equals(member.getRank())) {
+            if (member.getSex() == sex && rank == member.getRank()) {
                 count++;
             }
         }
