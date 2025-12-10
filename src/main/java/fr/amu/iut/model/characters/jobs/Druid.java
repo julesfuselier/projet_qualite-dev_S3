@@ -2,6 +2,7 @@ package fr.amu.iut.model.characters.jobs;
 
 import fr.amu.iut.model.characters.*;
 import fr.amu.iut.model.characters.Character;
+import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.Item;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
@@ -47,7 +48,7 @@ public class Druid extends Warrior implements Leader, Worker, Fighter {
         return null;
     }
 
-    public void craftMagicPotion(PotionType desiredType) {
+    public void craftMagicPotion(PotionType desiredType) throws InsufficientIngredientsException {
         List<Item> inventoryItems = this.getInventory().getItems();
 
         Item mistletoe = findIngredient(inventoryItems, FoodType.MISTLETOE, null);
@@ -81,29 +82,35 @@ public class Druid extends Warrior implements Leader, Worker, Fighter {
             hasSpecialIngredient = (specialIngredient != null);
         }
 
-        if (hasBaseIngredients && hasSpecialIngredient) {
-            this.getInventory().removeItem(mistletoe);
-            this.getInventory().removeItem(carrot);
-            this.getInventory().removeItem(salt);
-            this.getInventory().removeItem(freshClover);
-            this.getInventory().removeItem(freshFish);
-            this.getInventory().removeItem(honey);
-            this.getInventory().removeItem(mead);
-            this.getInventory().removeItem(secretIngredient);
-            this.getInventory().removeItem(oilOrBeet);
-
-            if (specialIngredient != null) {
-                this.getInventory().removeItem(specialIngredient);
-            }
-
-            MagicPotion newPotion = new MagicPotion(desiredType);
-            this.getInventory().addItem(newPotion);
-
-            System.out.println(this.getName() + " a réussi à concocter une " + newPotion.getName() + " !");
-        } else {
-            System.out.println("Échec : " + this.getName() + " n'a pas les ingrédients requis pour une potion de type " + desiredType + ".");
-            if (!hasBaseIngredients) System.out.println("(Ingrédients de base manquants)");
-            if (!hasSpecialIngredient) System.out.println("(Ingrédient spécial manquant)");
+        if (!hasBaseIngredients) {
+            throw new InsufficientIngredientsException(
+                    "Échec : " + this.getName() + " n'a pas les ingrédients de base requis (Gui, Poisson frais, etc.) pour une potion " + desiredType + "."
+            );
         }
+
+        if (!hasSpecialIngredient) {
+            throw new InsufficientIngredientsException(
+                    "Échec : " + this.getName() + " n'a pas l'ingrédient spécial requis pour la potion " + desiredType + "."
+            );
+        }
+
+        this.getInventory().removeItem(mistletoe);
+        this.getInventory().removeItem(carrot);
+        this.getInventory().removeItem(salt);
+        this.getInventory().removeItem(freshClover);
+        this.getInventory().removeItem(freshFish);
+        this.getInventory().removeItem(honey);
+        this.getInventory().removeItem(mead);
+        this.getInventory().removeItem(secretIngredient);
+        this.getInventory().removeItem(oilOrBeet);
+
+        if (specialIngredient != null) {
+            this.getInventory().removeItem(specialIngredient);
+        }
+
+        MagicPotion newPotion = new MagicPotion(desiredType);
+        this.getInventory().addItem(newPotion);
+
+        System.out.println(this.getName() + " a réussi à concocter une " + newPotion.getName() + " !");
     }
 }

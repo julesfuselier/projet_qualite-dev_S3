@@ -2,6 +2,7 @@ package fr.amu.iut.model.characters;
 
 import fr.amu.iut.model.InvasionTheatre;
 import fr.amu.iut.model.characters.jobs.Druid;
+import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.potion.MagicPotion;
 import fr.amu.iut.model.items.potion.PotionType;
@@ -38,11 +39,12 @@ public class ClanLeader extends Character implements Leader {
     public void createNewCharacterInVillage(Faction faction, String role, String name) {
         Character newCharacter = characterFactory.createCharacter(faction, role, name);
         if (newCharacter != null) {
-            managedLocation.addCharacter(newCharacter);
-            System.out.println(
-                    getName() + " has created a new character : " + newCharacter.getName() + " in the village.");
-        } else {
-            System.out.println("Failure to create character.");
+            try {
+                managedLocation.addCharacter(newCharacter);
+                System.out.println(getName() + " has created a new character : " + newCharacter.getName());
+            } catch (Exception e) {
+                System.out.println("Erreur création : " + e.getMessage());
+            }
         }
     }
 
@@ -78,7 +80,7 @@ public class ClanLeader extends Character implements Leader {
     }
 
     // Demander au druide de faire une potion
-    public void askDruidForMagicPotion(Druid druid, PotionType potionType) {
+    public void askDruidForMagicPotion(Druid druid, PotionType potionType) throws InsufficientIngredientsException {
         if (managedLocation.getCharacters().contains(druid)) {
             druid.craftMagicPotion(potionType);
             System.out.println(getName() + " ask to " + druid.getName() + " to make a magic potion.");
@@ -104,14 +106,12 @@ public class ClanLeader extends Character implements Leader {
 
     public void transferCharacter(Character character, Space destination) {
         if (managedLocation.getCharacters().contains(character)) {
-            if (destination.authorized(character)) {
-                managedLocation.removeCharacter(character);
+            try {
                 destination.addCharacter(character);
-                System.out
-                        .println(getName() + " a transféré " + character.getName() + " vers " + destination.getName());
-            } else {
-                System.out.println("Transfert impossible : " + character.getName() + " n'est pas autorisé dans "
-                        + destination.getName());
+                managedLocation.removeCharacter(character);
+                System.out.println(getName() + " a transféré " + character.getName() + " vers " + destination.getName());
+            } catch (Exception e) {
+                System.out.println("Transfert impossible : " + e.getMessage());
             }
         } else {
             System.out.println(character.getName() + " n'est pas dans le lieu géré par " + getName());

@@ -4,7 +4,7 @@ import fr.amu.iut.model.characters.Character;
 
 public class StandardCombatStrategy implements CombatStrategy {
     @Override
-    public static void executeAttack(Character attacker, Character defender) {
+    public void executeAttack(Character attacker, Character defender) { // ← ENLEVER "static"
         if (defender.isActivePotion()) {
             System.out.println(defender.getName() + " est invincible grâce à la potion !");
             return;

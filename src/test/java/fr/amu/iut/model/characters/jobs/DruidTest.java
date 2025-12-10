@@ -1,7 +1,6 @@
 package fr.amu.iut.model.characters.jobs;
 
 import fr.amu.iut.model.characters.Faction;
-import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
@@ -13,10 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DruidTest {
 
-    /**
-     * Teste la création réussie d'une potion magique.
-     * Vérifie que les ingrédients sont consommés et que la potion est ajoutée.
-     */
     @Test
     void testCraftPotionSuccess() {
         Druid panoramix = new Druid("Panoramix", 'M', 170, 80, 10, 10, Faction.GAULOIS);
@@ -43,9 +38,6 @@ class DruidTest {
         assertFalse(hasMistletoe, "Les ingrédients utilisés (Gui) auraient dû être retirés de l'inventaire.");
     }
 
-    /**
-     * Teste l'échec de la création si un ingrédient manque.
-     */
     @Test
     void testCraftPotionFailure_MissingIngredient() {
         Druid panoramix = new Druid("Panoramix", 'M', 170, 80, 10, 10, Faction.GAULOIS);
@@ -59,18 +51,20 @@ class DruidTest {
         assertFalse(hasPotion, "Le druide ne devrait pas créer de potion s'il manque des ingrédients.");
     }
 
-    /**
-     * Teste que le Druide (qui est un Warrior) peut combattre et infliger des dégâts.
-     */
     @Test
     void testDruidCanFight() {
-        Druid druid = new Druid("Panoramix", 'M', 170, 80, 20, 10, Faction.GAULOIS); // Force 20
-        Legionary romain = new Legionary("Minus", 'M', 170, 30, 10, 5, Faction.ROMAIN); // Endurance 5
+        Druid druid = new Druid("Panoramix", 'M', 170, 80, 20, 10, Faction.GAULOIS);
+        Legionary romain = new Legionary("Minus", 'M', 170, 30, 10, 5, Faction.ROMAIN);
 
         int initialHealth = romain.getHealth().get();
         druid.fight(romain);
 
-        assertTrue(romain.getHealth().get() < initialHealth, "Le romain aurait dû perdre des PV.");
-        assertEquals(initialHealth - 15, romain.getHealth().get(), "Le calcul des dégâts est incorrect.");
+        assertTrue(romain.getHealth().get() < initialHealth,
+                "Le romain aurait dû perdre des PV.");
+
+        // Calcul dynamique des dégâts attendus
+        int expectedDamage = Math.max(1, druid.getStrength() - romain.getEndurance());
+        assertEquals(initialHealth - expectedDamage, romain.getHealth().get(),
+                "Le calcul des dégâts est incorrect.");
     }
 }

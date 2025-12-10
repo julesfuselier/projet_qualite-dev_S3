@@ -3,6 +3,7 @@ package fr.amu.iut.model;
 import fr.amu.iut.model.characters.ClanLeader;
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.jobs.Druid;
+import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodFactory;
 import fr.amu.iut.model.items.foods.FoodType;
@@ -74,22 +75,6 @@ public class InvasionTheatre {
                     System.out.println(" - " + c.toString());
                 }
             }
-        }
-    }
-
-    // Tri des personnages par nom (ordre alphabétique) - méthode d'insertion
-    private void sortCharactersByName(List<Character> characters) {
-        for (int i = 1; i < characters.size(); i++) {
-            Character keyChar = characters.get(i);
-            String keyName = keyChar.getName();
-            int j = i - 1;
-
-            // Déplace les éléments plus grands que la clé vers la droite
-            while (j >= 0 && characters.get(j).getName().compareToIgnoreCase(keyName) > 0) {
-                characters.set(j + 1, characters.get(j));
-                j = j - 1;
-            }
-            characters.set(j + 1, keyChar);
         }
     }
 
@@ -224,9 +209,13 @@ public class InvasionTheatre {
     // Déplace physiquement le personnage
     private void moveCharacter(Character c, Space from, Space to) {
         if (to.authorized(c)) {
-            from.removeCharacter(c);
-            to.addCharacter(c);
-            System.out.println("   -> " + c.getName() + " quitte " + from.getName() + " pour " + to.getName());
+            try {
+                to.addCharacter(c);
+                from.removeCharacter(c);
+                System.out.println("   -> " + c.getName() + " quitte " + from.getName() + " pour " + to.getName());
+            } catch (Exception e) {
+                System.out.println("Erreur de mouvement : " + e.getMessage());
+            }
         }
     }
 
@@ -236,11 +225,14 @@ public class InvasionTheatre {
         for ( Space loc : existingLocations) {
             if(!loc.isBattlefield()) {
                 for (Character c : loc.getCharacters()) {
-                    if (c instanceof Druid) {
-                        if(random.nextInt(3) == 0) { // 1 chance sur 3 de fabriquer une potion
-                            MagicPotion potion = new MagicPotion(PotionType.BASIC);
-                            c.getInventory().addItem(potion);
-                            System.out.println("[POTION] Le druide " + c.getName() + " a fabriqué une potion magique de type " + potion.getType());
+                    if (c instanceof Druid druid) {
+                        if(random.nextInt(3) == 0) {
+                            try {
+                                druid.craftMagicPotion(PotionType.BASIC);
+                                System.out.println("[POTION] Le druide " + c.getName() + " a fabriqué une potion !");
+                            } catch (InsufficientIngredientsException e) {
+                                System.out.println("[POTION] Le druide " + c.getName() + " n'a pas pu fabriquer de potion : " + e.getMessage());
+                            }
                         }
                     }
                 }
