@@ -1,21 +1,236 @@
 package fr.amu.iut;
 
 /**
- * Classe contenant les constantes de configuration du jeu.
+ * Singleton gérant la configuration globale du jeu.
+ * Utilise le pattern Singleton (Eager Initialization) pour garantir
+ * une instance unique de configuration dans toute l'application.
+ *
+ * <p>Ce pattern est utilisé pour centraliser la gestion des paramètres
+ * de simulation et éviter la duplication de configuration.</p>
  */
 public final class GameConfig {
-    private GameConfig() {}
 
-    public static final int PROBABILITY_HUNGER_EVENT = 10;
-    public static final int PROBABILITY_FOOD_SPAWN = 20;
-    public static final int PROBABILITY_DRUID_POTION = 33;
+    /**
+     * Instance unique du Singleton, créée au chargement de la classe.
+     * Thread-safe par garantie JVM.
+     */
+    private static final GameConfig INSTANCE = new GameConfig();
 
-    public static final int MAX_HUNGER_INCREASE = 5;
-    public static final int MAX_POTION_DECREASE = 2;
-    public static final int TURN_DURATION_MS = 3000;
+    /**
+     * Constructeur privé pour empêcher l'instanciation externe.
+     * Garantit qu'une seule instance peut exister.
+     */
+    private GameConfig() {
+        // Initialisation si nécessaire
+    }
 
-    public static final int BASE_SIZE = 160;
-    public static final int SIZE_VARIATION = 40;
+    /**
+     * Retourne l'instance unique de GameConfig.
+     *
+     * @return L'instance Singleton de GameConfig
+     */
+    public static GameConfig getInstance() {
+        return INSTANCE;
+    }
 
-    public static final int BONUS_STRENGTH_POTION = 100 ;
+    // ============================================
+    // CONFIGURATION DU JEU
+    // ============================================
+
+    // Probabilités des événements
+    private int probabilityHungerEvent = 10;
+    private int probabilityFoodSpawn = 20;
+    private int probabilityDruidPotion = 33;
+    private int probabilityLycanReproduction = 10;
+    private int probabilityLycanTransformation = 50;
+    private int probabilityHowl = 20;
+
+    // Paramètres de gameplay
+    private int maxHungerIncrease = 5;
+    private int maxPotionDecrease = 2;
+    private int turnDurationMs = 3000;
+
+    // Paramètres des personnages
+    private int baseSize = 160;
+    private int sizeVariation = 40;
+    private int bonusStrengthPotion = 100;
+
+    // Mode de difficulté
+    private DifficultyMode difficultyMode = DifficultyMode.NORMAL;
+
+    /**
+     * Enum représentant les modes de difficulté.
+     */
+    public enum DifficultyMode {
+        EASY(0.5),
+        NORMAL(1.0),
+        HARD(1.5);
+
+        private final double multiplier;
+
+        /**
+         * Constructeur de l'énumération.
+         *
+         * @param multiplier Multiplicateur affectant les probabilités
+         */
+        DifficultyMode(double multiplier) {
+            this.multiplier = multiplier;
+        }
+
+        /**
+         * Retourne le multiplicateur associé au mode de difficulté.
+         *
+         * @return Le multiplicateur
+         */
+        public double getMultiplier() {
+            return multiplier;
+        }
+    }
+
+    // ============================================
+    // GETTERS
+    // ============================================
+
+    /**
+     * Retourne la probabilité d'apparition d'un événement de faim,
+     * ajustée selon le mode de difficulté.
+     *
+     * @return Probabilité ajustée d'un événement de faim
+     */
+    public int getProbabilityHungerEvent() {
+        return (int)(probabilityHungerEvent * difficultyMode.getMultiplier());
+    }
+
+    /**
+     * Retourne la probabilité d'apparition de nourriture,
+     * ajustée selon le mode de difficulté.
+     *
+     * @return Probabilité ajustée d'apparition de nourriture
+     */
+    public int getProbabilityFoodSpawn() {
+        return probabilityFoodSpawn;
+    }
+
+    /**
+     * Retourne la probabilité d'apparition d'une potion de druide.
+     *
+     * @return Probabilité d'apparition d'une potion de druide
+     */
+    public int getProbabilityDruidPotion() {
+        return probabilityDruidPotion;
+    }
+
+    /**
+     * Retourne l'augmentation maximale de la faim par tour.
+     *
+     * @return Augmentation maximale de la faim
+     */
+    public int getMaxHungerIncrease() {
+        return maxHungerIncrease;
+    }
+
+    /**
+     * Retourne la diminution maximale de la faim par potion.
+     *
+     * @return Diminution maximale de la faim
+     */
+    public int getMaxPotionDecrease() {
+        return maxPotionDecrease;
+    }
+
+    /**
+     * Retourne la durée d'un tour en millisecondes.
+     *
+     * @return Durée d'un tour en ms
+     */
+    public int getTurnDurationMs() {
+        return turnDurationMs;
+    }
+
+    /**
+     * Retourne la taille de base des personnages.
+     *
+     * @return Taille de base
+     */
+    public int getBaseSize() {
+        return baseSize;
+    }
+
+    /**
+     * Retourne la variation de taille des personnages.
+     *
+     * @return Variation de taille
+     */
+    public int getSizeVariation() {
+        return sizeVariation;
+    }
+
+    /**
+     * Retourne le bonus de force accordé par une potion.
+     *
+     * @return Bonus de force par potion
+     */
+    public int getBonusStrengthPotion() {
+        return bonusStrengthPotion;
+    }
+
+    /**
+     * Retourne la probabilité de reproduction des lycans.
+     *
+     * @return Probabilité de reproduction des lycans
+     */
+    public int getProbabilityLycanReproduction() {
+        return probabilityLycanReproduction;
+    }
+
+    /**
+     * Retourne la probabilité de transformation en lycan.
+     *
+     * @return Probabilité de transformation en lycan
+     */
+    public int getProbabilityLycanTransformation() {
+        return probabilityLycanTransformation;
+    }
+
+    /**
+     * Retourne la probabilité de hurlement des lycans.
+     *
+     * @return Probabilité de hurlement
+     */
+    public int getProbabilityHowl() {
+        return probabilityHowl;
+    }
+
+    /**
+     * Retourne le mode de difficulté actuel du jeu.
+     *
+     * @return Mode de difficulté
+     */
+    public DifficultyMode getDifficultyMode() {
+        return difficultyMode;
+    }
+
+    // ============================================
+    // SETTERS ( config dynamique )
+    // ============================================
+
+    /**
+     * Modifie le mode de difficulté du jeu.
+     * Affecte les probabilités des événements.
+     *
+     * @param mode Le nouveau mode de difficulté
+     */
+    public void setDifficultyMode(DifficultyMode mode) {
+        this.difficultyMode = mode;
+    }
+
+    /**
+     * Réinitialise la configuration aux valeurs par défaut.
+     */
+    public void resetToDefaults() {
+        this.probabilityHungerEvent = 10;
+        this.probabilityFoodSpawn = 20;
+        this.difficultyMode = DifficultyMode.NORMAL;
+        // TODO : Réinitialiser les autres paramètres si nécessaire
+    }
 }

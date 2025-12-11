@@ -15,17 +15,19 @@ import fr.amu.iut.GameConfig;
  *     .setAge(35)
  *     .setStrength(80)
  *     .setEndurance(70)
- *     .setFaction(Faction.GAULOIS)
+ *     .setFaction(Faction.GALISH)
  *     .build("druide");
  */
 public class CharacterBuilder {
+    private final GameConfig gameConfig = GameConfig.getInstance();
+
     private String name = "Inconnu";
     private char sex = 'M';
-    private int size = GameConfig.BASE_SIZE;
+    private int size = gameConfig.getBaseSize();
     private int age = 30;
     private int strength = 50;
     private int endurance = 50;
-    private Faction faction = Faction.GAULOIS;
+    private Faction faction = Faction.GALISH;
 
     /**
      * Définit le nom du personnage.
@@ -77,21 +79,19 @@ public class CharacterBuilder {
     public CharacterBuilder setFaction(Faction faction) { this.faction = faction; return this; }
 
     /**
-     * Construit le personnage en fonction du métier spécifié.
-     * @param role Le métier du personnage (druide, forgeron, légionnaire, général, aubergiste, marchand, préfet).
+     * Construit le personnage avec les attributs définis.
+     * @param role Le rôle (métier) du personnage.
      * @return Le personnage construit.
-     * @throws IllegalArgumentException Si le métier est inconnu.
      */
-    public Character build(String role) {
-        return switch (role.toLowerCase()) {
-            case "druide" -> new Druid(name, sex, size, age, strength, endurance, faction);
-            case "forgeron" -> new Blacksmith(name, sex, size, age, strength, endurance, faction);
-            case "legionnaire" -> new Legionary(name, sex, size, age, strength, endurance, faction);
-            case "général" -> new General(name, sex, size, age, strength, endurance, faction);
-            case "aubergiste" -> new Innkeeper(name, sex, size, age, strength, endurance, faction);
-            case "marchand" -> new Merchant(name, sex, size, age, strength, endurance, faction);
-            case "préfet" -> new Prefect(name, sex, size, age, strength, endurance, faction);
-            default -> throw new IllegalArgumentException("Métier inconnu : " + role);
+    public Character build(JobType role) {
+        return switch (role) {
+            case DRUID -> new Druid(name, sex, size, age, strength, endurance, faction);
+            case BLACKSMITH -> new Blacksmith(name, sex, size, age, strength, endurance, faction);
+            case LEGIONARY -> new Legionary(name, sex, size, age, strength, endurance, faction);
+            case GENERAL -> new General(name, sex, size, age, strength, endurance, faction);
+            case INKEEPER -> new Innkeeper(name, sex, size, age, strength, endurance, faction);
+            case MERCHANT -> new Merchant(name, sex, size, age, strength, endurance, faction);
+            case PREFECT -> new Prefect(name, sex, size, age, strength, endurance, faction);
         };
     }
 }

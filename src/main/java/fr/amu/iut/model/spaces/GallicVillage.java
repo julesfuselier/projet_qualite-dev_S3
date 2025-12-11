@@ -30,6 +30,6 @@ public final class GallicVillage extends Space{
      */
     @Override
     public boolean authorized(Character c) {
-        return c.getFaction() == Faction.GAULOIS || c instanceof Lycanthrope;
+        return c.getFaction() == Faction.GALISH || c instanceof Lycanthrope;
     }
 }

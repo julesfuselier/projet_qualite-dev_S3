@@ -3,12 +3,13 @@ package fr.amu.iut.model.characters.jobs;
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Worker;
+import fr.amu.iut.util.GameEvents;
 
 /**
  * Classe représentant un forgeron dans le jeu.
  * Le forgeron est un personnage qui peut travailler en forgeant des objets.
  */
-public class Blacksmith extends Character implements Worker {
+public class Blacksmith extends Craftsman {
 
     /**
      * Constructeur de la classe Blacksmith.
@@ -31,6 +32,6 @@ public class Blacksmith extends Character implements Worker {
      */
     @Override
     public void work() {
-        System.out.println(this.getName() + " tape sur son enclume ...");
+        GameEvents.log(this.getName() + " tape sur son enclume ...");
     }
 }

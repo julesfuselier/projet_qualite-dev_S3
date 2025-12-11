@@ -11,6 +11,7 @@ import fr.amu.iut.model.items.foods.FreshnessStatus;
 import fr.amu.iut.model.items.potion.MagicPotion;
 import fr.amu.iut.model.fight.CombatStrategy;
 import fr.amu.iut.model.fight.StandardCombatStrategy;
+import fr.amu.iut.util.GameEvents;
 
 /**
  * Classe abstraite représentant un personnage dans le jeu.
@@ -46,6 +47,8 @@ public abstract class Character implements Cloneable {
     private boolean permanentPotion = false; // Indicateur potion permanente
     private int potDrunkCount = 0; // indicateur nombre de marmites bus
 
+    GameConfig gameConfig = GameConfig.getInstance();
+
     /**
      * Constructeur complet de la classe Character.
      * @param name Le nom du personnage
@@ -64,7 +67,7 @@ public abstract class Character implements Cloneable {
         this.strength = strength;
         this.endurance = endurance;
         this.faction = faction;
-        this.inventory = new Inventory();
+        this.inventory = new Inventory<>();
     }
 
     /**
@@ -89,41 +92,41 @@ public abstract class Character implements Cloneable {
      */
     public void eat(Food food) {
         if (food == null) {
-            System.out.println("Il n'y a rien à manger ici.");
+            GameEvents.log("Il n'y a rien à manger ici.");
             return;
         }
 
         if (!inventory.getItems().contains(food)) {
-            System.out.println(getName() + " ne possède pas cet aliment (" + food.getName() + ").");
+            GameEvents.log(getName() + " ne possède pas cet aliment (" + food.getName() + ").");
             return;
         }
 
         if (!canEat(food)) {
-            System.out.println(getName() + " (" + getFaction() + ") refuse de manger : " + food.getName() + " !");
+            GameEvents.log(getName() + " (" + getFaction() + ") refuse de manger : " + food.getName() + " !");
             return;
         }
 
         inventory.removeItem(food);
         this.hunger.add(food.getNutritionValue());
-        System.out.println(
-                getName() + " mange " + food.getName() + ". (Faim : " + hunger.get() + "/" + hunger.getMax() + ")");
+
+        GameEvents.log(getName() + " mange " + food.getName() +
+                ". (Faim : " + hunger.get() + "/" + hunger.getMax() + ")");
 
         int healthDamage = 0;
 
         if (food.getType() == FoodType.FISH && food.getStatus() == FreshnessStatus.STALE) {
-            System.out.println("Beurk ! Ce poisson n'est pas frais...");
+            GameEvents.log("Beurk ! Ce poisson n'est pas frais...");
             healthDamage += 20;
         }
 
         if (isVegetable(food.getType()) && isVegetable(this.lastEatenFoodType)) {
-            System.out.println("Encore de la verdure ?! J'ai mal au ventre...");
+            GameEvents.log("Encore de la verdure ?! J'ai mal au ventre...");
             healthDamage += 15;
         }
 
         if (healthDamage > 0) {
             this.health.add(-healthDamage);
-            System.out.println(
-                    getName() + " perd " + healthDamage + " points de vie à cause d'une mauvaise alimentation.");
+            GameEvents.log(getName() + " perd " + healthDamage + " points de vie à cause d'une mauvaise alimentation.");
         }
 
         this.lastEatenFoodType = food.getType();
@@ -137,13 +140,13 @@ public abstract class Character implements Cloneable {
     private boolean canEat(Food food) {
         FoodType type = food.getType();
 
-        if (getFaction() == Faction.GAULOIS) {
+        if (getFaction() == Faction.GALISH) {
             if (type == FoodType.WILD_BOAR || type == FoodType.WINE)
                 return true;
             return type == FoodType.FISH;
         }
 
-        else if (getFaction() == Faction.ROMAIN) {
+        else if (getFaction() == Faction.ROMAN) {
             return type == FoodType.WILD_BOAR ||
                     type == FoodType.HONEY ||
                     type == FoodType.WINE ||
@@ -184,12 +187,12 @@ public abstract class Character implements Cloneable {
      */
     public Object drinkMagicPotion(MagicPotion potion, boolean drinkAll) {
         if (isStatue || isDead()) {
-            System.out.println(getName() + " ne peut pas boire.");
+            GameEvents.log(getName() + " ne peut pas boire.");
             return this;
         }
 
         if (drinkAll) {
-            System.out.println(getName() + " boit toute la marmite d'un trait !");
+            GameEvents.log(getName() + " boit toute la marmite d'un trait !");
             potDrunkCount++;
 
             if (potDrunkCount >= 2) {
@@ -202,35 +205,33 @@ public abstract class Character implements Cloneable {
             this.magicPotion.setMax(100);
             this.magicPotion.add(100);
 
-            while (potion.takeDose())
-                ;
+            while (potion.takeDose()); // Vide la potion
             inventory.removeItem(potion);
 
         } else {
             if (potion.takeDose()) {
-                System.out.println(getName() + " boit une gorgée de potion magique.");
+                GameEvents.log(getName() + " boit une gorgée de potion magique.");
                 this.magicPotion.add(20);
 
                 if (potion.getDoses() == 0) {
-                    System.out.println("La marmite est vide !");
+                    GameEvents.log("La marmite est vide !");
                     inventory.removeItem(potion);
                 }
             } else {
-                System.out.println("La marmite est déjà vide.");
+                GameEvents.log("La marmite est déjà vide.");
             }
         }
 
         if (isActivePotion()) {
             switch (potion.getType()) {
                 case METAMORPHOSIS:
-                    System.out.println("Des poils commencent à pousser sur " + getName() + "...");
+                    GameEvents.log("Des poils commencent à pousser sur " + getName() + "...");
                     return transformToLycanthrope();
                 case SPLITTING:
                     Character clone = this.clone();
                     clone.setName(this.getName() + " (Copie)");
                     clone.inventory = new Inventory();
                     return clone;
-
             }
         }
         return this;
@@ -250,7 +251,7 @@ public abstract class Character implements Cloneable {
     private void becomeGraniteStatue() {
         isStatue = true;
         this.name += " (Statue de Granit)";
-        System.out.println(getName() + " s'est transformé en statue de granit pour l'éternité !");
+        GameEvents.log(getName() + " s'est transformé en statue de granit pour l'éternité !");
     }
 
     /**
@@ -259,7 +260,7 @@ public abstract class Character implements Cloneable {
      */
     public int getStrength() {
         if (isActivePotion()) {
-            return strength + GameConfig.BONUS_STRENGTH_POTION; // Force surhumaine
+            return strength + gameConfig.getBonusStrengthPotion(); // Force surhumaine
         }
         return strength;
     }
@@ -275,7 +276,7 @@ public abstract class Character implements Cloneable {
         if (magicPotion.get() > 0) {
             magicPotion.add(-1);
             if (magicPotion.get() == 0) {
-                System.out.println("Les effets de la potion magique se dissipent pour " + getName() + ".");
+                GameEvents.log("Les effets de la potion magique se dissipent pour " + getName() + ".");
             }
         }
     }
@@ -285,7 +286,7 @@ public abstract class Character implements Cloneable {
             return;
         }
         this.health.add(amount);
-        System.out.println(getName() + " est soigné de " + amount + " PV.");
+        GameEvents.log(getName() + " est soigné de " + amount + " PV.");
     }
 
     /**
@@ -364,11 +365,11 @@ public abstract class Character implements Cloneable {
     }
 
     /* Setters et Getters de l'inventaire */
-    public void setInventory(Inventory inventory) {
+    public void setInventory(Inventory<Item> inventory) {
         this.inventory = inventory;
+    }    public Inventory<Item> getInventory() {
+        return inventory;
     }
-    public Inventory getInventory() {return inventory;}
-
 
     public fr.amu.iut.model.spaces.Space getCurrentSpace() {
         return currentSpace;

@@ -1,7 +1,10 @@
 package fr.amu.iut.model;
 
 import fr.amu.iut.model.items.Item;
+import fr.amu.iut.util.GameEvents;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,7 +35,7 @@ public class Inventory<T extends Item> {
         if (items.size() < MAX_CAPACITY) {
             items.add(item);
         } else {
-            System.out.println("Inventaire plein ! Impossible d'ajouter " + item.getName());
+            GameEvents.log("Inventaire plein ! Impossible d'ajouter " + item.getName());
         }
     }
 
@@ -53,6 +56,17 @@ public class Inventory<T extends Item> {
      */
     public List<T> getItems() {
         return items;
+    }
+
+    /**
+     * Affiche les objets présents dans l'inventaire.
+     */
+    public void displayItems() {
+        Iterator<T> it = items.iterator();
+        while (it.hasNext()) {
+            T item = it.next();
+            GameEvents.log(" - " + item.getName());
+        }
     }
 
     /**

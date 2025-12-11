@@ -1,6 +1,7 @@
 package fr.amu.iut.model.characters.jobs;
 
 import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
@@ -13,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class DruidTest {
 
     @Test
-    void testCraftPotionSuccess() {
-        Druid panoramix = new Druid("Panoramix", 'M', 170, 80, 10, 10, Faction.GAULOIS);
+    void testCraftPotionSuccess() throws InsufficientIngredientsException {
+        Druid panoramix = new Druid("Panoramix", 'M', 170, 80, 10, 10, Faction.GALISH);
 
         panoramix.getInventory().addItem(new Food("Gui", 0, true, FreshnessStatus.FRESH, FoodType.MISTLETOE));
         panoramix.getInventory().addItem(new Food("Carotte", 0, true, FreshnessStatus.FRESH, FoodType.CARROT));
@@ -39,8 +40,8 @@ class DruidTest {
     }
 
     @Test
-    void testCraftPotionFailure_MissingIngredient() {
-        Druid panoramix = new Druid("Panoramix", 'M', 170, 80, 10, 10, Faction.GAULOIS);
+    void testCraftPotionFailure_MissingIngredient() throws InsufficientIngredientsException {
+        Druid panoramix = new Druid("Panoramix", 'M', 170, 80, 10, 10, Faction.GALISH);
 
         panoramix.getInventory().addItem(new Food("Gui", 0, true, FreshnessStatus.FRESH, FoodType.MISTLETOE));
         panoramix.craftMagicPotion(PotionType.BASIC);
@@ -53,8 +54,8 @@ class DruidTest {
 
     @Test
     void testDruidCanFight() {
-        Druid druid = new Druid("Panoramix", 'M', 170, 80, 20, 10, Faction.GAULOIS);
-        Legionary romain = new Legionary("Minus", 'M', 170, 30, 10, 5, Faction.ROMAIN);
+        Druid druid = new Druid("Panoramix", 'M', 170, 80, 20, 10, Faction.GALISH);
+        Legionary romain = new Legionary("Minus", 'M', 170, 30, 10, 5, Faction.ROMAN);
 
         int initialHealth = romain.getHealth().get();
         druid.fight(romain);

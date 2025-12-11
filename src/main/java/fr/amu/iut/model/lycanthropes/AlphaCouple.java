@@ -3,6 +3,7 @@ package fr.amu.iut.model.lycanthropes;
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import java.util.Random;
 import fr.amu.iut.model.lycanthropes.Rank;
+import fr.amu.iut.util.GameEvents;
 
 /**
  * Représente un couple Alpha composé d'un mâle et d'une femelle lycanthrope.
@@ -36,10 +37,10 @@ public class AlphaCouple {
      * composant le couple Alpha.
      */
     public void displayCharacteristics() {
-        System.out.println("Couple Alpha : ");
-        System.out.println("\nMâle :");
+        GameEvents.log("Couple Alpha : ");
+        GameEvents.log("\nMâle :");
         male.printCharacteristics();
-        System.out.println("\nFemelle :");
+        GameEvents.log("\nFemelle :");
         female.printCharacteristics();
     }
 
@@ -91,9 +92,7 @@ public class AlphaCouple {
 
             pack.addMember(young);
         }
-
-        System.out.println(numberOfYoung + " nouveau(x) lycanthrope(s) de rang " +
-                youngRank.getDisplay() + " sont nés du couple alpha.");
+        GameEvents.log(numberOfYoung + " nouveau(x) lycanthrope(s) de rang " + youngRank.getDisplay() + " sont nés du couple alpha.");
     }
 
     /**

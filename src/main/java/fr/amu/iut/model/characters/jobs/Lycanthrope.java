@@ -6,6 +6,7 @@ import fr.amu.iut.model.lycanthropes.Howl;
 import fr.amu.iut.model.lycanthropes.HowlType;
 import fr.amu.iut.model.lycanthropes.Pack;
 import fr.amu.iut.model.lycanthropes.Rank;
+import fr.amu.iut.util.GameEvents;
 
 import java.util.Random;
 
@@ -42,9 +43,9 @@ public class Lycanthrope extends Character implements Fighter {
             if (opponent instanceof Lycanthrope && opponent.getHealth().get() < 1) {
                 opponent.getHealth().add(1);
             }
-            System.out.println(getName() + " attaque sauvagement " + opponent.getName() + " (-" + damage + " HP)");
+            GameEvents.log(getName() + " attaque sauvagement " + opponent.getName() + " (-" + damage + " HP)");
         } else {
-            System.out.println(getName() + " essaie d'attaquer " + opponent.getName() + " mais échoue.");
+            GameEvents.log(getName() + " essaie d'attaquer " + opponent.getName() + " mais échoue.");
         }
     }
 
@@ -55,31 +56,31 @@ public class Lycanthrope extends Character implements Fighter {
      */
     public void dominate(Lycanthrope target) {
         if (this == target) {
-            System.out.println(getName() + " ne peut pas se dominer lui-même.");
+            GameEvents.log(getName() + " ne peut pas se dominer lui-même.");
             return;
         }
         if (this.rank == Rank.OMEGA) {
-            System.out.println(getName() + " est un " + Rank.OMEGA.getDisplay() + ", il ne peut donc dominer personne");
+            GameEvents.log(getName() + " est un " + Rank.OMEGA.getDisplay() + ", il ne peut donc dominer personne");
             return;
         }
 
         if (target.getPack() != null && target.getPack().getAlphaFemale() == target) {
-            System.out.println(getName() + " ne peut pas dominer la femelle Alpha !");
+            GameEvents.log(getName() + " ne peut pas dominer la femelle Alpha !");
             return;
         }
 
         double perceivedSelfStrength = this.getStrength() * this.impulsiveness;
         if (perceivedSelfStrength < target.getStrength()) {
-            System.out.println(getName() + " ne se sent pas assez fort pour dominer " + target.getName());
+            GameEvents.log(getName() + " ne se sent pas assez fort pour dominer " + target.getName());
             return;
         }
 
-        System.out.println(getName() + " tente de dominer " + target.getName() + " !");
+        GameEvents.log(getName() + " tente de dominer " + target.getName() + " !");
 
         boolean success = (this.level > target.getLevel()) || target.getRank() == Rank.OMEGA;
 
         if (success) {
-            System.out.println("Domination réussie !");
+            GameEvents.log("Domination réussie !");
             this.dominationFactor++;
 
             Rank tempRank = this.rank;
@@ -93,19 +94,19 @@ public class Lycanthrope extends Character implements Fighter {
 
             Pack pack = target.getPack();
             if (pack != null && target == pack.getAlphaMale()) {
-                System.out.println(target.getName() + " a été détrôné de sa place de Mâle Alpha !");
+                GameEvents.log(target.getName() + " a été détrôné de sa place de Mâle Alpha !");
                 Lycanthrope oldAlphaFemale = pack.getAlphaFemale();
 
                 pack.updateAlphasAfterDomination(this);
 
                 if (oldAlphaFemale != null && oldAlphaFemale != pack.getAlphaFemale()) {
-                    System.out.println(oldAlphaFemale.getName() + " a perdu sa place de Femelle Alpha.");
+                    GameEvents.log(oldAlphaFemale.getName() + " a perdu sa place de Femelle Alpha.");
                     oldAlphaFemale.setRank(target.getRank());
                 }
             }
 
         } else {
-            System.out.println("Domination échouée !");
+            GameEvents.log("Domination échouée !");
             target.becomeAggressive(this);
 
             target.dominationFactor--;
@@ -118,7 +119,7 @@ public class Lycanthrope extends Character implements Fighter {
     }
 
     public void becomeAggressive(Lycanthrope aggressor) {
-        System.out.println(getName() + " devient agressif envers " + aggressor.getName() + " !");
+        GameEvents.log(getName() + " devient agressif envers " + aggressor.getName() + " !");
         this.howl(HowlType.AGGRESSION, true);
         this.fight(aggressor);
     }
@@ -138,15 +139,15 @@ public class Lycanthrope extends Character implements Fighter {
     }
 
     public void printCharacteristics() {
-        System.out.println("Nom : " + getName());
-        System.out.println("Sexe : " + getSex());
-        System.out.println("Groupe d'âge : " + ageGroup);
-        System.out.println("Force : " + getStrength());
-        System.out.println("Facteur de domination : " + dominationFactor);
-        System.out.println("Rang : " + rank);
-        System.out.println("Niveau : " + level);
-        System.out.println("Impulsivité : " + impulsiveness);
-        System.out.println("Meute : " + (lone ? "Solitaire" : (pack != null ? "Membre d'une meute" : "Aucune")));
+        GameEvents.log("Nom : " + getName());
+        GameEvents.log("Sexe : " + getSex());
+        GameEvents.log("Groupe d'âge : " + ageGroup);
+        GameEvents.log("Force : " + getStrength());
+        GameEvents.log("Facteur de domination : " + dominationFactor);
+        GameEvents.log("Rang : " + rank);
+        GameEvents.log("Niveau : " + level);
+        GameEvents.log("Impulsivité : " + impulsiveness);
+        GameEvents.log("Meute : " + (lone ? "Solitaire" : (pack != null ? "Membre d'une meute" : "Aucune")));
     }
 
     /**
@@ -160,7 +161,7 @@ public class Lycanthrope extends Character implements Fighter {
         if (expectResponse && getCurrentSpace() != null && getCurrentSpace().getColony() != null) {
             getCurrentSpace().getColony().broadcastHowl(howl);
         } else {
-            System.out.println(getName() + " répond par un hurlement (" + type.getLabel() + ").");
+            GameEvents.log(getName() + " répond par un hurlement (" + type.getLabel() + ").");
         }
     }
 
@@ -170,11 +171,11 @@ public class Lycanthrope extends Character implements Fighter {
      */
     public void hearHowl(Howl howl) {
         if (getHealth().get() <= 20) {
-            System.out.println(getName() + " est trop faible pour réagir au hurlement.");
+            GameEvents.log(getName() + " est trop faible pour réagir au hurlement.");
             return;
         }
 
-        System.out.println(getName() + " entend le hurlement de " + howl.getEmitter().getName());
+        GameEvents.log(getName() + " entend le hurlement de " + howl.getEmitter().getName());
 
         switch (howl.getType()) {
             case BELONGING:
@@ -183,10 +184,10 @@ public class Lycanthrope extends Character implements Fighter {
             case DOMINATION:
                 // Réponse : Soumission ou Agressivité
                 if (shouldSubmit(howl.getEmitter())) {
-                    System.out.println(getName() + " choisit de se soumettre.");
+                    GameEvents.log(getName() + " choisit de se soumettre.");
                     howl(HowlType.SUBMISSION, false);
                 } else {
-                    System.out.println(getName() + " choisit de répondre par l'agressivité !");
+                    GameEvents.log(getName() + " choisit de répondre par l'agressivité !");
                     howl(HowlType.AGGRESSION, false);
                 }
                 break;
@@ -210,7 +211,7 @@ public class Lycanthrope extends Character implements Fighter {
         // Si je suis d'une autre meute
         else if (myPack != null && emitterPack != null) {
             if (new Random().nextBoolean()) {
-                System.out.println(getName() + " répond pour affirmer son propre clan !");
+                GameEvents.log(getName() + " répond pour affirmer son propre clan !");
                 howl(HowlType.BELONGING, false);
             }
         }
@@ -231,20 +232,20 @@ public class Lycanthrope extends Character implements Fighter {
             pack.removeMember(this);
             this.pack = null;
             this.lone = true;
-            System.out.println(getName() + " quitte la meute et devient solitaire.");
+            GameEvents.log(getName() + " quitte la meute et devient solitaire.");
         }
     }
 
     // Transformation d'un lycnathrope en humain
     public void transformToHuman() {
-        System.out.println(getName() + " se transforme en humain !");
+        GameEvents.log(getName() + " se transforme en humain !");
 
         // La probabilité de partir est de niveau * 2%
         double chanceOfLeaving = getLevel() * 2;
         double roll = new Random().nextDouble() * 100;
 
         if (roll < chanceOfLeaving) {
-            System.out.println(getName() + " profite de sa forme humaine pour quitter la meute et l'enclos !");
+            GameEvents.log(getName() + " profite de sa forme humaine pour quitter la meute et l'enclos !");
 
             leavePack();
 
@@ -253,7 +254,7 @@ public class Lycanthrope extends Character implements Fighter {
             }
 
         } else {
-            System.out.println(getName() + " reste sous forme humaine, mais ne quitte pas la meute.");
+            GameEvents.log(getName() + " reste sous forme humaine, mais ne quitte pas la meute.");
         }
     }
 
@@ -271,7 +272,7 @@ public class Lycanthrope extends Character implements Fighter {
         if (this.pack != null && !this.pack.isLastOfRank(this.rank, this.getSex())) {
             Rank nextRank = getNextRank(this.rank);
             if (nextRank != null) {
-                System.out.println(getName() + " a un facteur de domination trop bas et est dégradé au rang " + nextRank);
+                GameEvents.log(getName() + " a un facteur de domination trop bas et est dégradé au rang " + nextRank);
                 this.setRank(nextRank);
                 this.setDominationFactor(0);
             }
@@ -295,7 +296,7 @@ public class Lycanthrope extends Character implements Fighter {
         }
         lone = true;
         rank = null;
-        System.out.println(getName() + " est devenu solitaire !");
+        GameEvents.log(getName() + " est devenu solitaire !");
     }
 
     // Getters & Setters

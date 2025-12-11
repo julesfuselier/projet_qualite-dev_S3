@@ -5,6 +5,7 @@ import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Fighter;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.lycanthropes.Colony;
+import fr.amu.iut.util.GameEvents;
 
 import java.util.*;
 
@@ -190,18 +191,18 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
      * Affiche les caractéristiques de l'espace.
      */
     public void showCharacteristics(){
-        System.out.println("Nom: " + name);
-        System.out.println("Surface : " + surface);
+        GameEvents.log("Nom: " + name);
+        GameEvents.log("Surface : " + surface);
         if(!(this instanceof Battlefield)){
-            System.out.println("Personnage principal: " + leader);
+            GameEvents.log("Personnage principal: " + leader);
         }
-        System.out.println("Personnages: " + characters.size());
+        GameEvents.log("Personnages: " + characters.size());
         for(Character c : characters){
-            System.out.println(" - " + c.getName());
+            GameEvents.log(" - " + c.getName());
         }
 
         for(Food f : foods){
-            System.out.println("Nourriture disponible : " + f.getName());
+            GameEvents.log("Nourriture disponible : " + f.getName());
         }
     }
 
@@ -241,9 +242,9 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
 
         for (Character c : getCharacters()) {
             if (c instanceof Fighter) {
-                if (c.getFaction() == Faction.GAULOIS) {
+                if (c.getFaction() == Faction.GALISH) {
                     teamGaulois.add(c);
-                } else if (c.getFaction() == Faction.ROMAIN) {
+                } else if (c.getFaction() == Faction.ROMAN) {
                     teamRomain.add(c);
                 }
             }
@@ -253,7 +254,7 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
             return;
         }
 
-        System.out.println( "--- BASTON GÉNÉRALE à " + getName() + " ---");
+        GameEvents.log( "--- BASTON GÉNÉRALE à " + getName() + " ---");
 
         shuffle(teamGaulois);
         shuffle(teamRomain);
@@ -265,7 +266,7 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
             Character romain = teamRomain.get(i);
 
             if (!gaulois.isDead() && !romain.isDead()) {
-                System.out.println("   Duel : " + gaulois.getName() + " VS " + romain.getName());
+                GameEvents.log("   Duel : " + gaulois.getName() + " VS " + romain.getName());
 
                 ((Fighter) gaulois).fight(romain);
 
@@ -283,7 +284,7 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
     private void removeDeadCharacters() {
         getCharacters().removeIf(c -> {
             if (c.isDead()) {
-                System.out.println(c.getName() + " est tombé au combat à " + getName() + " !");
+                GameEvents.log(c.getName() + " est tombé au combat à " + getName() + " !");
                 return true;
             }
             return false;

@@ -6,6 +6,7 @@ import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.potion.MagicPotion;
 import fr.amu.iut.model.items.potion.PotionType;
 import fr.amu.iut.model.spaces.Space;
+import fr.amu.iut.util.GameEvents;
 
 /**
  * Représente un chef de clan dans le jeu.
@@ -46,7 +47,7 @@ public class ClanLeader extends Character implements Leader {
      */
     @Override
     public void lead(Character character) {
-        System.out.println(getName() + " dirige " + character.getName());
+        GameEvents.log(getName() + " dirige " + character.getName());
     }
 
     /**
@@ -62,14 +63,14 @@ public class ClanLeader extends Character implements Leader {
      * @param role Le rôle du nouveau personnage.
      * @param name Le nom du nouveau personnage.
      */
-    public void createNewCharacterInVillage(Faction faction, String role, String name) {
+    public void createNewCharacterInVillage(Faction faction, JobType role, String name) {
         Character newCharacter = characterFactory.createCharacter(faction, role, name);
         if (newCharacter != null) {
             try {
                 managedLocation.addCharacter(newCharacter);
-                System.out.println(getName() + " a créé un nouveau personnage : " + newCharacter.getName());
+                GameEvents.log(getName() + " a créé un nouveau personnage : " + newCharacter.getName());
             } catch (Exception e) {
-                System.out.println("Erreur création : " + e.getMessage());
+                GameEvents.log("Erreur création : " + e.getMessage());
             }
         }
     }
@@ -83,10 +84,10 @@ public class ClanLeader extends Character implements Leader {
     public void healCharacterInVillage(Character character, int healAmountToHeal) {
         if (managedLocation.getCharacters().contains(character)) {
             character.beHealed(healAmountToHeal);
-            System.out.println(getName() + " soigne " + character.getName() + ". Sa vie est maintenant de "
+            GameEvents.log(getName() + " soigne " + character.getName() + ". Sa vie est maintenant de "
                     + character.getHealth().get() + ".");
         } else {
-            System.out.println(character.getName() + " n'est pas dans le village de " + getName() + ".");
+            GameEvents.log(character.getName() + " n'est pas dans le village de " + getName() + ".");
         }
     }
 
@@ -99,13 +100,13 @@ public class ClanLeader extends Character implements Leader {
         if (managedLocation.getCharacters().contains(character) && managedLocation.getFoods().contains(food)) {
             character.eat(food);
             managedLocation.removeFood(food);
-            System.out.println(getName() + " nourrit " + character.getName() + " avec " + food.getName() + ".");
+            GameEvents.log(getName() + " nourrit " + character.getName() + " avec " + food.getName() + ".");
         }
         else if (!managedLocation.getCharacters().contains(character)) {
-            System.out.println(character.getName() + " n'est pas dans le village de " + getName() + ".");
+            GameEvents.log(character.getName() + " n'est pas dans le village de " + getName() + ".");
         }
         else {
-            System.out.println(food.getName() + " n'est pas disponible dans le village de " + getName() + ".");
+            GameEvents.log(food.getName() + " n'est pas disponible dans le village de " + getName() + ".");
         }
     }
 
@@ -118,9 +119,9 @@ public class ClanLeader extends Character implements Leader {
     public void askDruidForMagicPotion(Druid druid, PotionType potionType) throws InsufficientIngredientsException {
         if (managedLocation.getCharacters().contains(druid)) {
             druid.craftMagicPotion(potionType);
-            System.out.println(getName() + " a demandé à " + druid.getName() + " de faire une potion de type " + potionType + ".");
+            GameEvents.log(getName() + " a demandé à " + druid.getName() + " de faire une potion de type " + potionType + ".");
         } else {
-            System.out.println("Le druide " + druid.getName() + " n'est pas dans le village.");
+            GameEvents.log("Le druide " + druid.getName() + " n'est pas dans le village.");
         }
     }
 
@@ -133,13 +134,13 @@ public class ClanLeader extends Character implements Leader {
         if (managedLocation.getCharacters().contains(character)) {
             if (magicPotion != null) {
                 character.drinkMagicPotion(magicPotion, false);
-                System.out.println(getName() + " donne une potion magique à " + character.getName() + ".");
+                GameEvents.log(getName() + " donne une potion magique à " + character.getName() + ".");
                 magicPotion = null; // La potion a été utilisée
             } else {
-                System.out.println(getName() + " n'a pas de potion magique à donner.");
+                GameEvents.log(getName() + " n'a pas de potion magique à donner.");
             }
         } else {
-            System.out.println(character.getName() + " n'est pas disponible dans le village de " + getName() + ".");
+            GameEvents.log(character.getName() + " n'est pas disponible dans le village de " + getName() + ".");
         }
     }
 
@@ -153,12 +154,12 @@ public class ClanLeader extends Character implements Leader {
             try {
                 destination.addCharacter(character);
                 managedLocation.removeCharacter(character);
-                System.out.println(getName() + " a transféré " + character.getName() + " vers " + destination.getName());
+                GameEvents.log(getName() + " a transféré " + character.getName() + " vers " + destination.getName());
             } catch (Exception e) {
-                System.out.println("Transfert impossible : " + e.getMessage());
+                GameEvents.log("Transfert impossible : " + e.getMessage());
             }
         } else {
-            System.out.println(character.getName() + " n'est pas dans le lieu géré par " + getName());
+            GameEvents.log(character.getName() + " n'est pas dans le lieu géré par " + getName());
         }
     }
 

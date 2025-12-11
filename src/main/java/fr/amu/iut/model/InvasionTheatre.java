@@ -5,7 +5,6 @@ import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.foods.Food;
-import fr.amu.iut.model.items.foods.FoodFactory;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
 import fr.amu.iut.model.items.potion.PotionType;
@@ -17,8 +16,10 @@ import fr.amu.iut.model.spaces.GallicVillage;
 import fr.amu.iut.model.spaces.RomanFortifiedCamp;
 import fr.amu.iut.GameConfig;
 import fr.amu.iut.util.CharacterSorter;
+import fr.amu.iut.util.GameEvents;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -33,7 +34,9 @@ public class InvasionTheatre {
     private int maxLocations;
     private List<Space> existingLocations;
     private List<ClanLeader> clanChiefs;
-    private Random random = new Random();
+    private final Random random = new Random();
+
+    GameConfig gameConfig = GameConfig.getInstance();
 
 
     /**
@@ -53,9 +56,9 @@ public class InvasionTheatre {
      */
     public void showLocations() {
         if (existingLocations != null) {
-            System.out.println("Emplacements du théâtre d'invasion " + name);
+            GameEvents.log("Emplacements du théâtre d'invasion " + name);
             for (Space location : existingLocations) {
-                System.out.println(location);
+                GameEvents.log(location.toString());
             }
         }
     }
@@ -70,23 +73,29 @@ public class InvasionTheatre {
                 total += loc.getCharacters().size();
             }
         }
-        System.out.println("Nombre total de personnages en jeu : " + total);
+        GameEvents.log("Nombre total de personnages en jeu : " + total);
     }
 
     /**
-     * Affiche tous les personnages présents dans chaque emplacement, triés par nom.
+     * Affiche tous les personnages présents dans chaque emplacement.
+     * Utilisation explicite d'un Iterator (Point Clean Code).
      */
     public void showAllCharacters() {
         if (existingLocations != null) {
-            for (Space loc : existingLocations) {
-                System.out.println("Lieu : " + loc.getName());
+            // Utilisation explicite de l'itérateur
+            Iterator<Space> spaceIt = existingLocations.iterator();
+
+            while (spaceIt.hasNext()) {
+                Space loc = spaceIt.next();
+                GameEvents.log("Lieu : " + loc.getName());
+
                 List<Character> sortedChars = new ArrayList<>(loc.getCharacters());
+                CharacterSorter.quickSortByName(sortedChars); // Ton QuickSort est top, on le garde
 
-                // Utilisation du QuickSort ( cf CharacterSorter )
-                CharacterSorter.quickSortByName(sortedChars);
-
-                for (Character c : sortedChars) {
-                    System.out.println(" - " + c.toString());
+                Iterator<Character> charIt = sortedChars.iterator();
+                while (charIt.hasNext()) {
+                    Character c = charIt.next();
+                    GameEvents.log(" - " + c.toString());
                 }
             }
         }
@@ -115,13 +124,13 @@ public class InvasionTheatre {
             for (Character c : loc.getCharacters()) {
 
                 // Utilisation de GameConfig
-                if (random.nextInt(100) < GameConfig.PROBABILITY_HUNGER_EVENT) {
-                    int randomIncrease = random.nextInt(GameConfig.MAX_HUNGER_INCREASE) + 1;
+                if (random.nextInt(100) < gameConfig.getProbabilityHungerEvent()) {
+                    int randomIncrease = random.nextInt(gameConfig.getMaxHungerIncrease()) + 1;
                     c.getHunger().add(-randomIncrease);
                 }
 
                 if (c.getMagicPotion().get() > 0) {
-                    int randomDecrease = random.nextInt(GameConfig.MAX_POTION_DECREASE) + 1;
+                    int randomDecrease = random.nextInt(gameConfig.getMaxPotionDecrease()) + 1;
                     c.getMagicPotion().add(-randomDecrease);
                 }
             }
@@ -135,10 +144,10 @@ public class InvasionTheatre {
         if (existingLocations == null) return;
         for (Space loc : existingLocations) {
             if (!loc.isBattlefield()) {
-                if (random.nextInt(100) < GameConfig.PROBABILITY_FOOD_SPAWN) {
+                if (random.nextInt(100) < gameConfig.getProbabilityFoodSpawn()) {
                     loc.addFood(new Food("Poisson", 10, true, FreshnessStatus.FRESH, FoodType.FISH));
                     loc.addFood(loc.getFoods().get(random.nextInt(loc.getFoods().size())));
-                    System.out.println("De la nourriture est apparu à : " + loc.getName());
+                    GameEvents.log("De la nourriture est apparu à : " + loc.getName());
                 }
             }
         }
@@ -162,7 +171,7 @@ public class InvasionTheatre {
 
     // Donner la main au chef de clan
     public void handleClanChiefTurn(ClanLeader chief) {
-        System.out.println("C'est le tour du chef : " + chief.getName());
+        GameEvents.log("C'est le tour du chef : " + chief.getName());
         // TODO : Ajouter une fonction TakeTurn pour réellement donner la main au chef de clan
     }
 
@@ -190,7 +199,7 @@ public class InvasionTheatre {
     public void handleAutonomousMovements() {
         if (existingLocations == null) return;
 
-        System.out.println("Mouvements autonomes des troupes...");
+        GameEvents.log("Mouvements autonomes des troupes...");
 
         for (Space currentSpace : existingLocations) {
             List<Character> charactersSnapshot = new ArrayList<>(currentSpace.getCharacters());
@@ -227,8 +236,8 @@ public class InvasionTheatre {
      */
     private Space findSafeHaven(Faction faction) {
         for (Space s : existingLocations) {
-            if (faction == Faction.GAULOIS && s instanceof GallicVillage) return s;
-            if (faction == Faction.ROMAIN && s instanceof RomanFortifiedCamp) return s;
+            if (faction == Faction.GALISH && s instanceof GallicVillage) return s;
+            if (faction == Faction.ROMAN && s instanceof RomanFortifiedCamp) return s;
         }
         return null;
     }
@@ -255,9 +264,9 @@ public class InvasionTheatre {
             try {
                 to.addCharacter(c);
                 from.removeCharacter(c);
-                System.out.println("   -> " + c.getName() + " quitte " + from.getName() + " pour " + to.getName());
+                GameEvents.log("   -> " + c.getName() + " quitte " + from.getName() + " pour " + to.getName());
             } catch (Exception e) {
-                System.out.println("Erreur de mouvement : " + e.getMessage());
+                GameEvents.log("Erreur de mouvement : " + e.getMessage());
             }
         }
     }
@@ -276,9 +285,9 @@ public class InvasionTheatre {
                         if(random.nextInt(3) == 0) {
                             try {
                                 druid.craftMagicPotion(PotionType.BASIC);
-                                System.out.println("[POTION] Le druide " + c.getName() + " a fabriqué une potion !");
+                                GameEvents.log("[POTION] Le druide " + c.getName() + " a fabriqué une potion !");
                             } catch (InsufficientIngredientsException e) {
-                                System.out.println("[POTION] Le druide " + c.getName() + " n'a pas pu fabriquer de potion : " + e.getMessage());
+                                GameEvents.log("[POTION] Le druide " + c.getName() + " n'a pas pu fabriquer de potion : " + e.getMessage());
                             }
                         }
                     }

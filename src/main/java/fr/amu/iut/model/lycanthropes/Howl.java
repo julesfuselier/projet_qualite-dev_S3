@@ -1,6 +1,7 @@
 package fr.amu.iut.model.lycanthropes;
 
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
+import fr.amu.iut.util.GameEvents;
 
 /**
  * Représente un hurlement émis par un lycanthrope.
@@ -17,12 +18,12 @@ public class Howl {
     }
 
     public void showCharacteristics() {
-        System.out.println(">>> HURLEMENT <<<");
-        System.out.println("Émetteur : " + emitter.getName());
-        System.out.println("Meute : " + (emitter.getPack() != null ? emitter.getPack().getName() : "Solitaire"));
-        System.out.println("Type : " + type.getLabel());
-        System.out.println("Message : " + message);
-        System.out.println("-----------------");
+        GameEvents.log(">>> HURLEMENT <<<");
+        GameEvents.log("Émetteur : " + emitter.getName());
+        GameEvents.log("Meute : " + (emitter.getPack() != null ? emitter.getPack().getName() : "Solitaire"));
+        GameEvents.log("Type : " + type.getLabel());
+        GameEvents.log("Message : " + message);
+        GameEvents.log("-----------------");
     }
 
     public Lycanthrope getEmitter() { return emitter; }
