@@ -2,7 +2,17 @@
 
 ## À propos du projet
 
-Le projet est développé en Java et utilise Maven pour la gestion des dépendances et du build.
+Le projet est développé en Java et utilise Maven pour la gestion des dépendances et du build. Il s'agit d'une simulation stratégique où les joueurs peuvent interagir avec différentes factions et personnages dans un monde dynamique.
+
+## Structure du projet
+
+Voici les principaux dossiers et fichiers du projet :
+
+-   **`src/main/java`** : Contient le code source principal de l'application.
+-   **`src/test/java`** : Contient les tests unitaires pour vérifier le bon fonctionnement du code.
+-   **`docs/`** : Contient la documentation générée automatiquement, incluant des fichiers HTML pour naviguer dans les classes et méthodes.
+-   **`pom.xml`** : Fichier de configuration Maven pour gérer les dépendances et les plugins.
+-   **`target/`** : Dossier généré après compilation, contenant les classes compilées et les rapports de test.
 
 ## Prérequis
 
@@ -13,13 +23,13 @@ Pour compiler et exécuter ce projet, vous aurez besoin de :
 
 ## Comment lancer le jeu
 
-1.  **Clonez le dépôt** (si ce n'est pas déjà fait) ou assurez-vous d'être à la racine du projet.
-2.  **Ouvrez un terminal** ou une invite de commande dans le répertoire du projet.
-3.  **Compilez le projet** avec Maven :
+1. **Clonez le dépôt** (si ce n'est pas déjà fait) ou assurez-vous d'être à la racine du projet.
+2. **Ouvrez un terminal** ou une invite de commande dans le répertoire du projet.
+3. **Compilez le projet** avec Maven :
     ```bash
     mvn compile
     ```
-4.  **Exécutez l'application** via le plugin Maven Exec :
+4. **Exécutez l'application** via le plugin Maven Exec :
     ```bash
     mvn exec:java -Dexec.mainClass="fr.amu.iut.MainApp"
     ```
@@ -34,6 +44,12 @@ Pour vous assurer que tout fonctionne correctement, vous pouvez lancer la suite 
 mvn test
 ```
 
+Les rapports de test sont générés dans le dossier `target/surefire-reports/`.
+
+## Documentation
+
+La documentation du projet est générée automatiquement et se trouve dans le dossier `docs/`. Vous pouvez ouvrir le fichier `index.html` dans un navigateur pour explorer les classes, méthodes et autres éléments du projet.
+
 ## Manuel d'utilisation
 
 ### 1. Démarrage de la simulation
@@ -47,19 +63,19 @@ Au lancement, le jeu vous propose deux modes de départ :
 
 Le jeu est structuré en tours. Le menu principal vous offre plusieurs options :
 
-1.  **Lancer la simulation temporelle** : Fait avancer le temps d'un tour. Des événements automatiques se produisent :
+1. **Lancer la simulation temporelle** : Fait avancer le temps d'un tour. Des événements automatiques se produisent :
 
-    -   Déplacements autonomes des personnages.
-    -   Déclenchement des batailles entre factions ennemies sur un même lieu.
-    -   Gestion de la faim des personnages.
-    -   Apparition de nourriture.
-    -   Mise à jour de la fraîcheur des aliments.
+    - Déplacements autonomes des personnages.
+    - Déclenchement des batailles entre factions ennemies sur un même lieu.
+    - Gestion de la faim des personnages.
+    - Apparition de nourriture.
+    - Mise à jour de la fraîcheur des aliments.
 
-2.  **Actions de Chef de Clan** : Permet de prendre le contrôle d'un personnage de type "Chef de Clan" pour effectuer des actions manuelles (voir ci-dessous).
+2. **Actions de Chef de Clan** : Permet de prendre le contrôle d'un personnage de type "Chef de Clan" pour effectuer des actions manuelles (voir ci-dessous).
 
-3.  **Afficher l'état du monde** : Affiche la liste de tous les personnages, leur état et leur localisation.
+3. **Afficher l'état du monde** : Affiche la liste de tous les personnages, leur état et leur localisation.
 
-4.  **Quitter** : Termine la simulation.
+4. **Quitter** : Termine la simulation.
 
 ### 3. Factions et Personnages
 
@@ -93,6 +109,7 @@ En plus des Gaulois et des Romains, une faction mystérieuse et puissante peuple
 ## Génération des tests unitaires
 
 Pour les exécuter, utilisez la commande suivante à la racine du projet :
+
 ```bash
 mvn test
 ```
