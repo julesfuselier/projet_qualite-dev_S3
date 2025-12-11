@@ -1,6 +1,9 @@
 package fr.amu.iut.model.characters;
 
-
+/**
+ * Classe abstraite représentant un guerrier dans le jeu.
+ * Un guerrier est un personnage capable de combattre.
+ */
 public abstract class Warrior extends Character implements Fighter {
 
     /**
@@ -19,7 +22,7 @@ public abstract class Warrior extends Character implements Fighter {
     }
 
     /**
-     * Méthode pour combattre un adversaire.
+     * Méthode permettant à un guerrier de combattre un adversaire.
      * @param opponent L'adversaire à combattre.
      */
     @Override

@@ -6,6 +6,10 @@ import fr.amu.iut.model.spaces.Space;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Classe responsable de l'affichage des informations dans la console
+ * et de la gestion des interactions utilisateur.
+ */
 public class ConsoleView {
 
     private final Scanner scanner;
@@ -17,26 +21,55 @@ public class ConsoleView {
     private static final String BLUE = "\u001B[34m";
     private static final String YELLOW = "\u001B[33m";
 
+    /**
+     * Constructeur de la classe ConsoleView.
+     * Initialise le scanner pour la lecture des entrées utilisateur.
+     */
     public ConsoleView() {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Affiche un message simple dans la console.
+     *
+     * @param message Le message à afficher.
+     */
     public void displayMessage(String message) {
         System.out.println(message);
     }
 
+    /**
+     * Affiche un message d'erreur en rouge.
+     *
+     * @param error Le message d'erreur à afficher.
+     */
     public void displayError(String error) {
         System.out.println(RED + error + RESET);
     }
 
+    /**
+     * Affiche un message de succès en vert.
+     *
+     * @param success Le message de succès à afficher.
+     */
     public void displaySuccess(String success) {
         System.out.println(GREEN + success + RESET);
     }
 
+    /**
+     * Affiche un titre encadré.
+     *
+     * @param title Le titre à afficher.
+     */
     public void displayTitle(String title) {
         System.out.println(BLUE + "\n=== " + title + " ===" + RESET);
     }
 
+    /**
+     * Affiche le menu principal.
+     *
+     * @param turnCount Le numéro du tour actuel.
+     */
     public void showMainMenu(int turnCount) {
         System.out.println("\n" + BLUE + "╔════════ MENU PRINCIPAL (Tour " + turnCount + ") ════════╗" + RESET);
         System.out.println("1. Lancer la simulation temporelle (Combats, Faim...)");
@@ -47,6 +80,11 @@ public class ConsoleView {
         System.out.print("Votre choix : ");
     }
 
+    /**
+     * Affiche le menu des actions du chef de clan.
+     *
+     * @param leaderName Le nom du chef de clan.
+     */
     public void showClanLeaderMenu(String leaderName) {
         System.out.println(GREEN + "\n--- ACTION : " + leaderName + " ---" + RESET);
         System.out.println("1. Examiner le lieu");
@@ -56,6 +94,13 @@ public class ConsoleView {
         System.out.println("5. Retour");
     }
 
+    /**
+     * Lit une entrée entière de l'utilisateur dans une plage spécifiée.
+     *
+     * @param min La valeur minimale acceptable.
+     * @param max La valeur maximale acceptable.
+     * @return L'entier saisi par l'utilisateur.
+     */
     public int getIntInput(int min, int max) {
         while (true) {
             try {
@@ -69,13 +114,23 @@ public class ConsoleView {
         }
     }
 
+    /**
+     * Attend que l'utilisateur appuie sur Entrée pour continuer.
+     *
+     * @param message Le message à afficher avant d'attendre.
+     */
     public void waitForEnter(String message) {
         System.out.println(RED + message + RESET);
         scanner.nextLine();
     }
 
     /**
-     * Affiche une liste d'objets (qui ont une méthode toString ou getName) et demande une sélection.
+     * Permet à l'utilisateur de sélectionner un élément dans une liste.
+     *
+     * @param list   La liste des éléments à choisir.
+     * @param prompt Le message d'invite à afficher.
+     * @param <T>    Le type des éléments dans la liste.
+     * @return L'élément sélectionné par l'utilisateur.
      */
     public <T> T selectFromList(List<T> list, String prompt) {
         if (list.isEmpty()) {

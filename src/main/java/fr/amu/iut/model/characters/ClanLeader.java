@@ -1,6 +1,5 @@
 package fr.amu.iut.model.characters;
 
-import fr.amu.iut.model.InvasionTheatre;
 import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.foods.Food;
@@ -8,102 +7,147 @@ import fr.amu.iut.model.items.potion.MagicPotion;
 import fr.amu.iut.model.items.potion.PotionType;
 import fr.amu.iut.model.spaces.Space;
 
+/**
+ * Représente un chef de clan dans le jeu.
+ * Un chef de clan peut diriger des personnages, créer de nouveaux personnages,
+ * soigner et nourrir les personnages dans son village, demander des potions magiques
+ * au druide, et donner des potions magiques aux personnages.
+ */
 public class ClanLeader extends Character implements Leader {
 
     private Space managedLocation;
     private CharacterFactory characterFactory = new CharacterFactory();
     private MagicPotion magicPotion;
 
-    // Permet au chef de clan de recevoir une potion magique (ex: du druide)
+    /**
+     * Permet de recevoir une potion magique.
+     * @param potion La potion magique reçue.
+     */
     public void receiveMagicPotion(MagicPotion potion) {
         this.magicPotion = potion;
     }
 
-    // Constructeur de ClanLeader
+    /**
+     * Constructeur de la classe ClanLeader.
+     *
+     * @param name Le nom du chef de clan
+     * @param sex Le sexe du chef de clan
+     * @param age L'âge du chef de clan
+     * @param location L'emplacement géré par le chef de clan
+     */
     public ClanLeader(String name, char sex, int age, Space location) {
         super(name, sex, age);
         this.managedLocation = location;
     }
 
+    /**
+     * Dirige un personnage.
+     * @param character Le personnage à diriger.
+     */
     @Override
     public void lead(Character character) {
-        System.out.println(getName() + " leads " + character.getName());
+        System.out.println(getName() + " dirige " + character.getName());
     }
 
-    // Affiche les informations concernant l'emplacement geré
+    /**
+     * Examine les caractéristiques de l'emplacement géré.
+     */
     public void examineLocation() {
         managedLocation.showCharacteristics();
     }
 
-    // Crée un nouveau personnage dans le village
+    /**
+     * Crée un nouveau personnage dans le village.
+     * @param faction La faction du nouveau personnage.
+     * @param role Le rôle du nouveau personnage.
+     * @param name Le nom du nouveau personnage.
+     */
     public void createNewCharacterInVillage(Faction faction, String role, String name) {
         Character newCharacter = characterFactory.createCharacter(faction, role, name);
         if (newCharacter != null) {
             try {
                 managedLocation.addCharacter(newCharacter);
-                System.out.println(getName() + " has created a new character : " + newCharacter.getName());
+                System.out.println(getName() + " a créé un nouveau personnage : " + newCharacter.getName());
             } catch (Exception e) {
                 System.out.println("Erreur création : " + e.getMessage());
             }
         }
     }
 
-    // Soigne un personnage du village
+
+    /**
+     * Soigne un personnage dans le village.
+     * @param character Le personnage à soigner.
+     * @param healAmountToHeal La quantité de soins à appliquer.
+     */
     public void healCharacterInVillage(Character character, int healAmountToHeal) {
-        // Si le personnage concerné est dans l'emplacement geré
         if (managedLocation.getCharacters().contains(character)) {
             character.beHealed(healAmountToHeal);
-            System.out.println(getName() + " treat " + character.getName() + ". His health is now "
+            System.out.println(getName() + " soigne " + character.getName() + ". Sa vie est maintenant de "
                     + character.getHealth().get() + ".");
         } else {
-            System.out.println(character.getName() + " is not in the village of " + getName() + ".");
+            System.out.println(character.getName() + " n'est pas dans le village de " + getName() + ".");
         }
     }
 
-    // Nourrit un personnage du village
+    /**
+     * Nourrit un personnage dans le village.
+     * @param character Le personnage à nourrir.
+     * @param food La nourriture à donner.
+     */
     public void feedCharacterInVillage(Character character, Food food) {
-        // Si le personnage concerné est dans l'emplacement géré et que la nourriture
-        // existe
         if (managedLocation.getCharacters().contains(character) && managedLocation.getFoods().contains(food)) {
             character.eat(food);
             managedLocation.removeFood(food);
-            System.out.println(getName() + " feeds " + character.getName() + " with " + food.getName() + ".");
+            System.out.println(getName() + " nourrit " + character.getName() + " avec " + food.getName() + ".");
         }
-        // Si le personnage concerné n'est pas dans l'emplacement geré
         else if (!managedLocation.getCharacters().contains(character)) {
-            System.out.println(character.getName() + " is not in the village of " + getName() + ".");
+            System.out.println(character.getName() + " n'est pas dans le village de " + getName() + ".");
         }
-        // Si la nouriture est dusponible dans le village
         else {
-            System.out.println(food.getName() + " is not available in the village of " + getName() + ".");
+            System.out.println(food.getName() + " n'est pas disponible dans le village de " + getName() + ".");
         }
     }
 
-    // Demander au druide de faire une potion
+    /**
+     * Demande au druide de fabriquer une potion magique.
+     * @param druid Le druide à qui demander la potion.
+     * @param potionType Le type de potion magique à fabriquer.
+     * @throws InsufficientIngredientsException Si le druide n'a pas assez d'ingrédients.
+     */
     public void askDruidForMagicPotion(Druid druid, PotionType potionType) throws InsufficientIngredientsException {
         if (managedLocation.getCharacters().contains(druid)) {
             druid.craftMagicPotion(potionType);
-            System.out.println(getName() + " ask to " + druid.getName() + " to make a magic potion.");
+            System.out.println(getName() + " a demandé à " + druid.getName() + " de faire une potion de type " + potionType + ".");
         } else {
-            System.out.println("The druid " + druid.getName() + " is not in the villag.");
+            System.out.println("Le druide " + druid.getName() + " n'est pas dans le village.");
         }
     }
 
-    // Donner une potion magique à un personnage du village
+    /**
+     * Donne une potion magique à un personnage dans le village.
+     * @param character Le personnage à qui donner la potion.
+     * @param amount La quantité de potion à donner (non utilisée ici).
+     */
     public void giveMagicPotionToCharacterInVillage(Character character, int amount) {
         if (managedLocation.getCharacters().contains(character)) {
             if (magicPotion != null) {
                 character.drinkMagicPotion(magicPotion, false);
-                System.out.println(getName() + " give the magic potion to " + character.getName() + ".");
+                System.out.println(getName() + " donne une potion magique à " + character.getName() + ".");
                 magicPotion = null; // La potion a été utilisée
             } else {
                 System.out.println(getName() + " n'a pas de potion magique à donner.");
             }
         } else {
-            System.out.println(character.getName() + " is not in the village of " + getName() + ".");
+            System.out.println(character.getName() + " n'est pas disponible dans le village de " + getName() + ".");
         }
     }
 
+    /**
+     * Transfère un personnage vers un autre emplacement.
+     * @param character Le personnage à transférer.
+     * @param destination L'emplacement de destination.
+     */
     public void transferCharacter(Character character, Space destination) {
         if (managedLocation.getCharacters().contains(character)) {
             try {
@@ -118,6 +162,10 @@ public class ClanLeader extends Character implements Leader {
         }
     }
 
+    /**
+     * Définit l'emplacement géré par le chef de clan.
+     * @param location Le nouvel emplacement géré.
+     */
     public void setLocation(Space location) {
         this.managedLocation = location;
     }

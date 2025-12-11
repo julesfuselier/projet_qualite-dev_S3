@@ -1,5 +1,8 @@
 package fr.amu.iut.model.items.foods;
 
+/**
+ * Enumération représentant les différents types de nourriture disponibles dans le jeu.
+ */
 public enum FoodType {
     FISH,
     CLOVER, // trèfle

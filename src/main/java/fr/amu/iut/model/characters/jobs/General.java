@@ -5,6 +5,10 @@ import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Leader;
 import fr.amu.iut.model.characters.Warrior;
 
+/**
+ * Classe représentant un général dans le jeu.
+ * Le général est un personnage qui peut mener d'autres personnages.
+ */
 public class General extends Warrior implements Leader {
 
     /**
@@ -16,13 +20,20 @@ public class General extends Warrior implements Leader {
      * @param age       L'âge du guerrier.
      * @param strength  La force du guerrier.
      * @param endurance L'endurance du guerrier.
+     * @param faction   La faction à laquelle appartient le guerrier.
      */
     public General(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
         super(name, sex, size, age, strength, endurance, faction);
     }
 
+    /**
+     * Méthode représentant le fait de mener un autre personnage.
+     * Affiche un message indiquant que le général mène le personnage spécifié.
+     *
+     * @param character Le personnage à mener.
+     */
     @Override
     public void lead(Character character) {
-        System.out.println(this.getName() + " is leading to " + character.getName());
+        System.out.println(this.getName() + " dirige " + character.getName());
     }
 }

@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contrôleur principal du jeu (Pattern MVC).
- * Gère le flux de l'application et fait le lien entre les Modèles (Données) et la Vue (Affichage).
+ * Contrôleur principal de la simulation de jeu.
+ * Gère la boucle de jeu, les interactions utilisateur et la logique principale.
  */
 public class GameController {
 
@@ -34,13 +34,16 @@ public class GameController {
     }
 
     /**
-     * Lance la boucle principale du jeu.
+     * Démarre la simulation de jeu.
      */
     public void start() {
         initSimulation();
         runGameLoop();
     }
 
+    /**
+     * Boucle principale du jeu, gérant les tours et les interactions utilisateur.
+     */
     private void runGameLoop() {
         boolean running = true;
         while (running) {
@@ -49,6 +52,10 @@ public class GameController {
         view.displayMessage("Fin de la simulation. Au revoir !");
     }
 
+    /**
+     * Gère le menu principal et les choix de l'utilisateur.
+     * @return true si la simulation doit continuer, false pour quitter.
+     */
     private boolean handleMainMenuChoice() {
         view.showMainMenu(turnCount);
         int choice = view.getIntInput(1, 5);
@@ -80,7 +87,7 @@ public class GameController {
     }
 
     /**
-     * Lance la simulation automatique dans un Thread séparé.
+     * Démarre le mode de simulation automatique.
      */
     private void startAutoSimulation() {
         autoModeRunning = true;
@@ -111,7 +118,7 @@ public class GameController {
     }
 
     /**
-     * Exécute la logique d'un tour de jeu complet.
+     * Exécute les actions d'un tour de jeu.
      */
     private void runNextTurn() {
         turnCount++;
@@ -137,7 +144,7 @@ public class GameController {
     }
 
     /**
-     * Gère les actions manuelles des Chefs de Clan.
+     * Gère les actions spécifiques aux Chefs de Clan.
      */
     private void handleClanLeaderActions() {
         List<ClanLeader> leaders = new ArrayList<>();
@@ -197,7 +204,8 @@ public class GameController {
     }
 
     /**
-     * Logique spécifique pour trouver une potion et la distribuer.
+     * Gère la distribution de potions magiques par un Druide.
+     * @param space L'espace où se trouve le Druide.
      */
     private void handlePotionDistribution(Space space) {
         Character druidWithPotion = null;
@@ -232,7 +240,7 @@ public class GameController {
     }
 
     /**
-     * Initialisation du jeu (Choix du mode).
+     * Initialise la simulation en mode démo ou manuel.
      */
     private void initSimulation() {
         view.displayTitle("BIENVENUE DANS LA SIMULATION");
@@ -251,6 +259,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Initialise une démo étendue avec des lieux et personnages prédéfinis.
+     */
     private void initDemo() {
         view.displaySuccess("Chargement de la démo étendue...");
 
@@ -300,6 +311,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Initialise les lieux en mode manuel.
+     */
     private void initPlaces() {
         boolean running = true;
         while (running) {
@@ -337,6 +351,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Initialise les personnages en mode manuel.
+     */
     private void initCharacters() {
         if (theatre.getExistingLocations() == null || theatre.getExistingLocations().isEmpty()) {
             view.displayError("Aucun lieu disponible. Impossible de créer des personnages.");
@@ -377,6 +394,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Trouve l'espace où se trouve un personnage donné.
+     * @param c Le personnage recherché.
+     * @return L'espace contenant le personnage, ou null s'il n'est pas trouvé.
+     */
     private Space findSpaceOfCharacter(Character c) {
         if (theatre.getExistingLocations() == null) return null;
         for (Space s : theatre.getExistingLocations()) {

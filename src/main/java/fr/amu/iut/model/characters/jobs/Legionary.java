@@ -4,8 +4,8 @@ import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Warrior;
 
 /**
- * La classe Legionary représente un personnage de type légionnaire dans le jeu.
- * Un légionnaire est un combattant spécialisé avec des attributs spécifiques.
+ * Classe représentant un légionnaire dans le jeu.
+ * Le légionnaire est un personnage de type guerrier.
  */
 public class Legionary extends Warrior {
 
@@ -17,6 +17,7 @@ public class Legionary extends Warrior {
      * @param age L'âge du légionnaire.
      * @param strength La force du légionnaire.
      * @param endurance L'endurance du légionnaire.
+     * @param faction La faction du légionnaire.
      */
     public Legionary(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
         super(name, sex, size, age, strength, endurance, faction);

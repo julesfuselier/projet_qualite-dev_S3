@@ -1,5 +1,8 @@
 package fr.amu.iut;
 
+/**
+ * Classe contenant les constantes de configuration du jeu.
+ */
 public final class GameConfig {
     private GameConfig() {}
 
