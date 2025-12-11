@@ -193,4 +193,7 @@ public class Pack {
             System.out.println("Aucun couple Alpha dans la meute pour se reproduire.");
         }
     }
+
+    public void decreaseDominationOfMembers() {
+    }
 }

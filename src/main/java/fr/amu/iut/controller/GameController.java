@@ -72,6 +72,11 @@ public class GameController {
             case 3 -> {
                 view.displayTitle("ÉTAT DU MONDE");
                 theatre.showAllCharacters();
+                for (Space space : theatre.getExistingLocations()) {
+                    if (space.getColony() != null && !space.getColony().getPacks().isEmpty()) {
+                        space.getColony().showAllLycanthropes();
+                    }
+                }
                 yield true;
             }
             case 4 -> {
@@ -128,6 +133,16 @@ public class GameController {
 
         view.displayMessage("⚔ Gestion des batailles...");
         theatre.handleBattles();
+
+        view.displayMessage("Gestion des colonies de Lycanthropes...");
+        if (theatre.getExistingLocations() != null) {
+            for (Space space : theatre.getExistingLocations()) {
+                if (space.getColony() != null) {
+                    space.getColony().manageTime();
+                }
+            }
+        }
+        // -------------------------------------------------------------
 
         view.displayMessage("Mise à jour des états (Faim, Potions)...");
         theatre.updateRandomCharacterStates();

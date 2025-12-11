@@ -1,16 +1,15 @@
 package fr.amu.iut.model.spaces;
 
-import fr.amu.iut.model.characters.Faction;
-import fr.amu.iut.model.characters.jobs.Lycanthrope;
-import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Fighter;
-import fr.amu.iut.model.lycanthropes.Pack;
+import fr.amu.iut.model.items.foods.Food;
+import fr.amu.iut.model.lycanthropes.Colony;
 
 import java.util.*;
 
 import static java.util.Collections.shuffle;
+
 /**
  * Classe abstraite représentant un espace dans le jeu.
  * Les espaces peuvent être des champs de bataille, des enclos, des villages gaulois,
@@ -28,95 +27,10 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
     private final Set<Character> characters;
 
     private final List<Food> foods;
-    private Random random;
-    private Pack pack;
-
-    public Space(String name, double surface, Character leader, Pack pack) {
-        this.name = name;
-        this.surface = surface;
-        this.leader = leader;
-        characters = new Set<>() {
-            @Override
-            public int size() {
-                return 0;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return false;
-            }
-
-            @Override
-            public Iterator<Character> iterator() {
-                return null;
-            }
-
-            @Override
-            public Object[] toArray() {
-                return new Object[0];
-            }
-
-            @Override
-            public <T> T[] toArray(T[] a) {
-                return null;
-            }
-
-            @Override
-            public boolean add(Character character) {
-                return false;
-            }
-
-            @Override
-            public boolean remove(Object o) {
-                return false;
-            }
-
-            @Override
-            public boolean containsAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(Collection<? extends Character> c) {
-                return false;
-            }
-
-            @Override
-            public boolean retainAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean removeAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public void clear() {
-
-            }
-
-            @Override
-            public boolean equals(Object o) {
-                return false;
-            }
-
-            @Override
-            public int hashCode() {
-                return 0;
-            }
-        };
-        foods = new ArrayList<>();
-        this.pack = pack;
-    }
+    private Colony colony;
 
     /**
-     * Constructeur de la classe Space.
+     * Constructeur complet.
      *
      * @param name    Le nom de l'espace.
      * @param surface La surface de l'espace.
@@ -128,30 +42,26 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
         this.leader = leader;
         this.characters = new HashSet<>();
         this.foods = new ArrayList<>();
+        this.colony = new Colony(this);
     }
 
     /**
-     * Constructeur de la classe Space sans leader.
+     * Constructeur sans leader.
      *
      * @param name    Le nom de l'espace.
      * @param surface La surface de l'espace.
      */
     public Space(String name, double surface) {
-        this.name = name;
-        this.surface = surface;
-        this.characters = new HashSet<>();
-        this.foods = new ArrayList<>();
+        this(name, surface, null);
     }
 
     /**
-     * Constructeur de la classe Space avec seulement le nom.
+     * Constructeur avec seulement le nom.
      *
      * @param name Le nom de l'espace.
      */
     public Space(String name) {
-        this.name = name;
-        this.characters = new HashSet<>();
-        this.foods = new ArrayList<>();
+        this(name, 100, null); // Surface par défaut
     }
 
     /**
@@ -193,6 +103,7 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
     public Character getLeader() {
         return leader;
     }
+
     /**
      * Setter pour le leader de l'espace.
      * @param leader Le nouveau leader de l'espace.
@@ -215,6 +126,14 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
      */
     public List<Food> getFoods() {
         return foods;
+    }
+
+    /**
+     * Récupère la colonie de lycanthropes associée à cet espace.
+     * @return La colonie.
+     */
+    public Colony getColony() {
+        return colony;
     }
 
     /**
@@ -250,22 +169,11 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
         if (!authorized(c)){
             return false;
         }
-        if (c instanceof Lycanthrope l){
-            Pack p = l.getPack();
-            if (p != null) {
-                if (this.pack != null && this.pack != p) {
-                    System.out.println("Une autre meute occupe déjà" + name + "le lycanthrope ne peut donc pas entrer dedans");
-                    return false;
-                }
-                if (this.pack == null){
-                    this.pack = p;
-                    System.out.println("La meute" + p.getName() + "s'installe dans" + name);
-                }
-            }
+        boolean added = characters.add(c);
+        if (added) {
+            c.setCurrentSpace(this);
         }
-        characters.add(c);
-        c.setCurrentSpace(this);
-        return true;
+        return added;
     }
 
     /**
@@ -279,8 +187,7 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
     }
 
     /**
-     * Affiche les caractéristiques de l'espace, y compris le nom, la surface,
-     * le leader (si applicable), les personnages présents et les nourritures disponibles.
+     * Affiche les caractéristiques de l'espace.
      */
     public void showCharacteristics(){
         System.out.println("Nom: " + name);
@@ -304,10 +211,9 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
      * @param amount La quantité de soins à appliquer.
      */
     public void healCharacter(Character c, int amount){
-        if(!(characters.contains(c))){
-            return;
+        if(characters.contains(c)){
+            c.beHealed(amount);
         }
-        c.beHealed(amount);
     }
 
     /**
@@ -316,20 +222,14 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
      * @param f La nourriture à manger.
      */
     public void eatFood(Character c, Food f){
-        if(!(foods.contains(f))){
-            return;
-        } else if (!(characters.contains(c))) {
-            return;
+        if(foods.contains(f) && characters.contains(c)){
+            c.eat(f);
+            foods.remove(f);
         }
-        c.eat(f);
-        foods.remove(f);
     }
 
     /**
      * Résout les combats entre personnages dans un champ de bataille.
-     * Les personnages de la faction Gaulois combattent contre ceux de la faction Romain.
-     * Les combats sont effectués par paires jusqu'à ce qu'il n'y ait plus de combattants disponibles.
-     * Les personnages morts sont retirés du champ de bataille.
      */
     public void resolveCombat() {
         if (!isBattlefield() || getCharacters().size() < 2) {
@@ -378,7 +278,7 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
     }
 
     /**
-     * Retire les personnages morts du champ de bataille et affiche un message pour chaque personnage tombé au combat.
+     * Retire les personnages morts du champ de bataille.
      */
     private void removeDeadCharacters() {
         getCharacters().removeIf(c -> {
@@ -388,26 +288,5 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
             }
             return false;
         });
-    }
-
-    //creation d'une nouvelle meute s'il n'y en a pas et que les lycanthropes solitaires sont assez nombreux
-    public void NewPack(){
-        if (this.pack != null){
-            return;
-        }
-        List<Lycanthrope> solitarys = new ArrayList<>();
-        for (Character c : characters) {
-            if (c instanceof Lycanthrope l && l.isLone()) {
-                solitarys.add(l);
-            }
-        }
-
-        Pack p = Pack.createPackWithSolitary(solitarys);
-
-        if (p != null) {
-            this.pack = p;
-            System.out.println("la meute " + p.getName() + "vient d'être crée dans " + name);
-        }
-
     }
 }
