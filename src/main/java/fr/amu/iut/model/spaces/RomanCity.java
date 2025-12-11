@@ -28,6 +28,6 @@ public final class RomanCity extends Space {
      */
     @Override
     public boolean authorized(Character c) {
-        return c.getFaction() == Faction.ROMAIN || c instanceof Lycanthrope;
+        return c.getFaction() == Faction.ROMAN || c instanceof Lycanthrope;
     }
 }

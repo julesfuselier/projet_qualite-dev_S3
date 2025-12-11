@@ -140,13 +140,13 @@ public abstract class Character implements Cloneable {
     private boolean canEat(Food food) {
         FoodType type = food.getType();
 
-        if (getFaction() == Faction.GAULOIS) {
+        if (getFaction() == Faction.GALISH) {
             if (type == FoodType.WILD_BOAR || type == FoodType.WINE)
                 return true;
             return type == FoodType.FISH;
         }
 
-        else if (getFaction() == Faction.ROMAIN) {
+        else if (getFaction() == Faction.ROMAN) {
             return type == FoodType.WILD_BOAR ||
                     type == FoodType.HONEY ||
                     type == FoodType.WINE ||

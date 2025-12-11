@@ -5,7 +5,6 @@ import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.foods.Food;
-import fr.amu.iut.model.items.foods.FoodFactory;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
 import fr.amu.iut.model.items.potion.PotionType;
@@ -237,8 +236,8 @@ public class InvasionTheatre {
      */
     private Space findSafeHaven(Faction faction) {
         for (Space s : existingLocations) {
-            if (faction == Faction.GAULOIS && s instanceof GallicVillage) return s;
-            if (faction == Faction.ROMAIN && s instanceof RomanFortifiedCamp) return s;
+            if (faction == Faction.GALISH && s instanceof GallicVillage) return s;
+            if (faction == Faction.ROMAN && s instanceof RomanFortifiedCamp) return s;
         }
         return null;
     }

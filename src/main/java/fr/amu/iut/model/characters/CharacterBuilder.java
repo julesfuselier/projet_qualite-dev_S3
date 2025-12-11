@@ -15,7 +15,7 @@ import fr.amu.iut.GameConfig;
  *     .setAge(35)
  *     .setStrength(80)
  *     .setEndurance(70)
- *     .setFaction(Faction.GAULOIS)
+ *     .setFaction(Faction.GALISH)
  *     .build("druide");
  */
 public class CharacterBuilder {
@@ -27,7 +27,7 @@ public class CharacterBuilder {
     private int age = 30;
     private int strength = 50;
     private int endurance = 50;
-    private Faction faction = Faction.GAULOIS;
+    private Faction faction = Faction.GALISH;
 
     /**
      * Définit le nom du personnage.
@@ -85,13 +85,13 @@ public class CharacterBuilder {
      */
     public Character build(JobType role) {
         return switch (role) {
-            case DRUIDE -> new Druid(name, sex, size, age, strength, endurance, faction);
-            case FORGERON -> new Blacksmith(name, sex, size, age, strength, endurance, faction);
-            case LEGIONNAIRE -> new Legionary(name, sex, size, age, strength, endurance, faction);
+            case DRUID -> new Druid(name, sex, size, age, strength, endurance, faction);
+            case BLACKSMITH -> new Blacksmith(name, sex, size, age, strength, endurance, faction);
+            case LEGIONARY -> new Legionary(name, sex, size, age, strength, endurance, faction);
             case GENERAL -> new General(name, sex, size, age, strength, endurance, faction);
-            case AUBERGISTE -> new Innkeeper(name, sex, size, age, strength, endurance, faction);
-            case MARCHAND -> new Merchant(name, sex, size, age, strength, endurance, faction);
-            case PREFET -> new Prefect(name, sex, size, age, strength, endurance, faction);
+            case INKEEPER -> new Innkeeper(name, sex, size, age, strength, endurance, faction);
+            case MERCHANT -> new Merchant(name, sex, size, age, strength, endurance, faction);
+            case PREFECT -> new Prefect(name, sex, size, age, strength, endurance, faction);
         };
     }
 }

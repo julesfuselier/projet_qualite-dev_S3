@@ -242,9 +242,9 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
 
         for (Character c : getCharacters()) {
             if (c instanceof Fighter) {
-                if (c.getFaction() == Faction.GAULOIS) {
+                if (c.getFaction() == Faction.GALISH) {
                     teamGaulois.add(c);
-                } else if (c.getFaction() == Faction.ROMAIN) {
+                } else if (c.getFaction() == Faction.ROMAN) {
                     teamRomain.add(c);
                 }
             }

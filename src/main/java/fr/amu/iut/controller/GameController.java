@@ -300,23 +300,23 @@ public class GameController {
         theatre.addLocation(enclosure);
 
         try {
-            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.DRUIDE, "Panoramix"));
-            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.FORGERON, "Cétautomatix"));
-            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.MARCHAND, "Ordralphabétix"));
-            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.AUBERGISTE, "Bonemine"));
-            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.DRUIDE, "Panoramix Jr"));
+            village.addCharacter(characterFactory.createCharacter(Faction.GALISH, JobType.DRUID, "Panoramix"));
+            village.addCharacter(characterFactory.createCharacter(Faction.GALISH, JobType.BLACKSMITH, "Cétautomatix"));
+            village.addCharacter(characterFactory.createCharacter(Faction.GALISH, JobType.MERCHANT, "Ordralphabétix"));
+            village.addCharacter(characterFactory.createCharacter(Faction.GALISH, JobType.INKEEPER, "Bonemine"));
+            village.addCharacter(characterFactory.createCharacter(Faction.GALISH, JobType.DRUID, "Panoramix Jr"));
 
-            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.GENERAL, "Caius Bonus"));
-            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.PREFET, "Brutus"));
-            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.LEGIONNAIRE, "Minus"));
-            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.LEGIONNAIRE, "Chorus"));
-            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.LEGIONNAIRE, "Motus"));
+            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAN, JobType.GENERAL, "Caius Bonus"));
+            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAN, JobType.PREFECT, "Brutus"));
+            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAN, JobType.LEGIONARY, "Minus"));
+            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAN, JobType.LEGIONARY, "Chorus"));
+            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAN, JobType.LEGIONARY, "Motus"));
 
-            city.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.MARCHAND, "Technocratus"));
-            city.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.AUBERGISTE, "Tifus"));
+            city.addCharacter(characterFactory.createCharacter(Faction.ROMAN, JobType.MERCHANT, "Technocratus"));
+            city.addCharacter(characterFactory.createCharacter(Faction.ROMAN, JobType.INKEEPER, "Tifus"));
 
-            serum.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.MARCHAND, "Pneumatix"));
-            serum.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.LEGIONNAIRE, "Tikedbus"));
+            serum.addCharacter(characterFactory.createCharacter(Faction.GALISH, JobType.MERCHANT, "Pneumatix"));
+            serum.addCharacter(characterFactory.createCharacter(Faction.ROMAN, JobType.LEGIONARY, "Tikedbus"));
 
             view.displaySuccess("Monde généré avec succès ! (6 Lieux créés)");
             theatre.showTotalCharacterCount();
@@ -388,8 +388,8 @@ public class GameController {
                 continue;
             }
 
-            Faction faction = (choice == 1) ? Faction.GAULOIS : Faction.ROMAIN;
-            JobType role = (faction == Faction.GAULOIS) ? JobType.DRUIDE : JobType.LEGIONNAIRE; // Simplifié pour l'exemple manuel
+            Faction faction = (choice == 1) ? Faction.GALISH : Faction.ROMAN;
+            JobType role = (faction == Faction.GALISH) ? JobType.DRUID : JobType.LEGIONARY; // Simplifié pour l'exemple manuel
 
             try {
                 Character newChar = characterFactory.createCharacter(faction, role, "Personnage " + System.currentTimeMillis() % 1000);

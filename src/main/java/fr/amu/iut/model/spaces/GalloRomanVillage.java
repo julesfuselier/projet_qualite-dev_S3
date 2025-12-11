@@ -26,6 +26,6 @@ public final class GalloRomanVillage extends Space {
      */
     @Override
     public boolean authorized(Character c) {
-        return c.getFaction() == Faction.GAULOIS || c.getFaction() == Faction.ROMAIN;
+        return c.getFaction() == Faction.GALISH || c.getFaction() == Faction.ROMAN;
     }
 }

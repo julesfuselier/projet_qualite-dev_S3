@@ -32,7 +32,7 @@ public final class RomanFortifiedCamp extends Space {
      */
     @Override
     public boolean authorized(Character c) {
-        return (c.getFaction() == Faction.ROMAIN && c instanceof Fighter) || c instanceof Lycanthrope;
+        return (c.getFaction() == Faction.ROMAN && c instanceof Fighter) || c instanceof Lycanthrope;
     }
 
 }

@@ -7,7 +7,7 @@ import java.util.Random;
  * Factory pour créer des personnages avec des attributs aléatoires basés sur leur faction et rôle.
  * Utilise le pattern Factory pour encapsuler la logique de création des personnages.
  * Exemple d'utilisation :
- * Character character = new CharacterFactory().createCharacter(Faction.GAULOIS, "druide", "Panoramix");
+ * Character character = new CharacterFactory().createCharacter(Faction.GALISH, "druide", "Panoramix");
  */
 public class CharacterFactory {
     private final Random random = new Random();
@@ -37,9 +37,9 @@ public class CharacterFactory {
                 .setEndurance(baseEnd);
 
         switch (role) {
-            case FORGERON -> builder.setStrength(baseStr + 20);
-            case DRUIDE -> builder.setEndurance(baseEnd + 20);
-            case LEGIONNAIRE -> {
+            case BLACKSMITH -> builder.setStrength(baseStr + 20);
+            case DRUID -> builder.setEndurance(baseEnd + 20);
+            case LEGIONARY -> {
                 builder.setStrength(baseStr + 10);
                 builder.setEndurance(baseEnd + 15);
             }

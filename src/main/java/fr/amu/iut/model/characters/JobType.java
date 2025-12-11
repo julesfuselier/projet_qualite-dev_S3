@@ -1,11 +1,11 @@
 package fr.amu.iut.model.characters;
 
 public enum JobType {
-    DRUIDE,
-    FORGERON,
-    LEGIONNAIRE,
+    DRUID,
+    BLACKSMITH,
+    LEGIONARY,
     GENERAL,
-    AUBERGISTE,
-    MARCHAND,
-    PREFET;
+    INKEEPER,
+    MERCHANT,
+    PREFECT;
 }
