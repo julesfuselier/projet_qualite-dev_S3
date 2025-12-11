@@ -19,9 +19,11 @@ import fr.amu.iut.GameConfig;
  *     .build("druide");
  */
 public class CharacterBuilder {
+    private final GameConfig gameConfig = GameConfig.getInstance();
+
     private String name = "Inconnu";
     private char sex = 'M';
-    private int size = GameConfig.BASE_SIZE;
+    private int size = gameConfig.getBaseSize();
     private int age = 30;
     private int strength = 50;
     private int endurance = 50;

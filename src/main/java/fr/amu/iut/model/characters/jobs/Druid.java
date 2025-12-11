@@ -6,13 +6,10 @@ import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.Item;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
-import fr.amu.iut.model.items.foods.FreshnessStatus;
 import fr.amu.iut.model.items.potion.MagicPotion;
 import fr.amu.iut.model.items.potion.PotionRecipe;
 import fr.amu.iut.model.items.potion.PotionType;
 import fr.amu.iut.util.GameEvents;
-
-import java.util.List;
 
 /**
  * Classe représentant un druide dans le jeu.
@@ -45,7 +42,7 @@ public class Druid extends Warrior implements Leader, Worker, Fighter {
     }
 
     /**
-     * Méthode représentant le travail du druide.
+     * Méthode représentant le travail du druide dans la nature.
      * Affiche un message indiquant que le druide travaille dans la nature.
      */
     @Override
@@ -54,7 +51,9 @@ public class Druid extends Warrior implements Leader, Worker, Fighter {
     }
 
     /**
-     * Vérifie si l'inventaire contient un ingrédient spécifique (et frais si nécessaire).
+     * Recherche un ingrédient spécifique dans l'inventaire du druide.
+     * @param type Le type d'ingrédient à rechercher
+     * @return L'ingrédient trouvé ou null s'il n'est pas présent
      */
     private Item findIngredientInInventory(FoodType type) {
         return this.getInventory().getItems().stream()
@@ -72,7 +71,10 @@ public class Druid extends Warrior implements Leader, Worker, Fighter {
     }
 
     /**
-     * Nouvelle version Clean de craftMagicPotion.
+     * Méthode permettant au druide de concocter une potion magique.
+     * Vérifie la présence des ingrédients nécessaires dans l'inventaire.
+     * @param desiredType Le type de potion magique à concocter
+     * @throws InsufficientIngredientsException Si les ingrédients nécessaires sont absents
      */
     public void craftMagicPotion(PotionType desiredType) throws InsufficientIngredientsException {
         PotionRecipe recipe = PotionRecipe.fromType(desiredType);

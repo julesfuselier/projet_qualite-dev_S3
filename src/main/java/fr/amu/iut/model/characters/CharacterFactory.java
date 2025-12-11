@@ -11,6 +11,7 @@ import java.util.Random;
  */
 public class CharacterFactory {
     private final Random random = new Random();
+    private final GameConfig gameConfig = GameConfig.getInstance();
 
     /**
      * Crée un personnage avec des attributs aléatoires basés sur la faction et le rôle.
@@ -20,7 +21,7 @@ public class CharacterFactory {
      * @return Le personnage créé.
      */
     public Character createCharacter(Faction faction, JobType role, String name) {
-        int size = GameConfig.BASE_SIZE + random.nextInt(GameConfig.SIZE_VARIATION);
+        int size = gameConfig.getBaseSize() + random.nextInt(gameConfig.getSizeVariation());
         int age = 18 + random.nextInt(60);
         int baseStr = 50 + random.nextInt(50);
         int baseEnd = 50 + random.nextInt(50);

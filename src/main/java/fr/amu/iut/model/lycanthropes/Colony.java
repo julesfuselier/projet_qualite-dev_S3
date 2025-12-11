@@ -18,6 +18,7 @@ public class Colony {
     private Space location;
     private List<Pack> packs;
     private final Random random;
+    private final GameConfig gameConfig = GameConfig.getInstance();
 
     public Colony(Space location) {
         this.location = location;
@@ -70,7 +71,7 @@ public class Colony {
     }
 
     private void handleReproduction() {
-        if (random.nextInt(GameConfig.PROBABILITY_LYCAN_REPRODUCTION) == 0) {
+        if (random.nextInt(gameConfig.getProbabilityLycanReproduction()) == 0) {
             GameEvents.log("C'est la saison des amours !");
             for (Pack pack : packs) {
                 pack.createLitter();
@@ -120,7 +121,7 @@ public class Colony {
 
         for (Character c : charactersSnapshot) {
             if (c instanceof Lycanthrope l) {
-                if (random.nextInt(GameConfig.PROBABILITY_LYCAN_TRANSFORMATION) == 0) {
+                if (random.nextInt(gameConfig.getProbabilityLycanTransformation()) == 0) {
                     l.transformToHuman();
                 }
             }
@@ -154,7 +155,7 @@ public class Colony {
             Iterator<Lycanthrope> memberIt = pack.getMembers().iterator();
             while (memberIt.hasNext()) {
                 Lycanthrope l = memberIt.next();
-                if (random.nextInt(GameConfig.PROBABILITY_HOWL) == 0) {
+                if (random.nextInt(gameConfig.getProbabilityHowl()) == 0) {
                     l.howl(HowlType.BELONGING, true);
                 }
             }

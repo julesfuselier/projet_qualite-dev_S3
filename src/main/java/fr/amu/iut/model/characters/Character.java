@@ -47,6 +47,8 @@ public abstract class Character implements Cloneable {
     private boolean permanentPotion = false; // Indicateur potion permanente
     private int potDrunkCount = 0; // indicateur nombre de marmites bus
 
+    GameConfig gameConfig = GameConfig.getInstance();
+
     /**
      * Constructeur complet de la classe Character.
      * @param name Le nom du personnage
@@ -65,7 +67,7 @@ public abstract class Character implements Cloneable {
         this.strength = strength;
         this.endurance = endurance;
         this.faction = faction;
-        this.inventory = new Inventory();
+        this.inventory = new Inventory<>();
     }
 
     /**
@@ -258,7 +260,7 @@ public abstract class Character implements Cloneable {
      */
     public int getStrength() {
         if (isActivePotion()) {
-            return strength + GameConfig.BONUS_STRENGTH_POTION; // Force surhumaine
+            return strength + gameConfig.getBonusStrengthPotion(); // Force surhumaine
         }
         return strength;
     }

@@ -35,7 +35,9 @@ public class InvasionTheatre {
     private int maxLocations;
     private List<Space> existingLocations;
     private List<ClanLeader> clanChiefs;
-    private Random random = new Random();
+    private final Random random = new Random();
+
+    GameConfig gameConfig = GameConfig.getInstance();
 
 
     /**
@@ -123,13 +125,13 @@ public class InvasionTheatre {
             for (Character c : loc.getCharacters()) {
 
                 // Utilisation de GameConfig
-                if (random.nextInt(100) < GameConfig.PROBABILITY_HUNGER_EVENT) {
-                    int randomIncrease = random.nextInt(GameConfig.MAX_HUNGER_INCREASE) + 1;
+                if (random.nextInt(100) < gameConfig.getProbabilityHungerEvent()) {
+                    int randomIncrease = random.nextInt(gameConfig.getMaxHungerIncrease()) + 1;
                     c.getHunger().add(-randomIncrease);
                 }
 
                 if (c.getMagicPotion().get() > 0) {
-                    int randomDecrease = random.nextInt(GameConfig.MAX_POTION_DECREASE) + 1;
+                    int randomDecrease = random.nextInt(gameConfig.getMaxPotionDecrease()) + 1;
                     c.getMagicPotion().add(-randomDecrease);
                 }
             }
@@ -143,7 +145,7 @@ public class InvasionTheatre {
         if (existingLocations == null) return;
         for (Space loc : existingLocations) {
             if (!loc.isBattlefield()) {
-                if (random.nextInt(100) < GameConfig.PROBABILITY_FOOD_SPAWN) {
+                if (random.nextInt(100) < gameConfig.getProbabilityFoodSpawn()) {
                     loc.addFood(new Food("Poisson", 10, true, FreshnessStatus.FRESH, FoodType.FISH));
                     loc.addFood(loc.getFoods().get(random.nextInt(loc.getFoods().size())));
                     GameEvents.log("De la nourriture est apparu à : " + loc.getName());
