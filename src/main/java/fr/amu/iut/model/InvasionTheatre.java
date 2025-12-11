@@ -56,7 +56,7 @@ public class InvasionTheatre {
         if (existingLocations != null) {
             GameEvents.log("Emplacements du théâtre d'invasion " + name);
             for (Space location : existingLocations) {
-                System.out.println(location);
+                GameEvents.log(location.toString());
             }
         }
     }
