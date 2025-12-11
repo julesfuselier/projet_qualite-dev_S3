@@ -21,7 +21,29 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Étape 1 : Build et Exécution des Tests
+      # Build et Exécution des Tests
       - name: Build and Run Tests with Maven
         # La commande 'package' exécute automatiquement les phases compile, test, et package.
         run: mvn -B package --file pom.xml
+
+  # Linter
+  lint:
+    name: Super-Linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # Nécessaire pour Super-Linter
+          fetch-depth: 0
+
+      - name: Run Super-Linter
+        uses: github/super-linter@v5
+        env:
+          # Activation des linters spécifiques
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Choix des linters
+          VALIDATE_JAVA: true
+          VALIDATE_MAVEN: true
+          VALIDATE_YAML: true

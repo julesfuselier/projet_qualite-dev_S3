@@ -1,9 +1,12 @@
 package fr.amu.iut.model.spaces;
 
+import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.characters.jobs.Lycanthrope;
+import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Fighter;
-import fr.amu.iut.model.items.foods.Food;
+import fr.amu.iut.model.lycanthropes.Pack;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,6 +33,16 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
 
     private final List<Food> foods;
     private Random random;
+    private Pack pack;
+
+    public Space(String name, double surface, Character leader, Pack pack) {
+        this.name = name;
+        this.surface = surface;
+        this.leader = leader;
+        characters = new ArrayList<>();
+        foods = new ArrayList<>();
+        this.pack = pack;
+    }
 
     /**
      * Constructeur de la classe Space.
@@ -166,7 +179,22 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
         if (!authorized(c)){
             return false;
         }
-        return characters.add(c);
+        if (c instanceof Lycanthrope l){
+            Pack p = l.getPack();
+            if (p != null) {
+                if (this.pack != null && this.pack != p) {
+                    System.out.println("Une autre meute occupe déjà" + name + "le lycanthrope ne peut donc pas entrer dedans");
+                    return false;
+                }
+                if (this.pack == null){
+                    this.pack = p;
+                    System.out.println("La meute" + p.getName() + "s'installe dans" + name);
+                }
+            }
+        }
+        characters.add(c);
+        c.setCurrentSpace(this);
+        return true;
     }
 
     /**
@@ -174,7 +202,9 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
      * @param c Le personnage à retirer.
      */
     public void removeCharacter(Character c) {
-        characters.remove(c);
+        if(characters.remove(c)) {
+            c.setCurrentSpace(null);
+        }
     }
 
     /**
@@ -287,5 +317,26 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
             }
             return false;
         });
+    }
+
+    //creation d'une nouvelle meute s'il n'y en a pas et que les lycanthropes solitaires sont assez nombreux
+    public void NewPack(){
+        if (this.pack != null){
+            return;
+        }
+        List<Lycanthrope> solitarys = new ArrayList<>();
+        for (Character c : characters) {
+            if (c instanceof Lycanthrope l && l.isLone()) {
+                solitarys.add(l);
+            }
+        }
+
+        Pack p = Pack.createPackWithSolitary(solitarys);
+
+        if (p != null) {
+            this.pack = p;
+            System.out.println("la meute " + p.getName() + "vient d'être crée dans " + name);
+        }
+
     }
 }
