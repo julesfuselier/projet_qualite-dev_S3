@@ -1,6 +1,7 @@
 package fr.amu.iut.model.characters.jobs;
 
 import fr.amu.iut.model.characters.Faction;
+import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DruidTest {
 
     @Test
-    void testCraftPotionSuccess() {
+    void testCraftPotionSuccess() throws InsufficientIngredientsException {
         Druid panoramix = new Druid("Panoramix", 'M', 170, 80, 10, 10, Faction.GAULOIS);
 
         panoramix.getInventory().addItem(new Food("Gui", 0, true, FreshnessStatus.FRESH, FoodType.MISTLETOE));
@@ -39,7 +40,7 @@ class DruidTest {
     }
 
     @Test
-    void testCraftPotionFailure_MissingIngredient() {
+    void testCraftPotionFailure_MissingIngredient() throws InsufficientIngredientsException {
         Druid panoramix = new Druid("Panoramix", 'M', 170, 80, 10, 10, Faction.GAULOIS);
 
         panoramix.getInventory().addItem(new Food("Gui", 0, true, FreshnessStatus.FRESH, FoodType.MISTLETOE));

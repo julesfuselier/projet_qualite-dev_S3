@@ -9,7 +9,7 @@ import fr.amu.iut.util.GameEvents;
  * Classe représentant un forgeron dans le jeu.
  * Le forgeron est un personnage qui peut travailler en forgeant des objets.
  */
-public class Blacksmith extends Character implements Worker {
+public class Blacksmith extends Craftsman {
 
     /**
      * Constructeur de la classe Blacksmith.

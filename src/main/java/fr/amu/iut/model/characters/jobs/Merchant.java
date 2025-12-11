@@ -9,7 +9,7 @@ import fr.amu.iut.util.GameEvents;
  * Classe représentant un marchand dans le jeu.
  * Le marchand est un personnage qui peut travailler en vendant des marchandises aux voyageurs.
  */
-public class Merchant extends Character implements Worker {
+public class Merchant extends Craftsman {
 
 
     /**

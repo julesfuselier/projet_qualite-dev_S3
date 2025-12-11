@@ -20,6 +20,7 @@ import fr.amu.iut.util.CharacterSorter;
 import fr.amu.iut.util.GameEvents;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -75,18 +76,24 @@ public class InvasionTheatre {
     }
 
     /**
-     * Affiche tous les personnages présents dans chaque emplacement, triés par nom.
+     * Affiche tous les personnages présents dans chaque emplacement.
+     * Utilisation explicite d'un Iterator (Point Clean Code).
      */
     public void showAllCharacters() {
         if (existingLocations != null) {
-            for (Space loc : existingLocations) {
+            // Utilisation explicite de l'itérateur
+            Iterator<Space> spaceIt = existingLocations.iterator();
+
+            while (spaceIt.hasNext()) {
+                Space loc = spaceIt.next();
                 GameEvents.log("Lieu : " + loc.getName());
+
                 List<Character> sortedChars = new ArrayList<>(loc.getCharacters());
+                CharacterSorter.quickSortByName(sortedChars); // Ton QuickSort est top, on le garde
 
-                // Utilisation du QuickSort ( cf CharacterSorter )
-                CharacterSorter.quickSortByName(sortedChars);
-
-                for (Character c : sortedChars) {
+                Iterator<Character> charIt = sortedChars.iterator();
+                while (charIt.hasNext()) {
+                    Character c = charIt.next();
                     GameEvents.log(" - " + c.toString());
                 }
             }

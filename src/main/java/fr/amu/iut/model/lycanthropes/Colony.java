@@ -7,6 +7,7 @@ import fr.amu.iut.model.spaces.Space;
 import fr.amu.iut.util.GameEvents;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -16,7 +17,7 @@ import java.util.Random;
 public class Colony {
     private Space location;
     private List<Pack> packs;
-    private Random random;
+    private final Random random;
 
     public Colony(Space location) {
         this.location = location;
@@ -144,8 +145,15 @@ public class Colony {
     }
 
     private void generateRandomHowls() {
-        for (Pack pack : packs) {
-            for (Lycanthrope l : pack.getMembers()) {
+        // Parcours explicite des meutes
+        Iterator<Pack> packIt = packs.iterator();
+        while (packIt.hasNext()) {
+            Pack pack = packIt.next();
+
+            // Parcours explicite des membres
+            Iterator<Lycanthrope> memberIt = pack.getMembers().iterator();
+            while (memberIt.hasNext()) {
+                Lycanthrope l = memberIt.next();
                 if (random.nextInt(GameConfig.PROBABILITY_HOWL) == 0) {
                     l.howl(HowlType.BELONGING, true);
                 }
