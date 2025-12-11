@@ -110,16 +110,6 @@ public class Colony {
         }
     }
 
-    private void generateRandomHowls() {
-        for (Pack pack : packs) {
-            for (Lycanthrope l : pack.getMembers()) {
-                if (random.nextInt(20) == 0) { // 5% de chance
-                    l.howl("Appartenance");
-                }
-            }
-        }
-    }
-
     private void handleTransformations() {
         List<Character> charactersSnapshot = new ArrayList<>(location.getCharacters());
 
@@ -127,6 +117,33 @@ public class Colony {
             if (c instanceof Lycanthrope l) {
                 if (random.nextInt(50) == 0) { // 2% de chance de transformation spontanée
                     l.transformToHuman();
+                }
+            }
+        }
+    }
+
+    /**
+     * Diffuse un hurlement à tous les lycanthropes de la colonie.
+     * @param howl Le hurlement à diffuser.
+     */
+    public void broadcastHowl(Howl howl) {
+        System.out.println("\n🔊 " + howl.getEmitter().getName() + " pousse un hurlement puissant !");
+        howl.showCharacteristics();
+
+        for (Character c : location.getCharacters()) {
+            if (c instanceof Lycanthrope l) {
+                if (l != howl.getEmitter()) {
+                    l.hearHowl(howl);
+                }
+            }
+        }
+    }
+
+    private void generateRandomHowls() {
+        for (Pack pack : packs) {
+            for (Lycanthrope l : pack.getMembers()) {
+                if (random.nextInt(20) == 0) {
+                    l.howl(HowlType.BELONGING, true);
                 }
             }
         }

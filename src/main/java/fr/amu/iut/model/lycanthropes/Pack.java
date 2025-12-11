@@ -195,5 +195,6 @@ public class Pack {
     }
 
     public void decreaseDominationOfMembers() {
+
     }
 }
