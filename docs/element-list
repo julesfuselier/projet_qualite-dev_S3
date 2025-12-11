@@ -1,0 +1,14 @@
+fr.amu.iut
+fr.amu.iut.controller
+fr.amu.iut.model
+fr.amu.iut.model.characters
+fr.amu.iut.model.characters.jobs
+fr.amu.iut.model.exceptions
+fr.amu.iut.model.fight
+fr.amu.iut.model.items
+fr.amu.iut.model.items.foods
+fr.amu.iut.model.items.potion
+fr.amu.iut.model.lycanthropes
+fr.amu.iut.model.spaces
+fr.amu.iut.util
+fr.amu.iut.view
