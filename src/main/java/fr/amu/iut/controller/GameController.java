@@ -142,7 +142,6 @@ public class GameController {
                 }
             }
         }
-        // -------------------------------------------------------------
 
         view.displayMessage("Mise à jour des états (Faim, Potions)...");
         theatre.updateRandomCharacterStates();

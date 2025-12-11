@@ -10,6 +10,10 @@ import fr.amu.iut.util.GameEvents;
 
 import java.util.Random;
 
+/**
+ * Classe représentant un lycanthrope dans le jeu.
+ * Le lycanthrope est un personnage de type combattant avec des capacités spéciales liées à sa nature de loup-garou.
+ */
 public class Lycanthrope extends Character implements Fighter {
 
     private String ageGroup;
@@ -22,7 +26,22 @@ public class Lycanthrope extends Character implements Fighter {
 
     private static final int DOMINATION_THRESHOLD = -5;
 
-    // Constructeur
+    /**
+     * Constructeur de la classe Lycanthrope.
+     *
+     * @param name             Le nom du lycanthrope.
+     * @param sex              Le sexe du lycanthrope.
+     * @param size             La taille du lycanthrope.
+     * @param age              L'âge du lycanthrope.
+     * @param strength         La force du lycanthrope.
+     * @param endurance        L'endurance du lycanthrope.
+     * @param ageGroup         Le groupe d'âge du lycanthrope (jeune, adulte, vieux).
+     * @param rank             Le rang du lycanthrope dans la meute.
+     * @param dominationFactor Le facteur de domination du lycanthrope.
+     * @param impulsiveness    L'impulsivité du lycanthrope.
+     * @param pack             La meute à laquelle appartient le lycanthrope.
+     * @param lone             Indique si le lycanthrope est solitaire.
+     */
     public Lycanthrope(String name, char sex, int size, int age, int strength, int endurance, String ageGroup,
                        String rank, int dominationFactor, double impulsiveness, Pack pack, boolean lone) {
         super(name, sex, size, age, strength, endurance, null);
@@ -35,6 +54,12 @@ public class Lycanthrope extends Character implements Fighter {
         this.level = computeLevel();
     }
 
+    /**
+     * Méthode représentant le combat entre le lycanthrope et un adversaire.
+     * Le lycanthrope inflige des dégâts basés sur sa force et l'endurance de l'adversaire.
+     *
+     * @param opponent L'adversaire à combattre.
+     */
     @Override
     public void fight(Character opponent) {
         int damage = (this.getStrength() * 2) - opponent.getEndurance();
@@ -118,13 +143,20 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
+    /**
+     * Rend le lycanthrope agressif envers un autre lycanthrope.
+     * @param aggressor Le lycanthrope envers lequel devenir agressif.
+     */
     public void becomeAggressive(Lycanthrope aggressor) {
         GameEvents.log(getName() + " devient agressif envers " + aggressor.getName() + " !");
         this.howl(HowlType.AGGRESSION, true);
         this.fight(aggressor);
     }
 
-    // Calcul le niveau du lycanthrope
+    /**
+     * Calcule le niveau du lycanthrope en fonction de ses caractéristiques.
+     * @return Le niveau calculé.
+     */
     private double computeLevel() {
         int ageScore = switch (ageGroup != null ? ageGroup.toLowerCase() : "adulte") {
             case "jeune" -> 1;
@@ -138,6 +170,9 @@ public class Lycanthrope extends Character implements Fighter {
         return (ageScore * 2) + (getStrength() * 0.5) + (dominationFactor * 1.5) + (20 - rankScore);
     }
 
+    /**
+     * Affiche les caractéristiques du lycanthrope.
+     */
     public void printCharacteristics() {
         GameEvents.log("Nom : " + getName());
         GameEvents.log("Sexe : " + getSex());
@@ -236,7 +271,10 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
-    // Transformation d'un lycnathrope en humain
+    /**
+     * Transforme le lycanthrope en humain avec une probabilité basée sur son niveau.
+     * Si la transformation réussit, le lycanthrope quitte la meute et l'enclos.
+     */
     public void transformToHuman() {
         GameEvents.log(getName() + " se transforme en humain !");
 
@@ -258,12 +296,19 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
+    /**
+     * Met à jour le rang du lycanthrope en fonction de son facteur de domination.
+     * Si le facteur est inférieur au seuil, le lycanthrope est dégradé.
+     */
     public void updateRankFromDominationFactor() {
         if (this.dominationFactor < DOMINATION_THRESHOLD) {
             demoteRank();
         }
     }
 
+    /**
+     * Dégrade le rang du lycanthrope s'il ne remplit pas les conditions.
+     */
     private void demoteRank() {
         if (this.rank == Rank.ALPHA || this.rank == Rank.OMEGA) {
             return;
@@ -279,7 +324,11 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
-    // Trouve le rang inférieur à celui fourni en paramètre
+    /**
+     * Obtient le rang suivant dans la hiérarchie.
+     * @param currentRank Le rang actuel.
+     * @return Le rang suivant ou null si aucun.
+     */
     private Rank getNextRank(Rank currentRank) {
         if (currentRank == null || currentRank == Rank.OMEGA) {
             return null;
@@ -288,7 +337,9 @@ public class Lycanthrope extends Character implements Fighter {
         return Rank.fromValue(nextRankValue);
     }
 
-    // Transformation d'un membre en loup solitaire
+    /**
+     * Rend le lycanthrope solitaire en le retirant de sa meute.
+     */
     public void becomeSolitary() {
         if (pack != null) {
             pack.removeMember(this);
@@ -299,7 +350,7 @@ public class Lycanthrope extends Character implements Fighter {
         GameEvents.log(getName() + " est devenu solitaire !");
     }
 
-    // Getters & Setters
+    /** Getter et Setter **/
     public void setAgeGroup(String ageGroup) {
         this.ageGroup = ageGroup;
         this.level = computeLevel();

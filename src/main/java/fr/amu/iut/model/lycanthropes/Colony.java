@@ -70,6 +70,9 @@ public class Colony {
         }
     }
 
+    /**
+     * Gère la reproduction des meutes en fonction d'une probabilité définie.
+     */
     private void handleReproduction() {
         if (random.nextInt(gameConfig.getProbabilityLycanReproduction()) == 0) {
             GameEvents.log("C'est la saison des amours !");
@@ -84,6 +87,9 @@ public class Colony {
         }
     }
 
+    /**
+     * Fait évoluer la hiérarchie des meutes en diminuant le facteur de domination des membres.
+     */
     private void evolveHierarchy() {
         for (Pack pack : packs) {
             pack.decreaseDominationOfMembers();
@@ -96,6 +102,9 @@ public class Colony {
         }
     }
 
+    /**
+     * Vieillit tous les lycanthropes de la colonie et met à jour leur catégorie d'âge.
+     */
     private void ageLycanthropes() {
         for (Character c : location.getCharacters()) {
             if (c instanceof Lycanthrope l) {
@@ -105,6 +114,11 @@ public class Colony {
         }
     }
 
+
+    /**
+     * Met à jour la catégorie d'âge d'un lycanthrope et journalise le changement si nécessaire.
+     * @param l Le lycanthrope dont la catégorie d'âge doit être mise à jour.
+     */
     private void updateAgeCategory(Lycanthrope l) {
         String oldGroup = l.getAgeGroup();
         if (l.getAge() < 15) l.setAgeGroup("jeune");
@@ -116,6 +130,9 @@ public class Colony {
         }
     }
 
+    /**
+     * Gère les transformations aléatoires des lycanthropes.
+     */
     private void handleTransformations() {
         List<Character> charactersSnapshot = new ArrayList<>(location.getCharacters());
 
@@ -145,6 +162,9 @@ public class Colony {
         }
     }
 
+    /**
+     * Génère des hurlements aléatoires de la part des lycanthropes de la colonie.
+     */
     private void generateRandomHowls() {
         // Parcours explicite des meutes
         Iterator<Pack> packIt = packs.iterator();
@@ -162,10 +182,18 @@ public class Colony {
         }
     }
 
+    /**
+     * Ajoute une meute à la colonie.
+     * @param pack La meute à ajouter.
+     */
     public void addPack(Pack pack) {
         this.packs.add(pack);
     }
 
+    /**
+     * Retourne la liste des meutes de la colonie.
+     * @return La liste des meutes.
+     */
     public List<Pack> getPacks() {
         return packs;
     }

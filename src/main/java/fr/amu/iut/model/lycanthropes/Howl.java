@@ -4,19 +4,29 @@ import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import fr.amu.iut.util.GameEvents;
 
 /**
- * Représente un hurlement émis par un lycanthrope.
+ * Classe représentant un hurlement émis par un lycanthrope.
  */
 public class Howl {
     private final Lycanthrope emitter;
     private final HowlType type;
     private final String message;
 
+    /**
+     * Constructeur de la classe Howl.
+     *
+     * @param emitter Le lycanthrope émetteur du hurlement.
+     * @param type    Le type de hurlement.
+     * @param message Le message associé au hurlement.
+     */
     public Howl(Lycanthrope emitter, HowlType type, String message) {
         this.emitter = emitter;
         this.type = type;
         this.message = message;
     }
 
+    /**
+     * Affiche les caractéristiques du hurlement.
+     */
     public void showCharacteristics() {
         GameEvents.log(">>> HURLEMENT <<<");
         GameEvents.log("Émetteur : " + emitter.getName());
@@ -26,6 +36,15 @@ public class Howl {
         GameEvents.log("-----------------");
     }
 
+    /**  * Obtient le lycanthrope émetteur du hurlement.
+     *
+     * @return Le lycanthrope émetteur.
+     */
     public Lycanthrope getEmitter() { return emitter; }
+
+    /**  * Obtient le type de hurlement.
+     *
+     * @return Le type de hurlement.
+     */
     public HowlType getType() { return type; }
 }

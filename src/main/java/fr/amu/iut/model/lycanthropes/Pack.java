@@ -33,7 +33,9 @@ public class Pack {
     public Pack() {
     }
 
-    // Affiche les caractéristiques de la meute
+    /**
+     * Affiche les caractéristiques de la meute.
+     */
     public void showCharacteristics(){
         GameEvents.log("Nom: " + name);
         for (Lycanthrope l : members){
@@ -43,7 +45,9 @@ public class Pack {
         GameEvents.log("Nom de female alpha " + alphaCouple.getFemale().getName());
     }
 
-    // Affiche les caractéristiques des membres de la meute
+    /**
+     * Affiche les caractéristiques détaillées de chaque membre de la meute.
+     */
     public void showMembersCharacteristics(){
         for (Lycanthrope l : members){
             GameEvents.log("Nom membre " + l.getName());
