@@ -1,6 +1,8 @@
 package fr.amu.iut.model.lycanthropes;
 
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
+import fr.amu.iut.util.GameEvents;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -17,22 +19,22 @@ public class Pack {
 
     // Affiche les caractéristiques de la meute
     public void showCharacteristics(){
-        System.out.println("Nom: " + name);
+        GameEvents.log("Nom: " + name);
         for (Lycanthrope l : members){
-            System.out.println("Nom membre " + l.getName());
+            GameEvents.log("Nom membre " + l.getName());
         }
-        System.out.println("Nom du male alpha " + alphaCouple.getMale().getName());
-        System.out.println("Nom de female alpha " + alphaCouple.getFemale().getName());
+        GameEvents.log("Nom du male alpha " + alphaCouple.getMale().getName());
+        GameEvents.log("Nom de female alpha " + alphaCouple.getFemale().getName());
     }
 
     // Affiche les caractéristiques des membres de la meute
     public void showMembersCharacteristics(){
         for (Lycanthrope l : members){
-            System.out.println("Nom membre " + l.getName());
-            System.out.println("age du membre " + l.getAgeGroup());
-            System.out.println("rang du membre " + l.getRank());
-            System.out.println("facteur de domination du membre " + l.getDominationFactor());
-            System.out.println("niveau du membre " + l.getLevel());
+            GameEvents.log("Nom membre " + l.getName());
+            GameEvents.log("age du membre " + l.getAgeGroup());
+            GameEvents.log("rang du membre " + l.getRank());
+            GameEvents.log("facteur de domination du membre " + l.getDominationFactor());
+            GameEvents.log("niveau du membre " + l.getLevel());
 
         }
     }
@@ -68,7 +70,7 @@ public class Pack {
         }
         if (pack.getMembers().stream().anyMatch(m -> "M".equals(String.valueOf(m.getSex()))) && pack.getMembers().stream().anyMatch(f -> "F".equals(String.valueOf(f.getSex())))) {
             pack.createHierarchy();
-            System.out.println("crétion d'une nouvelle hiérarchie à partir de lycanthropes solitaires");
+            GameEvents.log("crétion d'une nouvelle hiérarchie à partir de lycanthropes solitaires");
             return pack;
         }
         return null;
@@ -96,7 +98,7 @@ public class Pack {
 
     // Affiche les membres et les caractéristiques de la meute
     public void displayPack() {
-        System.out.println("Membres de la meute :");
+        GameEvents.log("Membres de la meute :");
         for (Lycanthrope l : members) {
             l.printCharacteristics();
         }
@@ -112,7 +114,7 @@ public class Pack {
             Lycanthrope weakest = members.stream().min(Comparator.comparingInt(Lycanthrope::getStrength)).orElse(null);
             if (weakest != null) {
                 weakest.setRank(Rank.OMEGA);
-                System.out.println(weakest.getName() + " devient le souffre douleur de la meute");
+                GameEvents.log(weakest.getName() + " devient le souffre douleur de la meute");
             }
         }
 
@@ -148,7 +150,7 @@ public class Pack {
      * @param newAlphaMale Le lycanthrope qui est devenu le nouveau mâle Alpha.
      */
     public void updateAlphasAfterDomination(Lycanthrope newAlphaMale) {
-        System.out.println("Le couple Alpha de la meute est en train de changer !");
+        GameEvents.log("Le couple Alpha de la meute est en train de changer !");
 
         Lycanthrope newAlphaFemale = null;
         for (Lycanthrope l : members) {
@@ -162,10 +164,10 @@ public class Pack {
         
         if (newAlphaMale != null && newAlphaFemale != null) {
             this.alphaCouple = new AlphaCouple(newAlphaMale, newAlphaFemale, this);
-            System.out.println("Le nouveau couple Alpha est : " + this.alphaCouple.getMale().getName() + " et " + this.alphaCouple.getFemale().getName());
+            GameEvents.log("Le nouveau couple Alpha est : " + this.alphaCouple.getMale().getName() + " et " + this.alphaCouple.getFemale().getName());
         } else {
             this.alphaCouple = null;
-            System.out.println("Impossible de former un nouveau couple Alpha.");
+            GameEvents.log("Impossible de former un nouveau couple Alpha.");
         }
     }
 
@@ -190,7 +192,7 @@ public class Pack {
         if (alphaCouple != null) {
             alphaCouple.reproduce();
         } else {
-            System.out.println("Aucun couple Alpha dans la meute pour se reproduire.");
+            GameEvents.log("Aucun couple Alpha dans la meute pour se reproduire.");
         }
     }
 

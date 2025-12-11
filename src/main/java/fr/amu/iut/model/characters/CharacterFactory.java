@@ -19,7 +19,7 @@ public class CharacterFactory {
      * @param name Le nom du personnage.
      * @return Le personnage créé.
      */
-    public Character createCharacter(Faction faction, String role, String name) {
+    public Character createCharacter(Faction faction, JobType role, String name) {
         int size = GameConfig.BASE_SIZE + random.nextInt(GameConfig.SIZE_VARIATION);
         int age = 18 + random.nextInt(60);
         int baseStr = 50 + random.nextInt(50);
@@ -35,18 +35,17 @@ public class CharacterFactory {
                 .setStrength(baseStr)
                 .setEndurance(baseEnd);
 
-        switch (role.toLowerCase()) {
-            case "forgeron" -> builder.setStrength(baseStr + 20);
-            case "druide" -> builder.setEndurance(baseEnd + 20);
-            case "legionnaire" -> {
+        switch (role) {
+            case FORGERON -> builder.setStrength(baseStr + 20);
+            case DRUIDE -> builder.setEndurance(baseEnd + 20);
+            case LEGIONNAIRE -> {
                 builder.setStrength(baseStr + 10);
                 builder.setEndurance(baseEnd + 15);
             }
-            case "général" -> {
+            case GENERAL -> {
                 builder.setStrength(baseStr + 15);
                 builder.setEndurance(baseEnd + 10);
             }
-            // TODO : Voir si on ajoute d'autre bonus
         }
 
         return builder.build(role);

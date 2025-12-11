@@ -1,13 +1,12 @@
 package fr.amu.iut.controller;
 
 import fr.amu.iut.model.InvasionTheatre;
+import fr.amu.iut.model.characters.*;
 import fr.amu.iut.model.characters.Character;
-import fr.amu.iut.model.characters.CharacterFactory;
-import fr.amu.iut.model.characters.ClanLeader;
-import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.jobs.Druid;
 import fr.amu.iut.model.items.potion.MagicPotion;
 import fr.amu.iut.model.spaces.*;
+import fr.amu.iut.util.GameEvents;
 import fr.amu.iut.view.ConsoleView;
 
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ public class GameController {
         this.view = new ConsoleView();
         this.turnCount = 0;
         this.autoModeRunning = false;
+        GameEvents.register(message -> view.displayMessage(message));
     }
 
     /**
@@ -300,23 +300,23 @@ public class GameController {
         theatre.addLocation(enclosure);
 
         try {
-            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, "druide", "Panoramix"));
-            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, "forgeron", "Cétautomatix"));
-            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, "marchand", "Ordralphabétix"));
-            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, "aubergiste", "Bonemine"));
-            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, "druide", "Panoramix Jr"));
+            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.DRUIDE, "Panoramix"));
+            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.FORGERON, "Cétautomatix"));
+            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.MARCHAND, "Ordralphabétix"));
+            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.AUBERGISTE, "Bonemine"));
+            village.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.DRUIDE, "Panoramix Jr"));
 
-            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, "général", "Caius Bonus"));
-            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, "préfet", "Brutus"));
-            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, "legionnaire", "Minus"));
-            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, "legionnaire", "Chorus"));
-            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, "legionnaire", "Motus"));
+            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.GENERAL, "Caius Bonus"));
+            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.PREFET, "Brutus"));
+            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.LEGIONNAIRE, "Minus"));
+            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.LEGIONNAIRE, "Chorus"));
+            camp.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.LEGIONNAIRE, "Motus"));
 
-            city.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, "marchand", "Technocratus"));
-            city.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, "aubergiste", "Tifus"));
+            city.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.MARCHAND, "Technocratus"));
+            city.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.AUBERGISTE, "Tifus"));
 
-            serum.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, "marchand", "Pneumatix"));
-            serum.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, "legionnaire", "Tikedbus"));
+            serum.addCharacter(characterFactory.createCharacter(Faction.GAULOIS, JobType.MARCHAND, "Pneumatix"));
+            serum.addCharacter(characterFactory.createCharacter(Faction.ROMAIN, JobType.LEGIONNAIRE, "Tikedbus"));
 
             view.displaySuccess("Monde généré avec succès ! (6 Lieux créés)");
             theatre.showTotalCharacterCount();
@@ -389,7 +389,7 @@ public class GameController {
             }
 
             Faction faction = (choice == 1) ? Faction.GAULOIS : Faction.ROMAIN;
-            String role = (faction == Faction.GAULOIS) ? "druide" : "legionnaire"; // Simplifié pour l'exemple manuel
+            JobType role = (faction == Faction.GAULOIS) ? JobType.DRUIDE : JobType.LEGIONNAIRE; // Simplifié pour l'exemple manuel
 
             try {
                 Character newChar = characterFactory.createCharacter(faction, role, "Personnage " + System.currentTimeMillis() % 1000);

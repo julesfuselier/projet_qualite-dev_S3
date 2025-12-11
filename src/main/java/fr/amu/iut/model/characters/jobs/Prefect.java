@@ -3,6 +3,7 @@ package fr.amu.iut.model.characters.jobs;
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Leader;
+import fr.amu.iut.util.GameEvents;
 
 /**
  * Classe représentant un préfet dans le jeu.
@@ -33,6 +34,6 @@ public class Prefect extends fr.amu.iut.model.characters.Character implements Le
      */
     @Override
     public void lead(Character character) {
-        System.out.println(this.getName() + " dirige " + character.getName());
+        GameEvents.log(this.getName() + " dirige " + character.getName());
     }
 }

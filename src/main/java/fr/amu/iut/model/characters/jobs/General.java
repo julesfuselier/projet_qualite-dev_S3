@@ -4,6 +4,7 @@ import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Leader;
 import fr.amu.iut.model.characters.Warrior;
+import fr.amu.iut.util.GameEvents;
 
 /**
  * Classe représentant un général dans le jeu.
@@ -34,6 +35,6 @@ public class General extends Warrior implements Leader {
      */
     @Override
     public void lead(Character character) {
-        System.out.println(this.getName() + " dirige " + character.getName());
+        GameEvents.log(this.getName() + " dirige " + character.getName());
     }
 }

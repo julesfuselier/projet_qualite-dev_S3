@@ -1,8 +1,10 @@
 package fr.amu.iut.model.lycanthropes;
 
+import fr.amu.iut.GameConfig;
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import fr.amu.iut.model.spaces.Space;
+import fr.amu.iut.util.GameEvents;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ public class Colony {
      * Point d'entrée pour la gestion temporelle de la colonie (appelé à chaque tour).
      */
     public void manageTime() {
-        System.out.println("\n--- Gestion de la Colonie à " + location.getName() + " ---");
+        GameEvents.log("\n--- Gestion de la Colonie à " + location.getName() + " ---");
 
         createNewPacksIfNeeded();
         handleReproduction();
@@ -40,33 +42,35 @@ public class Colony {
      * Affiche tous les lycanthropes de toutes les meutes.
      */
     public void showAllLycanthropes() {
-        System.out.println("Colonie du lieu : " + location.getName());
+        GameEvents.log("Colonie du lieu : " + location.getName());
         for (Pack pack : packs) {
-            System.out.println(" > Meute : " + pack.getName());
+            GameEvents.log(" > Meute : " + pack.getName());
             pack.showMembersCharacteristics();
         }
     }
 
+    /**
+     * Crée de nouvelles meutes si des lycanthropes solitaires sont présents.
+     */
     private void createNewPacksIfNeeded() {
-        List<Lycanthrope> solitaries = new ArrayList<>();
-        for (Character c : location.getCharacters()) {
-            if (c instanceof Lycanthrope l && l.isLone()) {
-                solitaries.add(l);
-            }
-        }
+        List<Lycanthrope> solitaries = location.getCharacters().stream()
+                .filter(c -> c instanceof Lycanthrope)
+                .map(c -> (Lycanthrope) c)
+                .filter(Lycanthrope::isLone)
+                .toList();
 
         if (!solitaries.isEmpty()) {
             Pack newPack = Pack.createPackWithSolitary(solitaries);
             if (newPack != null) {
                 this.packs.add(newPack);
-                System.out.println("Une nouvelle meute a été formée !");
+                GameEvents.log("Une nouvelle meute a été formée !");
             }
         }
     }
 
     private void handleReproduction() {
-        if (random.nextInt(10) == 0) { // 10% de chance par tour
-            System.out.println("C'est la saison des amours !");
+        if (random.nextInt(GameConfig.PROBABILITY_LYCAN_REPRODUCTION) == 0) {
+            GameEvents.log("C'est la saison des amours !");
             for (Pack pack : packs) {
                 pack.createLitter();
                 for(Lycanthrope baby : pack.getMembers()) {
@@ -106,7 +110,7 @@ public class Colony {
         else l.setAgeGroup("vieux");
 
         if (!l.getAgeGroup().equals(oldGroup)) {
-            System.out.println(l.getName() + " est devenu " + l.getAgeGroup());
+            GameEvents.log(l.getName() + " est devenu " + l.getAgeGroup());
         }
     }
 
@@ -115,7 +119,7 @@ public class Colony {
 
         for (Character c : charactersSnapshot) {
             if (c instanceof Lycanthrope l) {
-                if (random.nextInt(50) == 0) { // 2% de chance de transformation spontanée
+                if (random.nextInt(GameConfig.PROBABILITY_LYCAN_TRANSFORMATION) == 0) {
                     l.transformToHuman();
                 }
             }
@@ -127,7 +131,7 @@ public class Colony {
      * @param howl Le hurlement à diffuser.
      */
     public void broadcastHowl(Howl howl) {
-        System.out.println("\n🔊 " + howl.getEmitter().getName() + " pousse un hurlement puissant !");
+        GameEvents.log("\n[HURLEMENT] " + howl.getEmitter().getName() + " pousse un hurlement puissant !");
         howl.showCharacteristics();
 
         for (Character c : location.getCharacters()) {
@@ -142,7 +146,7 @@ public class Colony {
     private void generateRandomHowls() {
         for (Pack pack : packs) {
             for (Lycanthrope l : pack.getMembers()) {
-                if (random.nextInt(20) == 0) {
+                if (random.nextInt(GameConfig.PROBABILITY_HOWL) == 0) {
                     l.howl(HowlType.BELONGING, true);
                 }
             }

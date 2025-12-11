@@ -18,4 +18,8 @@ public final class GameConfig {
     public static final int SIZE_VARIATION = 40;
 
     public static final int BONUS_STRENGTH_POTION = 100 ;
+
+    public static final int PROBABILITY_LYCAN_REPRODUCTION = 10;
+    public static final int PROBABILITY_LYCAN_TRANSFORMATION = 50;
+    public static final int PROBABILITY_HOWL = 20;
 }

@@ -77,21 +77,19 @@ public class CharacterBuilder {
     public CharacterBuilder setFaction(Faction faction) { this.faction = faction; return this; }
 
     /**
-     * Construit le personnage en fonction du métier spécifié.
-     * @param role Le métier du personnage (druide, forgeron, légionnaire, général, aubergiste, marchand, préfet).
+     * Construit le personnage avec les attributs définis.
+     * @param role Le rôle (métier) du personnage.
      * @return Le personnage construit.
-     * @throws IllegalArgumentException Si le métier est inconnu.
      */
-    public Character build(String role) {
-        return switch (role.toLowerCase()) {
-            case "druide" -> new Druid(name, sex, size, age, strength, endurance, faction);
-            case "forgeron" -> new Blacksmith(name, sex, size, age, strength, endurance, faction);
-            case "legionnaire" -> new Legionary(name, sex, size, age, strength, endurance, faction);
-            case "général" -> new General(name, sex, size, age, strength, endurance, faction);
-            case "aubergiste" -> new Innkeeper(name, sex, size, age, strength, endurance, faction);
-            case "marchand" -> new Merchant(name, sex, size, age, strength, endurance, faction);
-            case "préfet" -> new Prefect(name, sex, size, age, strength, endurance, faction);
-            default -> throw new IllegalArgumentException("Métier inconnu : " + role);
+    public Character build(JobType role) {
+        return switch (role) {
+            case DRUIDE -> new Druid(name, sex, size, age, strength, endurance, faction);
+            case FORGERON -> new Blacksmith(name, sex, size, age, strength, endurance, faction);
+            case LEGIONNAIRE -> new Legionary(name, sex, size, age, strength, endurance, faction);
+            case GENERAL -> new General(name, sex, size, age, strength, endurance, faction);
+            case AUBERGISTE -> new Innkeeper(name, sex, size, age, strength, endurance, faction);
+            case MARCHAND -> new Merchant(name, sex, size, age, strength, endurance, faction);
+            case PREFET -> new Prefect(name, sex, size, age, strength, endurance, faction);
         };
     }
 }

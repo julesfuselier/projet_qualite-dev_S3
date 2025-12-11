@@ -3,6 +3,7 @@ package fr.amu.iut.model.characters.jobs;
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Worker;
+import fr.amu.iut.util.GameEvents;
 
 /**
  * Classe représentant un marchand dans le jeu.
@@ -32,6 +33,6 @@ public class Merchant extends Character implements Worker {
      */
     @Override
     public void work() {
-        System.out.println(this.getName() + " vend des marchandises aux voyageurs.");
+        GameEvents.log(this.getName() + " vend des marchandises aux voyageurs.");
     }
 }

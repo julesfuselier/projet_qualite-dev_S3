@@ -17,6 +17,7 @@ import fr.amu.iut.model.spaces.GallicVillage;
 import fr.amu.iut.model.spaces.RomanFortifiedCamp;
 import fr.amu.iut.GameConfig;
 import fr.amu.iut.util.CharacterSorter;
+import fr.amu.iut.util.GameEvents;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class InvasionTheatre {
      */
     public void showLocations() {
         if (existingLocations != null) {
-            System.out.println("Emplacements du théâtre d'invasion " + name);
+            GameEvents.log("Emplacements du théâtre d'invasion " + name);
             for (Space location : existingLocations) {
                 System.out.println(location);
             }
@@ -70,7 +71,7 @@ public class InvasionTheatre {
                 total += loc.getCharacters().size();
             }
         }
-        System.out.println("Nombre total de personnages en jeu : " + total);
+        GameEvents.log("Nombre total de personnages en jeu : " + total);
     }
 
     /**
@@ -79,14 +80,14 @@ public class InvasionTheatre {
     public void showAllCharacters() {
         if (existingLocations != null) {
             for (Space loc : existingLocations) {
-                System.out.println("Lieu : " + loc.getName());
+                GameEvents.log("Lieu : " + loc.getName());
                 List<Character> sortedChars = new ArrayList<>(loc.getCharacters());
 
                 // Utilisation du QuickSort ( cf CharacterSorter )
                 CharacterSorter.quickSortByName(sortedChars);
 
                 for (Character c : sortedChars) {
-                    System.out.println(" - " + c.toString());
+                    GameEvents.log(" - " + c.toString());
                 }
             }
         }
@@ -138,7 +139,7 @@ public class InvasionTheatre {
                 if (random.nextInt(100) < GameConfig.PROBABILITY_FOOD_SPAWN) {
                     loc.addFood(new Food("Poisson", 10, true, FreshnessStatus.FRESH, FoodType.FISH));
                     loc.addFood(loc.getFoods().get(random.nextInt(loc.getFoods().size())));
-                    System.out.println("De la nourriture est apparu à : " + loc.getName());
+                    GameEvents.log("De la nourriture est apparu à : " + loc.getName());
                 }
             }
         }
@@ -162,7 +163,7 @@ public class InvasionTheatre {
 
     // Donner la main au chef de clan
     public void handleClanChiefTurn(ClanLeader chief) {
-        System.out.println("C'est le tour du chef : " + chief.getName());
+        GameEvents.log("C'est le tour du chef : " + chief.getName());
         // TODO : Ajouter une fonction TakeTurn pour réellement donner la main au chef de clan
     }
 
@@ -190,7 +191,7 @@ public class InvasionTheatre {
     public void handleAutonomousMovements() {
         if (existingLocations == null) return;
 
-        System.out.println("Mouvements autonomes des troupes...");
+        GameEvents.log("Mouvements autonomes des troupes...");
 
         for (Space currentSpace : existingLocations) {
             List<Character> charactersSnapshot = new ArrayList<>(currentSpace.getCharacters());
@@ -255,9 +256,9 @@ public class InvasionTheatre {
             try {
                 to.addCharacter(c);
                 from.removeCharacter(c);
-                System.out.println("   -> " + c.getName() + " quitte " + from.getName() + " pour " + to.getName());
+                GameEvents.log("   -> " + c.getName() + " quitte " + from.getName() + " pour " + to.getName());
             } catch (Exception e) {
-                System.out.println("Erreur de mouvement : " + e.getMessage());
+                GameEvents.log("Erreur de mouvement : " + e.getMessage());
             }
         }
     }
@@ -276,9 +277,9 @@ public class InvasionTheatre {
                         if(random.nextInt(3) == 0) {
                             try {
                                 druid.craftMagicPotion(PotionType.BASIC);
-                                System.out.println("[POTION] Le druide " + c.getName() + " a fabriqué une potion !");
+                                GameEvents.log("[POTION] Le druide " + c.getName() + " a fabriqué une potion !");
                             } catch (InsufficientIngredientsException e) {
-                                System.out.println("[POTION] Le druide " + c.getName() + " n'a pas pu fabriquer de potion : " + e.getMessage());
+                                GameEvents.log("[POTION] Le druide " + c.getName() + " n'a pas pu fabriquer de potion : " + e.getMessage());
                             }
                         }
                     }

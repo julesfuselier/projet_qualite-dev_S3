@@ -3,6 +3,7 @@ package fr.amu.iut.model.characters.jobs;
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Worker;
+import fr.amu.iut.util.GameEvents;
 
 /**
  * Classe représentant un aubergiste dans le jeu.
@@ -31,6 +32,6 @@ public class Innkeeper extends Character implements Worker {
      */
     @Override
     public void work() {
-        System.out.println(this.getName() + " sert des boissons aux clients de l'auberge.");
+        GameEvents.log(this.getName() + " sert des boissons aux clients de l'auberge.");
     }
 }
