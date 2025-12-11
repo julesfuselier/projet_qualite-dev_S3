@@ -20,17 +20,16 @@ public class LycanthropeTest {
     @BeforeEach
     public void setUp() {
         pack = mock(Pack.class);
-        alpha = new Lycanthrope("Alpha", 'M', 180, 35, 90, 80, "adulte", "alpha", 10, 0.8, pack, false);
-        beta = new Lycanthrope("Beta", 'F', 170, 25, 70, 60, "adulte", "beta", 5, 0.5, pack, false);
-        omega = new Lycanthrope("Omega", 'M', 160, 20, 50, 40, "jeune", "omega", -2, 0.2, pack, false);
+        // Utilisation des symboles grecs corrects pour que Rank.fromString fonctionne
+        alpha = new Lycanthrope("Alpha", 'M', 180, 35, 90, 80, "adulte", "α", 10, 0.8, pack, false);
+        beta = new Lycanthrope("Beta", 'F', 170, 25, 70, 60, "adulte", "β", 5, 0.5, pack, false);
+        omega = new Lycanthrope("Omega", 'M', 160, 20, 50, 40, "jeune", "ω", -2, 0.2, pack, false);
     }
 
     @Test
     public void testFight() {
         beta.getHealth().set(100);
         alpha.fight(beta);
-        // (90 * 2) - 60 = 120 damage. Health should go to 0, but not below for a
-        // lycanthrope.
         assertEquals(1, beta.getHealth().get());
     }
 
@@ -44,7 +43,6 @@ public class LycanthropeTest {
 
     @Test
     public void testDominateSuccess() {
-        // Ensure alpha has a higher level than beta
         alpha.setStrength(100);
         beta.setStrength(50);
         Rank initialAlphaRank = alpha.getRank();

@@ -5,6 +5,7 @@ import fr.amu.iut.model.Statistics;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class LycanthropeCombatStrategyTest {
@@ -33,23 +34,24 @@ public class LycanthropeCombatStrategyTest {
 
     @Test
     public void testExecuteAttack_HighDamage() {
-        // (40 * 2) - 30 = 50
+        // (40 * 2) - 30 = 50 dégâts. PV restants = 50.
         strategy.executeAttack(attacker, defender);
-        verify(defender.getHealth()).add(-50);
+        assertEquals(50, defender.getHealth().get());
     }
 
     @Test
     public void testExecuteAttack_MinimumDamage() {
-        attackerStrength.add(-20); // Strength becomes 20
-        when(attacker.getStrength()).thenReturn(attackerStrength.get());
-        // (20 * 2) - 30 = 10
+        // Force 20 -> (20*2) - 30 = 10 dégâts. PV restants = 90.
+        when(attacker.getStrength()).thenReturn(20);
         strategy.executeAttack(attacker, defender);
-        verify(defender.getHealth()).add(-10);
+        assertEquals(90, defender.getHealth().get());
 
-        attackerStrength.add(-10); // Strength becomes 10
-        when(attacker.getStrength()).thenReturn(attackerStrength.get());
-        // (10 * 2) - 30 = -10, so damage should be 5
+        // Reset health
+        defenderHealth.set(100);
+
+        // Force 10 -> (10*2) - 30 = -10 -> min 5 dégâts. PV restants = 95.
+        when(attacker.getStrength()).thenReturn(10);
         strategy.executeAttack(attacker, defender);
-        verify(defender.getHealth()).add(-5);
+        assertEquals(95, defender.getHealth().get());
     }
 }

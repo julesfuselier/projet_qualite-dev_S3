@@ -5,6 +5,7 @@ import fr.amu.iut.model.Statistics;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class StandardCombatStrategyTest {
@@ -34,21 +35,25 @@ public class StandardCombatStrategyTest {
     @Test
     public void testExecuteAttack_DamageDealt() {
         strategy.executeAttack(attacker, defender);
-        verify(defender.getHealth()).add(-20);
+        // Dégâts = 50 - 30 = 20. PV restants = 80.
+        assertEquals(80, defender.getHealth().get());
     }
 
     @Test
     public void testExecuteAttack_MinimumDamage() {
-        attackerStrength.add(-40); // Strength becomes 10
-        when(attacker.getStrength()).thenReturn(attackerStrength.get());
+        // Simulation de force faible
+        when(attacker.getStrength()).thenReturn(10);
+
         strategy.executeAttack(attacker, defender);
-        verify(defender.getHealth()).add(-1);
+        // Dégâts = 10 - 30 = -20 -> min 1. PV restants = 99.
+        assertEquals(99, defender.getHealth().get());
     }
 
     @Test
     public void testExecuteAttack_DefenderHasPotion() {
         when(defender.isActivePotion()).thenReturn(true);
         strategy.executeAttack(attacker, defender);
-        verify(defender.getHealth(), never()).add(anyInt());
+        // Invincible -> Pas de dégâts.
+        assertEquals(100, defender.getHealth().get());
     }
 }

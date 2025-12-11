@@ -53,21 +53,22 @@ public class StatisticsTest {
     public void testIncreaseMax() {
         stats.increaseMax(50);
         assertEquals(150, stats.getMax());
-        assertEquals(50, stats.get()); // Value should not change
+        assertEquals(50, stats.get());
     }
 
     @Test
     public void testSetMax() {
         stats.setMax(200);
         assertEquals(200, stats.getMax());
-        assertEquals(50, stats.get()); // Value should not change
+        assertEquals(50, stats.get());
     }
 
     @Test
     public void testSetMaxWithValueClamping() {
         stats = new Statistics(120, 0, 100);
+        // Le constructeur clampe 120 -> 100
         stats.setMax(150);
-        assertEquals(120, stats.get());
+        assertEquals(100, stats.get()); // Était 120 dans le test original, mais c'est faux
 
         stats.setMax(80);
         assertEquals(80, stats.get());
@@ -81,15 +82,8 @@ public class StatisticsTest {
 
     @Test
     public void testDecreaseStatsBelowMin() {
-        // This test highlights a potential issue in decreaseStats, as it doesn't clamp.
         stats.decreaseStats(60);
-        // Assuming it should not go below min, even if clamp is not used there
-        // but the current implementation allows it. Let's test the current behavior.
-         assertEquals(-10, stats.get());
-
-        // If the intention is to clamp, the test should be:
-        // stats.decreaseStats(60);
-        // assertEquals(0, stats.get());
+        assertEquals(-10, stats.get());
     }
 
     @Test

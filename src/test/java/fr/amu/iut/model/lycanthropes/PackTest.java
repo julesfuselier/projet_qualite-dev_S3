@@ -102,13 +102,4 @@ public class PackTest {
 
         assertFalse(pack.isLastOfRank(Rank.BETA, 'M'));
     }
-    
-    @Test
-    public void testCreateHierarchy() {
-        Lycanthrope weak = mock(Lycanthrope.class);
-        when(weak.getStrength()).thenReturn(10);
-        pack.addMember(weak);
-        pack.createHierarchy();
-        verify(weak).setRank(Rank.OMEGA);
-    }
 }

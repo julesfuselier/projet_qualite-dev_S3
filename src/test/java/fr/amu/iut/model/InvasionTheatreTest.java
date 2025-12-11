@@ -2,7 +2,7 @@ package fr.amu.iut.model;
 
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
-import fr.amu.iut.model.characters.Fighter;
+import fr.amu.iut.model.characters.jobs.Legionary;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FreshnessStatus;
 import fr.amu.iut.model.spaces.Battlefield;
@@ -62,19 +62,20 @@ public class InvasionTheatreTest {
 
     @Test
     public void testHandleAutonomousMovements_FighterToBattlefield() {
-        Fighter healthyFighter = mock(Fighter.class);
+        // Utiliser Legionary
+        Legionary healthyFighter = mock(Legionary.class);
         when(healthyFighter.getHealth()).thenReturn(new Statistics(100, 0, 100));
         when(healthyFighter.getHunger()).thenReturn(new Statistics(100, 0, 100));
 
         HashSet<Character> characters = new HashSet<>();
-        characters.add((Character) healthyFighter); // Cast Fighter to Character
+        characters.add(healthyFighter);
         when(village.getCharacters()).thenReturn(characters);
-        when(battlefield.authorized((Character) healthyFighter)).thenReturn(true); // Cast Fighter to Character
+        when(battlefield.authorized(healthyFighter)).thenReturn(true);
 
         theatre.handleAutonomousMovements();
 
-        verify(village).removeCharacter((Character) healthyFighter); // Cast Fighter to Character
-        verify(battlefield).addCharacter((Character) healthyFighter); // Cast Fighter to Character
+        verify(village).removeCharacter(healthyFighter);
+        verify(battlefield).addCharacter(healthyFighter);
     }
 
     @Test
@@ -82,21 +83,16 @@ public class InvasionTheatreTest {
         Character injuredCharacter = mock(Character.class);
         when(injuredCharacter.getHealth()).thenReturn(new Statistics(10, 0, 100));
         when(injuredCharacter.getHunger()).thenReturn(new Statistics(100, 0, 100));
-        when(injuredCharacter.getFaction()).thenReturn(Faction.GAULOIS);
+        when(injuredCharacter.getFaction()).thenReturn(Faction.GALISH);
 
         HashSet<Character> characters = new HashSet<>();
         characters.add(injuredCharacter);
         when(battlefield.getCharacters()).thenReturn(characters);
         when(village.authorized(injuredCharacter)).thenReturn(true);
 
-        // Need a safe haven for the faction
-        RomanFortifiedCamp romanCamp = mock(RomanFortifiedCamp.class);
-        theatre.addLocation(romanCamp);
-        GallicVillage gallicVillage = (GallicVillage) village;
-
         theatre.handleAutonomousMovements();
 
         verify(battlefield).removeCharacter(injuredCharacter);
-        verify(gallicVillage).addCharacter(injuredCharacter);
+        verify(village).addCharacter(injuredCharacter);
     }
 }

@@ -40,11 +40,14 @@ class DruidTest {
     }
 
     @Test
-    void testCraftPotionFailure_MissingIngredient() throws InsufficientIngredientsException {
+    void testCraftPotionFailure_MissingIngredient() {
         Druid panoramix = new Druid("Panoramix", 'M', 170, 80, 10, 10, Faction.GALISH);
 
         panoramix.getInventory().addItem(new Food("Gui", 0, true, FreshnessStatus.FRESH, FoodType.MISTLETOE));
-        panoramix.craftMagicPotion(PotionType.BASIC);
+
+        assertThrows(InsufficientIngredientsException.class, () -> {
+            panoramix.craftMagicPotion(PotionType.BASIC);
+        });
 
         boolean hasPotion = panoramix.getInventory().getItems().stream()
                 .anyMatch(item -> item instanceof MagicPotion);
@@ -63,7 +66,6 @@ class DruidTest {
         assertTrue(romain.getHealth().get() < initialHealth,
                 "Le romain aurait dû perdre des PV.");
 
-        // Calcul dynamique des dégâts attendus
         int expectedDamage = Math.max(1, druid.getStrength() - romain.getEndurance());
         assertEquals(initialHealth - expectedDamage, romain.getHealth().get(),
                 "Le calcul des dégâts est incorrect.");

@@ -2,7 +2,7 @@ package fr.amu.iut.model.spaces;
 
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
-import fr.amu.iut.model.characters.Fighter;
+import fr.amu.iut.model.characters.jobs.Legionary;
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,30 +23,31 @@ public class RomanFortifiedCampTest {
 
     @Test
     public void testAuthorizedRomanFighter() {
-        Fighter romanFighter = mock(Fighter.class);
-        when(romanFighter.getFaction()).thenReturn(Faction.ROMAIN);
-        assertTrue(camp.authorized((Character) romanFighter)); // Cast Fighter to Character
+        // Utiliser Legionary car c'est un Character ET un Fighter
+        Legionary romanFighter = mock(Legionary.class);
+        when(romanFighter.getFaction()).thenReturn(Faction.ROMAN);
+        assertTrue(camp.authorized(romanFighter));
     }
 
     @Test
     public void testUnauthorizedRomanCivilian() {
         Character romanCivilian = mock(Character.class);
-        when(romanCivilian.getFaction()).thenReturn(Faction.ROMAIN);
+        when(romanCivilian.getFaction()).thenReturn(Faction.ROMAN);
+        // Character n'est pas Fighter -> non autorisé
         assertFalse(camp.authorized(romanCivilian));
     }
 
     @Test
     public void testUnauthorizedGauloisFighter() {
-        Fighter gauloisFighter = mock(Fighter.class);
-        when(gauloisFighter.getFaction()).thenReturn(Faction.GAULOIS);
-        assertFalse(camp.authorized((Character) gauloisFighter)); // Cast Fighter to Character
+        Legionary gauloisFighter = mock(Legionary.class);
+        when(gauloisFighter.getFaction()).thenReturn(Faction.GALISH);
+        assertFalse(camp.authorized(gauloisFighter));
     }
 
     @Test
     public void testAuthorizedLycanthrope() {
         Lycanthrope lycanthrope = mock(Lycanthrope.class);
-        // Faction does not matter for Lycanthrope
-        when(lycanthrope.getFaction()).thenReturn(Faction.GAULOIS);
+        when(lycanthrope.getFaction()).thenReturn(Faction.GALISH);
         assertTrue(camp.authorized(lycanthrope));
     }
 }

@@ -23,21 +23,21 @@ public class GallicVillageTest {
     @Test
     public void testAuthorizedGaulois() {
         Character gaulois = mock(Character.class);
-        when(gaulois.getFaction()).thenReturn(Faction.GAULOIS);
+        when(gaulois.getFaction()).thenReturn(Faction.GALISH);
         assertTrue(village.authorized(gaulois));
     }
 
     @Test
     public void testUnauthorizedRoman() {
         Character roman = mock(Character.class);
-        when(roman.getFaction()).thenReturn(Faction.ROMAIN);
+        when(roman.getFaction()).thenReturn(Faction.ROMAN);
         assertFalse(village.authorized(roman));
     }
 
     @Test
     public void testAuthorizedLycanthrope() {
         Lycanthrope lycanthrope = mock(Lycanthrope.class);
-        when(lycanthrope.getFaction()).thenReturn(Faction.ROMAIN); // Faction should not matter
+        when(lycanthrope.getFaction()).thenReturn(Faction.ROMAN); // Peu importe
         assertTrue(village.authorized(lycanthrope));
     }
 }

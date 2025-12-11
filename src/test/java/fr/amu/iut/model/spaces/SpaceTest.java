@@ -2,13 +2,11 @@ package fr.amu.iut.model.spaces;
 
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
-import fr.amu.iut.model.characters.Fighter;
+import fr.amu.iut.model.characters.jobs.Legionary;
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import fr.amu.iut.model.items.foods.Food;
-import fr.amu.iut.model.lycanthropes.Pack;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,7 +19,7 @@ public class SpaceTest {
 
     @BeforeEach
     public void setUp() {
-        // Using Battlefield as a permitted subclass of Space
+        // Battlefield accepte tout le monde
         space = new Battlefield("Test Battlefield", 100.0);
         character = mock(Character.class);
         food = mock(Food.class);
@@ -47,6 +45,7 @@ public class SpaceTest {
 
     @Test
     public void testAddCharacter() {
+        // Battlefield autorise tout
         assertTrue(space.addCharacter(character));
         assertTrue(space.getCharacters().contains(character));
         verify(character).setCurrentSpace(space);
@@ -54,9 +53,13 @@ public class SpaceTest {
 
     @Test
     public void testAddCharacterNotAuthorized() {
-        Space restrictedSpace = new Battlefield("Restricted Space", 100); // Use Battlefield instead of anonymous class
-        assertFalse(restrictedSpace.addCharacter(character));
-        assertFalse(restrictedSpace.getCharacters().contains(character));
+        // Utilisation d'un village Gaulois qui n'accepte pas les Romains
+        Space restrictedSpace = new GallicVillage("Restricted Space", 100, null);
+        Character roman = mock(Character.class);
+        when(roman.getFaction()).thenReturn(Faction.ROMAN);
+
+        assertFalse(restrictedSpace.addCharacter(roman));
+        assertFalse(restrictedSpace.getCharacters().contains(roman));
     }
 
     @Test
@@ -104,35 +107,36 @@ public class SpaceTest {
 
     @Test
     public void testResolveCombat() {
-        Fighter gaulois = mock(Fighter.class);
-        when(gaulois.getFaction()).thenReturn(Faction.GAULOIS);
-        Fighter romain = mock(Fighter.class);
-        when(romain.getFaction()).thenReturn(Faction.ROMAIN);
+        // Utilisation de Legionary (qui est Fighter ET Character)
+        Legionary gaulois = mock(Legionary.class);
+        when(gaulois.getFaction()).thenReturn(Faction.GALISH);
+        Legionary romain = mock(Legionary.class);
+        when(romain.getFaction()).thenReturn(Faction.ROMAN);
 
         Space battlefield = new Battlefield("Arena", 2000);
-        battlefield.addCharacter((Character) gaulois); // Cast Fighter to Character
-        battlefield.addCharacter((Character) romain); // Cast Fighter to Character
+        battlefield.addCharacter(gaulois);
+        battlefield.addCharacter(romain);
 
         battlefield.resolveCombat();
 
-        verify(gaulois).fight((Character) romain); // Cast Fighter to Character
-        verify(romain).fight((Character) gaulois); // Cast Fighter to Character
+        verify(gaulois).fight(romain);
+        verify(romain).fight(gaulois);
     }
 
     @Test
     public void testResolveCombatNoFighters() {
         Character civilian1 = mock(Character.class);
         Character civilian2 = mock(Character.class);
-        Space battlefield = new Battlefield("Market", 100.0); // Correct constructor arguments
+        Space battlefield = new Battlefield("Market", 100.0);
         battlefield.addCharacter(civilian1);
         battlefield.addCharacter(civilian2);
 
-        battlefield.resolveCombat(); // Should not throw an error
+        battlefield.resolveCombat(); // Ne doit pas planter
     }
 
     @Test
     public void testNewPack() {
-        Space forest = new Battlefield("Forest", 1000); // Correct constructor arguments
+        Space forest = new Battlefield("Forest", 1000);
         Lycanthrope lycan1 = mock(Lycanthrope.class);
         when(lycan1.isLone()).thenReturn(true);
         Lycanthrope lycan2 = mock(Lycanthrope.class);
@@ -141,16 +145,6 @@ public class SpaceTest {
         forest.addCharacter(lycan1);
         forest.addCharacter(lycan2);
 
-        // This test is limited as Pack.createPackWithSolitary is static and not easily
-        // mocked.
-        // We can only check if the logic tries to create a pack.
-        // A full test would require refactoring Pack.createPackWithSolitary to be
-        // mockable.
         forest.newPack();
-        // Assuming createPackWithSolitary returns a pack, the space's pack should be
-        // set.
-        // Since we can't mock the static method, we can't assert a change in the
-        // space's pack.
-        // This test mainly ensures NewPack runs without error.
     }
 }

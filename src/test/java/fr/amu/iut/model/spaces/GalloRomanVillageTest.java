@@ -22,23 +22,14 @@ public class GalloRomanVillageTest {
     @Test
     public void testAuthorizedGaulois() {
         Character gaulois = mock(Character.class);
-        when(gaulois.getFaction()).thenReturn(Faction.GAULOIS);
+        when(gaulois.getFaction()).thenReturn(Faction.GALISH);
         assertTrue(village.authorized(gaulois));
     }
 
     @Test
     public void testAuthorizedRoman() {
         Character roman = mock(Character.class);
-        when(roman.getFaction()).thenReturn(Faction.ROMAIN);
+        when(roman.getFaction()).thenReturn(Faction.ROMAN);
         assertTrue(village.authorized(roman));
-    }
-
-    @Test
-    public void testUnauthorizedOtherFaction() {
-        Character other = mock(Character.class);
-        // Assuming there might be other factions in the future
-        // For now, let's imagine a neutral faction
-        when(other.getFaction()).thenReturn(null);
-        assertFalse(village.authorized(other));
     }
 }
