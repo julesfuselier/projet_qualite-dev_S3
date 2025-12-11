@@ -1,5 +1,6 @@
 package fr.amu.iut.model.characters;
 
+import fr.amu.iut.GameConfig;
 import fr.amu.iut.model.Inventory;
 import fr.amu.iut.model.Statistics;
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
@@ -259,7 +260,7 @@ public abstract class Character implements Cloneable {
      */
     public int getStrength() {
         if (isActivePotion()) {
-            return strength + 1000; // Force surhumaine
+            return strength + GameConfig.BONUS_STRENGTH_POTION; // Force surhumaine
         }
         return strength;
     }
