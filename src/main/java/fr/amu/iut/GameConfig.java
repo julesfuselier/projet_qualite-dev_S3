@@ -7,14 +7,8 @@ package fr.amu.iut;
  *
  * <p>Ce pattern est utilisé pour centraliser la gestion des paramètres
  * de simulation et éviter la duplication de configuration.</p>
- *
- * @see <a href="https://refactoring.guru/design-patterns/singleton">Singleton Pattern</a>
  */
 public final class GameConfig {
-
-    // ============================================
-    // SINGLETON PATTERN - Eager Initialization
-    // ============================================
 
     /**
      * Instance unique du Singleton, créée au chargement de la classe.
@@ -74,10 +68,20 @@ public final class GameConfig {
 
         private final double multiplier;
 
+        /**
+         * Constructeur de l'énumération.
+         *
+         * @param multiplier Multiplicateur affectant les probabilités
+         */
         DifficultyMode(double multiplier) {
             this.multiplier = multiplier;
         }
 
+        /**
+         * Retourne le multiplicateur associé au mode de difficulté.
+         *
+         * @return Le multiplicateur
+         */
         public double getMultiplier() {
             return multiplier;
         }
@@ -87,54 +91,121 @@ public final class GameConfig {
     // GETTERS
     // ============================================
 
+    /**
+     * Retourne la probabilité d'apparition d'un événement de faim,
+     * ajustée selon le mode de difficulté.
+     *
+     * @return Probabilité ajustée d'un événement de faim
+     */
     public int getProbabilityHungerEvent() {
         return (int)(probabilityHungerEvent * difficultyMode.getMultiplier());
     }
 
+    /**
+     * Retourne la probabilité d'apparition de nourriture,
+     * ajustée selon le mode de difficulté.
+     *
+     * @return Probabilité ajustée d'apparition de nourriture
+     */
     public int getProbabilityFoodSpawn() {
         return probabilityFoodSpawn;
     }
 
+    /**
+     * Retourne la probabilité d'apparition d'une potion de druide.
+     *
+     * @return Probabilité d'apparition d'une potion de druide
+     */
     public int getProbabilityDruidPotion() {
         return probabilityDruidPotion;
     }
 
+    /**
+     * Retourne l'augmentation maximale de la faim par tour.
+     *
+     * @return Augmentation maximale de la faim
+     */
     public int getMaxHungerIncrease() {
         return maxHungerIncrease;
     }
 
+    /**
+     * Retourne la diminution maximale de la faim par potion.
+     *
+     * @return Diminution maximale de la faim
+     */
     public int getMaxPotionDecrease() {
         return maxPotionDecrease;
     }
 
+    /**
+     * Retourne la durée d'un tour en millisecondes.
+     *
+     * @return Durée d'un tour en ms
+     */
     public int getTurnDurationMs() {
         return turnDurationMs;
     }
 
+    /**
+     * Retourne la taille de base des personnages.
+     *
+     * @return Taille de base
+     */
     public int getBaseSize() {
         return baseSize;
     }
 
+    /**
+     * Retourne la variation de taille des personnages.
+     *
+     * @return Variation de taille
+     */
     public int getSizeVariation() {
         return sizeVariation;
     }
 
+    /**
+     * Retourne le bonus de force accordé par une potion.
+     *
+     * @return Bonus de force par potion
+     */
     public int getBonusStrengthPotion() {
         return bonusStrengthPotion;
     }
 
+    /**
+     * Retourne la probabilité de reproduction des lycans.
+     *
+     * @return Probabilité de reproduction des lycans
+     */
     public int getProbabilityLycanReproduction() {
         return probabilityLycanReproduction;
     }
 
+    /**
+     * Retourne la probabilité de transformation en lycan.
+     *
+     * @return Probabilité de transformation en lycan
+     */
     public int getProbabilityLycanTransformation() {
         return probabilityLycanTransformation;
     }
 
+    /**
+     * Retourne la probabilité de hurlement des lycans.
+     *
+     * @return Probabilité de hurlement
+     */
     public int getProbabilityHowl() {
         return probabilityHowl;
     }
 
+    /**
+     * Retourne le mode de difficulté actuel du jeu.
+     *
+     * @return Mode de difficulté
+     */
     public DifficultyMode getDifficultyMode() {
         return difficultyMode;
     }
