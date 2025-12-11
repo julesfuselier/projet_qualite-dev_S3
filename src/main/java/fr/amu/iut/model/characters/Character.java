@@ -298,7 +298,7 @@ public abstract class Character implements Cloneable {
     }
 
     /**
-     * Vérifie si le personnage est mort (points de vie <= 0).
+     * Vérifie si le personnage est mort (points de vie &lt;= 0).
      * @return true si le personnage est mort, false sinon.
      */
     public boolean isDead() {
