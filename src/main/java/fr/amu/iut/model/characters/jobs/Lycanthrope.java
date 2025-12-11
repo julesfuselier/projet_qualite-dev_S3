@@ -2,8 +2,12 @@ package fr.amu.iut.model.characters.jobs;
 
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Fighter;
+import fr.amu.iut.model.lycanthropes.Howl;
+import fr.amu.iut.model.lycanthropes.HowlType;
 import fr.amu.iut.model.lycanthropes.Pack;
 import fr.amu.iut.model.lycanthropes.Rank;
+
+import java.util.Random;
 
 public class Lycanthrope extends Character implements Fighter {
 
@@ -35,7 +39,6 @@ public class Lycanthrope extends Character implements Fighter {
         int damage = (this.getStrength() * 2) - opponent.getEndurance();
         if (damage > 0) {
             opponent.getHealth().add(-damage);
-            // Empêche les lycanthropes de se tuer entre eux
             if (opponent instanceof Lycanthrope && opponent.getHealth().get() < 1) {
                 opponent.getHealth().add(1);
             }
@@ -45,7 +48,7 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
-    
+
     /**
      * Tente de prendre la place d'un autre Lycanthrope dans la hiérarchie par la force.
      * @param target Le Lycanthrope à dominer.
@@ -60,7 +63,6 @@ public class Lycanthrope extends Character implements Fighter {
             return;
         }
 
-        // Vérification si la domination est possible
         if (target.getPack() != null && target.getPack().getAlphaFemale() == target) {
             System.out.println(getName() + " ne peut pas dominer la femelle Alpha !");
             return;
@@ -115,10 +117,9 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
-    // Augmente le niveau d'agressivité du lycanthrope
     public void becomeAggressive(Lycanthrope aggressor) {
         System.out.println(getName() + " devient agressif envers " + aggressor.getName() + " !");
-        this.howl("AGRESSIVITÉ");
+        this.howl(HowlType.AGGRESSION, true);
         this.fight(aggressor);
     }
 
@@ -136,7 +137,6 @@ public class Lycanthrope extends Character implements Fighter {
         return (ageScore * 2) + (getStrength() * 0.5) + (dominationFactor * 1.5) + (20 - rankScore);
     }
 
-    // Affiche les informations du lycanthrope
     public void printCharacteristics() {
         System.out.println("Nom : " + getName());
         System.out.println("Sexe : " + getSex());
@@ -149,21 +149,80 @@ public class Lycanthrope extends Character implements Fighter {
         System.out.println("Meute : " + (lone ? "Solitaire" : (pack != null ? "Membre d'une meute" : "Aucune")));
     }
 
-    // Le lycanthrope hurle
-    public void howl(String type) {
-        System.out.println(getName() + " hurle (" + type + ") !");
+    /**
+     * Émet un hurlement.
+     * @param type Le type de hurlement.
+     * @param expectResponse Si true, le hurlement appelle une réponse (broadcast). Sinon, c'est juste une réponse locale.
+     */
+    public void howl(HowlType type, boolean expectResponse) {
+        Howl howl = new Howl(this, type, "Aouuuuuuuh !");
+
+        if (expectResponse && getCurrentSpace() != null && getCurrentSpace().getColony() != null) {
+            getCurrentSpace().getColony().broadcastHowl(howl);
+        } else {
+            System.out.println(getName() + " répond par un hurlement (" + type.getLabel() + ").");
+        }
     }
 
-    // Le lycanthrope entend un hurlement
-    public void hearHowl(String type) {
-        if (getHealth().get() > 20) {
-            System.out.println(getName() + " entend un hurlement : " + type);
-            if ("DOMINATION".equals(type)) {
-                howl("SOUMISSION");
-            }
-        } else {
-            System.out.println(getName() + " est trop malade pour entendre.");
+    /**
+     * Reçoit et réagit à un hurlement (Implémentation TD4).
+     * @param howl Le hurlement entendu.
+     */
+    public void hearHowl(Howl howl) {
+        if (getHealth().get() <= 20) {
+            System.out.println(getName() + " est trop faible pour réagir au hurlement.");
+            return;
         }
+
+        System.out.println(getName() + " entend le hurlement de " + howl.getEmitter().getName());
+
+        switch (howl.getType()) {
+            case BELONGING:
+                handleBelongingHowl(howl);
+                break;
+            case DOMINATION:
+                // Réponse : Soumission ou Agressivité
+                if (shouldSubmit(howl.getEmitter())) {
+                    System.out.println(getName() + " choisit de se soumettre.");
+                    howl(HowlType.SUBMISSION, false);
+                } else {
+                    System.out.println(getName() + " choisit de répondre par l'agressivité !");
+                    howl(HowlType.AGGRESSION, false);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Gère la réaction à un hurlement d'appartenance.
+     * Si même meute -> répond.
+     * Si autre meute -> probabilité de répondre pour défier.
+     */
+    private void handleBelongingHowl(Howl howl) {
+        Pack myPack = this.getPack();
+        Pack emitterPack = howl.getEmitter().getPack();
+
+        if (myPack != null && myPack == emitterPack) {
+            howl(HowlType.BELONGING, false);
+        }
+        // Si je suis d'une autre meute
+        else if (myPack != null && emitterPack != null) {
+            if (new Random().nextBoolean()) {
+                System.out.println(getName() + " répond pour affirmer son propre clan !");
+                howl(HowlType.BELONGING, false);
+            }
+        }
+    }
+
+    /**
+     * Détermine si le lycanthrope doit se soumettre face à un opposant.
+     * @param opponent L'émetteur du hurlement de domination.
+     * @return true si soumission, false sinon.
+     */
+    private boolean shouldSubmit(Lycanthrope opponent) {
+        return opponent.getStrength() > this.getStrength() * 1.5;
     }
 
     // Quitter la meute
@@ -182,15 +241,13 @@ public class Lycanthrope extends Character implements Fighter {
 
         // La probabilité de partir est de niveau * 2%
         double chanceOfLeaving = getLevel() * 2;
-        double roll = new java.util.Random().nextDouble() * 100;
+        double roll = new Random().nextDouble() * 100;
 
         if (roll < chanceOfLeaving) {
             System.out.println(getName() + " profite de sa forme humaine pour quitter la meute et l'enclos !");
 
-            // Quitter la meute
             leavePack();
 
-            // Quitter l'enclos
             if (getCurrentSpace() != null) {
                 getCurrentSpace().removeCharacter(this);
             }
@@ -200,14 +257,12 @@ public class Lycanthrope extends Character implements Fighter {
         }
     }
 
-    // Vérifie le facteur de domination
     public void updateRankFromDominationFactor() {
         if (this.dominationFactor < DOMINATION_THRESHOLD) {
             demoteRank();
         }
     }
 
-    // Dégradation d'un lycanthrope
     private void demoteRank() {
         if (this.rank == Rank.ALPHA || this.rank == Rank.OMEGA) {
             return;
