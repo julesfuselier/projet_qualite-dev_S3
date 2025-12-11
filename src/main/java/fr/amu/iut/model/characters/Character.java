@@ -81,27 +81,6 @@ public abstract class Character implements Cloneable {
     }
 
     /**
-     * Permet au personnage de se faire soigner.
-     * @param healAmount Le montant de soins à recevoir.
-     */
-    public void beHealed(int healAmount) {
-        this.health.add(healAmount);
-    }
-
-    /**
-     * Permet au personnage de manger un aliment.
-     * Gère les effets de l'aliment sur la faim et la santé du personnage.
-     * @param food L'aliment à manger.
-     */
-    public fr.amu.iut.model.spaces.Space getCurrentSpace() {
-        return currentSpace;
-    }
-
-    public void setCurrentSpace(fr.amu.iut.model.spaces.Space currentSpace) {
-        this.currentSpace = currentSpace;
-    }
-
-    /**
      * Permet de soigner le personnage pour augmenter l'indicateur de santé.
      * Méthode principale pour manger.
      * Gère la faim, les restrictions de faction, et les pénalités de santé.
@@ -391,14 +370,15 @@ public abstract class Character implements Cloneable {
     public Inventory getInventory() {return inventory;}
 
 
+    public fr.amu.iut.model.spaces.Space getCurrentSpace() {
+        return currentSpace;
+    }
+    public void setCurrentSpace(fr.amu.iut.model.spaces.Space currentSpace) {
+        this.currentSpace = currentSpace;
+    }
+
     // Getters et Setters pour les attributs
     public String getName() {return name;}
-    public Inventory getInventory() {
-        return inventory;
-    }
-    public String getName() {
-        return name;
-    }
     public void setName(String name) {
         this.name = name;
     }

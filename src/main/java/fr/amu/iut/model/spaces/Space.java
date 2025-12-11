@@ -8,11 +8,7 @@ import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Fighter;
 import fr.amu.iut.model.lycanthropes.Pack;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Collections.shuffle;
 /**
@@ -39,7 +35,82 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
         this.name = name;
         this.surface = surface;
         this.leader = leader;
-        characters = new ArrayList<>();
+        characters = new Set<>() {
+            @Override
+            public int size() {
+                return 0;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public boolean contains(Object o) {
+                return false;
+            }
+
+            @Override
+            public Iterator<Character> iterator() {
+                return null;
+            }
+
+            @Override
+            public Object[] toArray() {
+                return new Object[0];
+            }
+
+            @Override
+            public <T> T[] toArray(T[] a) {
+                return null;
+            }
+
+            @Override
+            public boolean add(Character character) {
+                return false;
+            }
+
+            @Override
+            public boolean remove(Object o) {
+                return false;
+            }
+
+            @Override
+            public boolean containsAll(Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public boolean addAll(Collection<? extends Character> c) {
+                return false;
+            }
+
+            @Override
+            public boolean retainAll(Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public boolean removeAll(Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public void clear() {
+
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                return false;
+            }
+
+            @Override
+            public int hashCode() {
+                return 0;
+            }
+        };
         foods = new ArrayList<>();
         this.pack = pack;
     }
