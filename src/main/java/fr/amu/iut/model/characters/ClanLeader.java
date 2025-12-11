@@ -63,7 +63,7 @@ public class ClanLeader extends Character implements Leader {
      * @param role Le rôle du nouveau personnage.
      * @param name Le nom du nouveau personnage.
      */
-    public void createNewCharacterInVillage(Faction faction, String role, String name) {
+    public void createNewCharacterInVillage(Faction faction, JobType role, String name) {
         Character newCharacter = characterFactory.createCharacter(faction, role, name);
         if (newCharacter != null) {
             try {
