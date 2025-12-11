@@ -1,7 +1,5 @@
 package fr.amu.iut.model.characters.jobs;
 
-import fr.amu.iut.model.characters.Character;
-import fr.amu.iut.model.Statistics;
 import fr.amu.iut.model.lycanthropes.Pack;
 import fr.amu.iut.model.lycanthropes.Rank;
 import org.junit.jupiter.api.BeforeEach;

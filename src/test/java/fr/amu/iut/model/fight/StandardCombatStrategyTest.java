@@ -4,7 +4,6 @@ import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.Statistics;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.mockito.Mockito.*;
 

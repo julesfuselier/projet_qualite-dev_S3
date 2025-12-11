@@ -11,17 +11,19 @@ import fr.amu.iut.util.GameEvents;
 /**
  * Représente un chef de clan dans le jeu.
  * Un chef de clan peut diriger des personnages, créer de nouveaux personnages,
- * soigner et nourrir les personnages dans son village, demander des potions magiques
+ * soigner et nourrir les personnages dans son village, demander des potions
+ * magiques
  * au druide, et donner des potions magiques aux personnages.
  */
 public class ClanLeader extends Character implements Leader {
 
     private Space managedLocation;
-    private CharacterFactory characterFactory = new CharacterFactory();
+    protected CharacterFactory characterFactory = new CharacterFactory();
     private MagicPotion magicPotion;
 
     /**
      * Permet de recevoir une potion magique.
+     * 
      * @param potion La potion magique reçue.
      */
     public void receiveMagicPotion(MagicPotion potion) {
@@ -31,9 +33,9 @@ public class ClanLeader extends Character implements Leader {
     /**
      * Constructeur de la classe ClanLeader.
      *
-     * @param name Le nom du chef de clan
-     * @param sex Le sexe du chef de clan
-     * @param age L'âge du chef de clan
+     * @param name     Le nom du chef de clan
+     * @param sex      Le sexe du chef de clan
+     * @param age      L'âge du chef de clan
      * @param location L'emplacement géré par le chef de clan
      */
     public ClanLeader(String name, char sex, int age, Space location) {
@@ -43,6 +45,7 @@ public class ClanLeader extends Character implements Leader {
 
     /**
      * Dirige un personnage.
+     * 
      * @param character Le personnage à diriger.
      */
     @Override
@@ -59,9 +62,10 @@ public class ClanLeader extends Character implements Leader {
 
     /**
      * Crée un nouveau personnage dans le village.
+     * 
      * @param faction La faction du nouveau personnage.
-     * @param role Le rôle du nouveau personnage.
-     * @param name Le nom du nouveau personnage.
+     * @param role    Le rôle du nouveau personnage.
+     * @param name    Le nom du nouveau personnage.
      */
     public void createNewCharacterInVillage(Faction faction, JobType role, String name) {
         Character newCharacter = characterFactory.createCharacter(faction, role, name);
@@ -75,10 +79,10 @@ public class ClanLeader extends Character implements Leader {
         }
     }
 
-
     /**
      * Soigne un personnage dans le village.
-     * @param character Le personnage à soigner.
+     * 
+     * @param character        Le personnage à soigner.
      * @param healAmountToHeal La quantité de soins à appliquer.
      */
     public void healCharacterInVillage(Character character, int healAmountToHeal) {
@@ -93,33 +97,35 @@ public class ClanLeader extends Character implements Leader {
 
     /**
      * Nourrit un personnage dans le village.
+     * 
      * @param character Le personnage à nourrir.
-     * @param food La nourriture à donner.
+     * @param food      La nourriture à donner.
      */
     public void feedCharacterInVillage(Character character, Food food) {
         if (managedLocation.getCharacters().contains(character) && managedLocation.getFoods().contains(food)) {
             character.eat(food);
             managedLocation.removeFood(food);
             GameEvents.log(getName() + " nourrit " + character.getName() + " avec " + food.getName() + ".");
-        }
-        else if (!managedLocation.getCharacters().contains(character)) {
+        } else if (!managedLocation.getCharacters().contains(character)) {
             GameEvents.log(character.getName() + " n'est pas dans le village de " + getName() + ".");
-        }
-        else {
+        } else {
             GameEvents.log(food.getName() + " n'est pas disponible dans le village de " + getName() + ".");
         }
     }
 
     /**
      * Demande au druide de fabriquer une potion magique.
-     * @param druid Le druide à qui demander la potion.
+     * 
+     * @param druid      Le druide à qui demander la potion.
      * @param potionType Le type de potion magique à fabriquer.
-     * @throws InsufficientIngredientsException Si le druide n'a pas assez d'ingrédients.
+     * @throws InsufficientIngredientsException Si le druide n'a pas assez
+     *                                          d'ingrédients.
      */
     public void askDruidForMagicPotion(Druid druid, PotionType potionType) throws InsufficientIngredientsException {
         if (managedLocation.getCharacters().contains(druid)) {
             druid.craftMagicPotion(potionType);
-            GameEvents.log(getName() + " a demandé à " + druid.getName() + " de faire une potion de type " + potionType + ".");
+            GameEvents.log(
+                    getName() + " a demandé à " + druid.getName() + " de faire une potion de type " + potionType + ".");
         } else {
             GameEvents.log("Le druide " + druid.getName() + " n'est pas dans le village.");
         }
@@ -127,8 +133,9 @@ public class ClanLeader extends Character implements Leader {
 
     /**
      * Donne une potion magique à un personnage dans le village.
+     * 
      * @param character Le personnage à qui donner la potion.
-     * @param amount La quantité de potion à donner (non utilisée ici).
+     * @param amount    La quantité de potion à donner (non utilisée ici).
      */
     public void giveMagicPotionToCharacterInVillage(Character character, int amount) {
         if (managedLocation.getCharacters().contains(character)) {
@@ -146,7 +153,8 @@ public class ClanLeader extends Character implements Leader {
 
     /**
      * Transfère un personnage vers un autre emplacement.
-     * @param character Le personnage à transférer.
+     * 
+     * @param character   Le personnage à transférer.
      * @param destination L'emplacement de destination.
      */
     public void transferCharacter(Character character, Space destination) {
@@ -165,6 +173,7 @@ public class ClanLeader extends Character implements Leader {
 
     /**
      * Définit l'emplacement géré par le chef de clan.
+     * 
      * @param location Le nouvel emplacement géré.
      */
     public void setLocation(Space location) {

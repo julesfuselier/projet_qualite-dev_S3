@@ -53,7 +53,6 @@ public final class GameConfig {
     // Paramètres des personnages
     private int baseSize = 160;
     private int sizeVariation = 40;
-    private int bonusStrengthPotion = 100;
 
     // Mode de difficulté
     private DifficultyMode difficultyMode = DifficultyMode.NORMAL;
@@ -166,15 +165,6 @@ public final class GameConfig {
     }
 
     /**
-     * Retourne le bonus de force accordé par une potion.
-     *
-     * @return Bonus de force par potion
-     */
-    public int getBonusStrengthPotion() {
-        return bonusStrengthPotion;
-    }
-
-    /**
      * Retourne la probabilité de reproduction des lycans.
      *
      * @return Probabilité de reproduction des lycans
@@ -210,6 +200,15 @@ public final class GameConfig {
         return difficultyMode;
     }
 
+    /**
+     * Returns the bonus strength added by the magic potion.
+     *
+     * @return the bonus strength value
+     */
+    public int getBonusStrengthPotion() {
+        return BONUS_STRENGTH_POTION;
+    }
+
     // ============================================
     // SETTERS ( config dynamique )
     // ============================================
@@ -233,4 +232,9 @@ public final class GameConfig {
         this.difficultyMode = DifficultyMode.NORMAL;
         // TODO : Réinitialiser les autres paramètres si nécessaire
     }
+
+    /**
+     * Bonus strength added by the magic potion.
+     */
+    public static final int BONUS_STRENGTH_POTION = 10; // Example value
 }

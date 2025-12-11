@@ -10,5 +10,7 @@ public enum JobType {
     GENERAL,
     INKEEPER,
     MERCHANT,
-    PREFECT;
+    PREFECT,
+    WARRIOR,
+    UNKNOWN;
 }

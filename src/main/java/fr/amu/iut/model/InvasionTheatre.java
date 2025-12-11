@@ -24,31 +24,29 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * La classe InvasionTheatre représente un théâtre d'invasion où se déroulent des batailles
- * entre différentes factions. Elle gère les emplacements, les personnages, les combats,
+ * La classe InvasionTheatre représente un théâtre d'invasion où se déroulent
+ * des batailles
+ * entre différentes factions. Elle gère les emplacements, les personnages, les
+ * combats,
  * la nourriture et les chefs de clan.
  */
 public class InvasionTheatre {
 
     private String name;
-    private int maxLocations;
     private List<Space> existingLocations;
-    private List<ClanLeader> clanChiefs;
     private final Random random = new Random();
 
     GameConfig gameConfig = GameConfig.getInstance();
 
-
     /**
      * Constructeur de la classe InvasionTheatre.
-     * @param name Le nom du théâtre d'invasion.
+     * 
+     * @param name         Le nom du théâtre d'invasion.
      * @param maxLocations Le nombre maximum d'emplacements dans le théâtre.
      */
     public InvasionTheatre(String name, int maxLocations) {
         this.name = name;
-        this.maxLocations = maxLocations;
         this.existingLocations = new ArrayList<>();
-        this.clanChiefs = new ArrayList<>();
     }
 
     /**
@@ -105,7 +103,8 @@ public class InvasionTheatre {
      * Gère les batailles dans tous les emplacements.
      */
     public void handleBattles() {
-        if (existingLocations == null) return;
+        if (existingLocations == null)
+            return;
 
         for (Space loc : existingLocations) {
             if (loc.isBattlefield()) {
@@ -115,10 +114,12 @@ public class InvasionTheatre {
     }
 
     /**
-     * Met à jour les états aléatoires des personnages, tels que la faim et les potions magiques.
+     * Met à jour les états aléatoires des personnages, tels que la faim et les
+     * potions magiques.
      */
     public void updateRandomCharacterStates() {
-        if (existingLocations == null) return;
+        if (existingLocations == null)
+            return;
 
         for (Space loc : existingLocations) {
             for (Character c : loc.getCharacters()) {
@@ -138,10 +139,12 @@ public class InvasionTheatre {
     }
 
     /**
-     * Fait apparaître de la nourriture dans les emplacements non-bataille selon une probabilité définie.
+     * Fait apparaître de la nourriture dans les emplacements non-bataille selon une
+     * probabilité définie.
      */
     public void spawnFood() {
-        if (existingLocations == null) return;
+        if (existingLocations == null)
+            return;
         for (Space loc : existingLocations) {
             if (!loc.isBattlefield()) {
                 if (random.nextInt(100) < gameConfig.getProbabilityFoodSpawn()) {
@@ -158,7 +161,8 @@ public class InvasionTheatre {
      * La nourriture fraîche devient non fraîche.
      */
     public void updateFoodFreshness() {
-        if (existingLocations == null) return;
+        if (existingLocations == null)
+            return;
 
         for (Space loc : existingLocations) {
             for (Food food : loc.getFoods()) {
@@ -172,20 +176,24 @@ public class InvasionTheatre {
     // Donner la main au chef de clan
     public void handleClanChiefTurn(ClanLeader chief) {
         GameEvents.log("C'est le tour du chef : " + chief.getName());
-        // TODO : Ajouter une fonction TakeTurn pour réellement donner la main au chef de clan
+        // TODO : Ajouter une fonction TakeTurn pour réellement donner la main au chef
+        // de clan
     }
 
     /**
      * Ajoute un emplacement au théâtre d'invasion.
+     * 
      * @param space L'emplacement à ajouter.
      */
     public void addLocation(Space space) {
-        if (existingLocations == null) existingLocations = new ArrayList<>();
+        if (existingLocations == null)
+            existingLocations = new ArrayList<>();
         this.existingLocations.add(space);
     }
 
     /**
      * Getter pour les emplacements existants dans le théâtre d'invasion.
+     * 
      * @return La liste des emplacements existants.
      */
     public List<Space> getExistingLocations() {
@@ -193,11 +201,14 @@ public class InvasionTheatre {
     }
 
     /**
-     * Gère les mouvements autonomes des personnages en fonction de leur état et de leur faction.
-     * Les personnages blessés ou affamés cherchent un lieu sûr, tandis que les combattants en bonne santé cherchent des champs de bataille.
+     * Gère les mouvements autonomes des personnages en fonction de leur état et de
+     * leur faction.
+     * Les personnages blessés ou affamés cherchent un lieu sûr, tandis que les
+     * combattants en bonne santé cherchent des champs de bataille.
      */
     public void handleAutonomousMovements() {
-        if (existingLocations == null) return;
+        if (existingLocations == null)
+            return;
 
         GameEvents.log("Mouvements autonomes des troupes...");
 
@@ -215,7 +226,8 @@ public class InvasionTheatre {
                     destination = findSafeHaven(c.getFaction());
                 }
 
-                // Guerre si combattant (bonne santé) et pas sur un champ de bataille, chercher un champ de bataille
+                // Guerre si combattant (bonne santé) et pas sur un champ de bataille, chercher
+                // un champ de bataille
                 else if (c instanceof Fighter && !currentSpace.isBattlefield()) {
                     if (!isInjured && !isStarving) {
                         destination = findBattlefield();
@@ -231,33 +243,41 @@ public class InvasionTheatre {
 
     /**
      * Trouve un lieu sûr pour une faction donnée.
+     * 
      * @param faction La faction du personnage cherchant un lieu sûr.
-     * @return L'emplacement sûr correspondant à la faction, ou null s'il n'en existe pas.
+     * @return L'emplacement sûr correspondant à la faction, ou null s'il n'en
+     *         existe pas.
      */
     private Space findSafeHaven(Faction faction) {
         for (Space s : existingLocations) {
-            if (faction == Faction.GALISH && s instanceof GallicVillage) return s;
-            if (faction == Faction.ROMAN && s instanceof RomanFortifiedCamp) return s;
+            if (faction == Faction.GALISH && s instanceof GallicVillage)
+                return s;
+            if (faction == Faction.ROMAN && s instanceof RomanFortifiedCamp)
+                return s;
         }
         return null;
     }
 
     /**
      * Trouve un champ de bataille dans les emplacements existants.
+     * 
      * @return Le champ de bataille trouvé, ou null s'il n'en existe pas.
      */
     private Space findBattlefield() {
         for (Space s : existingLocations) {
-            if (s instanceof Battlefield) return s;
+            if (s instanceof Battlefield)
+                return s;
         }
         return null;
     }
 
     /**
-     * Déplace un personnage d'un emplacement à un autre s'il est autorisé à le faire.
-     * @param c Le personnage à déplacer.
+     * Déplace un personnage d'un emplacement à un autre s'il est autorisé à le
+     * faire.
+     * 
+     * @param c    Le personnage à déplacer.
      * @param from L'emplacement de départ.
-     * @param to L'emplacement de destination.
+     * @param to   L'emplacement de destination.
      */
     private void moveCharacter(Character c, Space from, Space to) {
         if (to.authorized(c)) {
@@ -276,18 +296,20 @@ public class InvasionTheatre {
      * Les druides ont une chance de fabriquer une potion magique à chaque appel.
      */
     public void handleDruidActivity() {
-        if (existingLocations == null) return;
+        if (existingLocations == null)
+            return;
 
-        for ( Space loc : existingLocations) {
-            if(!loc.isBattlefield()) {
+        for (Space loc : existingLocations) {
+            if (!loc.isBattlefield()) {
                 for (Character c : loc.getCharacters()) {
                     if (c instanceof Druid druid) {
-                        if(random.nextInt(3) == 0) {
+                        if (random.nextInt(3) == 0) {
                             try {
                                 druid.craftMagicPotion(PotionType.BASIC);
                                 GameEvents.log("[POTION] Le druide " + c.getName() + " a fabriqué une potion !");
                             } catch (InsufficientIngredientsException e) {
-                                GameEvents.log("[POTION] Le druide " + c.getName() + " n'a pas pu fabriquer de potion : " + e.getMessage());
+                                GameEvents.log("[POTION] Le druide " + c.getName()
+                                        + " n'a pas pu fabriquer de potion : " + e.getMessage());
                             }
                         }
                     }

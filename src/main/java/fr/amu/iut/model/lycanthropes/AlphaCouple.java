@@ -2,12 +2,12 @@ package fr.amu.iut.model.lycanthropes;
 
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import java.util.Random;
-import fr.amu.iut.model.lycanthropes.Rank;
 import fr.amu.iut.util.GameEvents;
 
 /**
  * Représente un couple Alpha composé d'un mâle et d'une femelle lycanthrope.
- * Le couple Alpha est responsable de diriger la meute et peut produire une portée.
+ * Le couple Alpha est responsable de diriger la meute et peut produire une
+ * portée.
  */
 public class AlphaCouple {
 
@@ -47,7 +47,8 @@ public class AlphaCouple {
     /**
      * Génère une nouvelle portée de lycanthropes.
      * Le nombre de jeunes varie entre 1 et 7.
-     * Le rang attribué aux jeunes dépend de la présence d'un membre BETA dans la meute :
+     * Le rang attribué aux jeunes dépend de la présence d'un membre BETA dans la
+     * meute :
      * - S'il n'y a aucun BETA, la portée est classée BETA.
      * - Sinon, elle est classée GAMMA.
      *
@@ -87,12 +88,12 @@ public class AlphaCouple {
                     dominationFactor,
                     impulsiveness,
                     pack,
-                    false
-            );
+                    false);
 
             pack.addMember(young);
         }
-        GameEvents.log(numberOfYoung + " nouveau(x) lycanthrope(s) de rang " + youngRank.getDisplay() + " sont nés du couple alpha.");
+        GameEvents.log(numberOfYoung + " nouveau(x) lycanthrope(s) de rang " + youngRank.getDisplay()
+                + " sont nés du couple alpha.");
     }
 
     /**

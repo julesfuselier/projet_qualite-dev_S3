@@ -24,13 +24,14 @@ public class CharacterBuilderTest {
                 .setStrength(30)
                 .setEndurance(60)
                 .setFaction(Faction.GAULOIS)
-                .build("druide");
+                .build(JobType.DRUID);
 
         assertTrue(character instanceof Druid);
         assertEquals("TestDruid", character.getName());
         assertEquals('F', character.getSex());
         assertEquals(45, character.getAge());
-        // Note: getStrength() might be different if the potion is active, so we can't directly test the base strength.
+        // Note: getStrength() might be different if the potion is active, so we can't
+        // directly test the base strength.
         // This is a limitation of the current Character design. We test what we can.
         assertEquals(60, character.getEndurance());
         assertEquals(Faction.GAULOIS, character.getFaction());
@@ -38,7 +39,7 @@ public class CharacterBuilderTest {
 
     @Test
     public void testBuildWithDefaults() {
-        Character character = builder.build("forgeron");
+        Character character = builder.build(JobType.BLACKSMITH);
         assertTrue(character instanceof Blacksmith);
         assertEquals("Inconnu", character.getName());
         assertEquals('M', character.getSex());
@@ -48,7 +49,7 @@ public class CharacterBuilderTest {
     @Test
     public void testBuildUnknownRole() {
         assertThrows(IllegalArgumentException.class, () -> {
-            builder.build("unknown");
+            builder.build(JobType.UNKNOWN); // Updated to use JobType.UNKNOWN
         });
     }
 }

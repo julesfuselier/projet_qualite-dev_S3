@@ -4,20 +4,26 @@ import fr.amu.iut.GameConfig;
 import java.util.Random;
 
 /**
- * Factory pour créer des personnages avec des attributs aléatoires basés sur leur faction et rôle.
- * Utilise le pattern Factory pour encapsuler la logique de création des personnages.
+ * Factory pour créer des personnages avec des attributs aléatoires basés sur
+ * leur faction et rôle.
+ * Utilise le pattern Factory pour encapsuler la logique de création des
+ * personnages.
  * Exemple d'utilisation :
- * Character character = new CharacterFactory().createCharacter(Faction.GALISH, "druide", "Panoramix");
+ * Character character = new CharacterFactory().createCharacter(Faction.GALISH,
+ * "druide", "Panoramix");
  */
 public class CharacterFactory {
     private final Random random = new Random();
     private final GameConfig gameConfig = GameConfig.getInstance();
 
     /**
-     * Crée un personnage avec des attributs aléatoires basés sur la faction et le rôle.
+     * Crée un personnage avec des attributs aléatoires basés sur la faction et le
+     * rôle.
+     * 
      * @param faction La faction du personnage.
-     * @param role Le rôle du personnage (e.g., "forgeron", "druide", "légionnaire", "général").
-     * @param name Le nom du personnage.
+     * @param role    Le rôle du personnage (e.g., "forgeron", "druide",
+     *                "légionnaire", "général").
+     * @param name    Le nom du personnage.
      * @return Le personnage créé.
      */
     public Character createCharacter(Faction faction, JobType role, String name) {
@@ -47,6 +53,9 @@ public class CharacterFactory {
                 builder.setStrength(baseStr + 15);
                 builder.setEndurance(baseEnd + 10);
             }
+            case MERCHANT -> builder.setEndurance(baseEnd + 5);
+            case PREFECT -> builder.setStrength(baseStr + 10);
+            case INKEEPER -> builder.setEndurance(baseEnd + 10);
         }
 
         return builder.build(role);

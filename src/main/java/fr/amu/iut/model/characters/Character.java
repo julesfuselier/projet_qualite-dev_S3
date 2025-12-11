@@ -15,7 +15,8 @@ import fr.amu.iut.util.GameEvents;
 
 /**
  * Classe abstraite représentant un personnage dans le jeu.
- * Un personnage possède des attributs tels que le nom, le sexe, la taille, l'âge,
+ * Un personnage possède des attributs tels que le nom, le sexe, la taille,
+ * l'âge,
  * la force, l'endurance, la faction, ainsi que des indicateurs de santé, faim,
  * belligerence et potion magique.
  * Il peut manger des aliments, boire des potions magiques, se faire soigner,
@@ -42,7 +43,7 @@ public abstract class Character implements Cloneable {
     private fr.amu.iut.model.spaces.Space currentSpace;
 
     protected Inventory<Item> inventory;
-    
+
     private boolean isStatue = false; // indicateur statue de granit
     private boolean permanentPotion = false; // Indicateur potion permanente
     private int potDrunkCount = 0; // indicateur nombre de marmites bus
@@ -51,13 +52,14 @@ public abstract class Character implements Cloneable {
 
     /**
      * Constructeur complet de la classe Character.
-     * @param name Le nom du personnage
-     * @param sex Le sexe du personnage
-     * @param size La taille du personnage
-     * @param age L'âge du personnage
-     * @param strength La force du personnage
+     * 
+     * @param name      Le nom du personnage
+     * @param sex       Le sexe du personnage
+     * @param size      La taille du personnage
+     * @param age       L'âge du personnage
+     * @param strength  La force du personnage
      * @param endurance L'endurance du personnage
-     * @param faction La faction du personnage
+     * @param faction   La faction du personnage
      */
     public Character(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
         this.name = name;
@@ -73,9 +75,10 @@ public abstract class Character implements Cloneable {
     /**
      * Constructeur simplifié de la classe Character.
      * Initialise la taille, la force et l'endurance à des valeurs par défaut.
+     * 
      * @param name Le nom du personnage.
-     * @param sex Le sexe du personnage.
-     * @param age L'âge du personnage.
+     * @param sex  Le sexe du personnage.
+     * @param age  L'âge du personnage.
      */
     public Character(String name, char sex, int age) {
         this.name = name;
@@ -134,6 +137,7 @@ public abstract class Character implements Cloneable {
 
     /**
      * Vérifie si le personnage accepte de manger cet aliment selon sa faction.
+     * 
      * @param food L'aliment à vérifier.
      * @return true si le personnage peut manger l'aliment, false sinon.
      */
@@ -155,10 +159,12 @@ public abstract class Character implements Cloneable {
         return false;
     }
 
-    /** Vérifie si le type d'aliment est un légume.
+    /**
+     * Vérifie si le type d'aliment est un légume.
+     * 
      * @param type Le type d'aliment à vérifier.
      * @return true si c'est un légume, false sinon.
-     * */
+     */
     private boolean isVegetable(FoodType type) {
         if (type == null)
             return false;
@@ -172,6 +178,7 @@ public abstract class Character implements Cloneable {
 
     /**
      * Permet au personnage de ramasser un objet et de l'ajouter à son inventaire.
+     * 
      * @param item L'objet à ramasser.
      */
     public void pickUpItem(Item item) {
@@ -180,8 +187,10 @@ public abstract class Character implements Cloneable {
 
     /**
      * Permet de boire une potion magique.
-     * Gère les effets de la potion selon qu'on boive une gorgée ou toute la marmite.
-     * @param potion La potion magique à boire.
+     * Gère les effets de la potion selon qu'on boive une gorgée ou toute la
+     * marmite.
+     * 
+     * @param potion   La potion magique à boire.
      * @param drinkAll Indique si le personnage boit toute la marmite.
      * @return Le personnage après avoir bu la potion (peut être transformé).
      */
@@ -205,7 +214,8 @@ public abstract class Character implements Cloneable {
             this.magicPotion.setMax(100);
             this.magicPotion.add(100);
 
-            while (potion.takeDose()); // Vide la potion
+            while (potion.takeDose())
+                ; // Vide la potion
             inventory.removeItem(potion);
 
         } else {
@@ -230,8 +240,11 @@ public abstract class Character implements Cloneable {
                 case SPLITTING:
                     Character clone = this.clone();
                     clone.setName(this.getName() + " (Copie)");
-                    clone.inventory = new Inventory();
+                    clone.inventory = new Inventory<Item>();
                     return clone;
+                case BASIC:
+                    GameEvents.log(getName() + " boit une potion basique sans effet particulier.");
+                    break;
             }
         }
         return this;
@@ -239,6 +252,7 @@ public abstract class Character implements Cloneable {
 
     /**
      * Vérifie si la potion magique est active.
+     * 
      * @return true si la potion est active, false sinon.
      */
     public boolean isActivePotion() {
@@ -255,7 +269,9 @@ public abstract class Character implements Cloneable {
     }
 
     /**
-     * Obtient la force du personnage, en tenant compte des effets de la potion magique.
+     * Obtient la force du personnage, en tenant compte des effets de la potion
+     * magique.
+     * 
      * @return La force effective du personnage.
      */
     public int getStrength() {
@@ -267,7 +283,8 @@ public abstract class Character implements Cloneable {
 
     /**
      * Met à jour la durée de la potion magique.
-     * Diminue le compteur de la potion si elle n'est pas permanente ou si le personnage n'est pas une statue.
+     * Diminue le compteur de la potion si elle n'est pas permanente ou si le
+     * personnage n'est pas une statue.
      */
     public void updatePotionDuration() {
         if (permanentPotion || isStatue)
@@ -280,7 +297,7 @@ public abstract class Character implements Cloneable {
             }
         }
     }
-  
+
     public void beHealed(int amount) {
         if (isDead()) {
             return;
@@ -291,6 +308,7 @@ public abstract class Character implements Cloneable {
 
     /**
      * Augmente la faim du personnage.
+     * 
      * @param hungerAmount Le montant de faim à ajouter.
      */
     public void getHungry(int hungerAmount) {
@@ -299,6 +317,7 @@ public abstract class Character implements Cloneable {
 
     /**
      * Vérifie si le personnage est mort (points de vie &lt;= 0).
+     * 
      * @return true si le personnage est mort, false sinon.
      */
     public boolean isDead() {
@@ -307,6 +326,7 @@ public abstract class Character implements Cloneable {
 
     /**
      * Transforme le personnage en loup-garou.
+     * 
      * @return Le nouveau personnage loup-garou.
      */
     public Lycanthrope transformToLycanthrope() {
@@ -346,8 +366,7 @@ public abstract class Character implements Cloneable {
                 health.get(),
                 health.getMax(),
                 getStrength(),
-                hunger.get()
-        );
+                hunger.get());
     }
 
     /** Gestion du combat */
@@ -356,74 +375,117 @@ public abstract class Character implements Cloneable {
     }
 
     /**
-     * Effectue une attaque contre un adversaire en utilisant la stratégie de combat définie.
+     * Effectue une attaque contre un adversaire en utilisant la stratégie de combat
+     * définie.
+     * 
      * @param opponent L'adversaire à attaquer.
      */
     public void performAttack(Character opponent) {
-        if (this.isDead() || opponent.isDead()) return;
+        if (this.isDead() || opponent.isDead())
+            return;
         this.combatStrategy.executeAttack(this, opponent);
     }
 
     /* Setters et Getters de l'inventaire */
     public void setInventory(Inventory<Item> inventory) {
         this.inventory = inventory;
-    }    public Inventory<Item> getInventory() {
+    }
+
+    public Inventory<Item> getInventory() {
         return inventory;
     }
 
     public fr.amu.iut.model.spaces.Space getCurrentSpace() {
         return currentSpace;
     }
+
     public void setCurrentSpace(fr.amu.iut.model.spaces.Space currentSpace) {
         this.currentSpace = currentSpace;
     }
 
     // Getters et Setters pour les attributs
-    public String getName() {return name;}
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public char getSex() {
         return sex;
     }
+
     public void setSex(char sex) {
         this.sex = sex;
     }
+
     public int getSize() {
         return size;
     }
+
     public void setSize(int size) {
         this.size = size;
     }
+
     public int getAge() {
         return age;
     }
+
     public void setAge(int age) {
         this.age = age;
     }
+
     public void setStrength(int strength) {
         this.strength = strength;
     }
+
     public int getEndurance() {
         return endurance;
     }
+
     public void setEndurance(int endurance) {
         this.endurance = endurance;
     }
+
     public Faction getFaction() {
         return faction;
     }
+
     public void setFaction(Faction faction) {
         this.faction = faction;
     }
 
     // Getters & Setters des indicateurs
-    public Statistics getHealth() { return health; }
-    public void setHealth(Statistics health) {this.health = health;}
-    public Statistics getHunger() { return hunger; }
-    public void setHunger(Statistics hunger) {this.hunger = hunger;}
-    public Statistics getBelligerence() { return belligerence; }
-    public void setBelligerence(Statistics belligerence) {this.belligerence = belligerence;}
-    public Statistics getMagicPotion() { return magicPotion;}
-    public void setMagicPotion(Statistics magicPotion) {this.magicPotion = magicPotion;}
+    public Statistics getHealth() {
+        return health;
+    }
+
+    public void setHealth(Statistics health) {
+        this.health = health;
+    }
+
+    public Statistics getHunger() {
+        return hunger;
+    }
+
+    public void setHunger(Statistics hunger) {
+        this.hunger = hunger;
+    }
+
+    public Statistics getBelligerence() {
+        return belligerence;
+    }
+
+    public void setBelligerence(Statistics belligerence) {
+        this.belligerence = belligerence;
+    }
+
+    public Statistics getMagicPotion() {
+        return magicPotion;
+    }
+
+    public void setMagicPotion(Statistics magicPotion) {
+        this.magicPotion = magicPotion;
+    }
 }

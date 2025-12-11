@@ -146,7 +146,7 @@ public class SpaceTest {
         // We can only check if the logic tries to create a pack.
         // A full test would require refactoring Pack.createPackWithSolitary to be
         // mockable.
-        forest.NewPack();
+        forest.newPack();
         // Assuming createPackWithSolitary returns a pack, the space's pack should be
         // set.
         // Since we can't mock the static method, we can't assert a change in the

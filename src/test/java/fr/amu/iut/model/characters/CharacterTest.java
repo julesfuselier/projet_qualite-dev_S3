@@ -24,7 +24,6 @@ public class CharacterTest {
             super(name, sex, 1, age, 1, 1, faction);
         }
 
-        @Override
         public void fight(Character opponent) {
             // Simple implementation for testing purposes
             System.out.println(getName() + " fights " + opponent.getName());
@@ -44,14 +43,6 @@ public class CharacterTest {
                         food.getType() == FoodType.MEAD;
             }
             return false;
-        }
-
-        @Override
-        public void eat(Food food) {
-            if (canEat(food)) {
-                getHunger().increase(food.getNutritionValue());
-                getInventory().removeItem(food);
-            }
         }
     }
 

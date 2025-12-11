@@ -20,7 +20,6 @@ public class CharacterSorterTest {
             super(name, 'M', 30, 50, 10, 10, Faction.GAULOIS);
         }
 
-        @Override
         public void fight(Character opponent) {
             // Simple implementation for testing purposes
             System.out.println(getName() + " fights " + opponent.getName());

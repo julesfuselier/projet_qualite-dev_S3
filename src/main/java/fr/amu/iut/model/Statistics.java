@@ -1,8 +1,10 @@
 package fr.amu.iut.model;
 
 /**
- * Classe représentant des statistiques avec une valeur, un minimum et un maximum.
- * La valeur ne peut pas descendre en dessous du minimum et ne peut pas dépasser le maximum.
+ * Classe représentant des statistiques avec une valeur, un minimum et un
+ * maximum.
+ * La valeur ne peut pas descendre en dessous du minimum et ne peut pas dépasser
+ * le maximum.
  */
 public class Statistics {
     private int value;
@@ -66,14 +68,18 @@ public class Statistics {
      *
      * @return La valeur actuelle.
      */
-    public int get() { return value; }
+    public int get() {
+        return value;
+    }
 
     /**
      * Getter pour la valeur maximale des statistiques.
      *
      * @return La valeur maximale.
      */
-    public int getMax() { return max; }
+    public int getMax() {
+        return max;
+    }
 
     public void set(int value) {
         this.value = clamp(value);

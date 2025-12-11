@@ -13,27 +13,30 @@ import fr.amu.iut.util.GameEvents;
 
 /**
  * Classe représentant un druide dans le jeu.
- * Le druide est un personnage qui peut mener, travailler dans la nature et combattre.
+ * Le druide est un personnage qui peut mener, travailler dans la nature et
+ * combattre.
  */
-public class Druid extends Warrior implements Leader, Worker, Fighter {
+public class Druid extends Warrior implements Leader, Worker {
 
     /**
      * Constructeur de la classe Druid.
-     * @param name Le nom du druide
-     * @param sex Le sexe du druide
-     * @param size La taille du druide
-     * @param age L'âge du druide
-     * @param strength La force du druide
+     * 
+     * @param name      Le nom du druide
+     * @param sex       Le sexe du druide
+     * @param size      La taille du druide
+     * @param age       L'âge du druide
+     * @param strength  La force du druide
      * @param endurance L'endurance du druide
-     * @param faction La faction à laquelle appartient le druide
+     * @param faction   La faction à laquelle appartient le druide
      */
     public Druid(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
-        super(name, sex, size, age, strength, endurance, faction );
+        super(name, sex, size, age, strength, endurance, faction);
     }
 
     /**
      * Méthode représentant le fait de mener un autre personnage.
      * Affiche un message indiquant que le druide mène le personnage spécifié.
+     * 
      * @param character Le personnage à mener
      */
     @Override
@@ -52,6 +55,7 @@ public class Druid extends Warrior implements Leader, Worker, Fighter {
 
     /**
      * Recherche un ingrédient spécifique dans l'inventaire du druide.
+     * 
      * @param type Le type d'ingrédient à rechercher
      * @return L'ingrédient trouvé ou null s'il n'est pas présent
      */
@@ -73,8 +77,10 @@ public class Druid extends Warrior implements Leader, Worker, Fighter {
     /**
      * Méthode permettant au druide de concocter une potion magique.
      * Vérifie la présence des ingrédients nécessaires dans l'inventaire.
+     * 
      * @param desiredType Le type de potion magique à concocter
-     * @throws InsufficientIngredientsException Si les ingrédients nécessaires sont absents
+     * @throws InsufficientIngredientsException Si les ingrédients nécessaires sont
+     *                                          absents
      */
     public void craftMagicPotion(PotionType desiredType) throws InsufficientIngredientsException {
         PotionRecipe recipe = PotionRecipe.fromType(desiredType);

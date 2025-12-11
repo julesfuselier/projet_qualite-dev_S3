@@ -42,7 +42,6 @@ public class Prefect extends fr.amu.iut.model.characters.Character implements Le
      *
      * @param opponent L'adversaire à combattre.
      */
-    @Override
     public void fight(Character opponent) {
         System.out.println(getName() + " combat " + opponent.getName());
         // Implement combat logic here

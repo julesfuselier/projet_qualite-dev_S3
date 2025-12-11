@@ -92,6 +92,8 @@ public class CharacterBuilder {
             case INKEEPER -> new Innkeeper(name, sex, size, age, strength, endurance, faction);
             case MERCHANT -> new Merchant(name, sex, size, age, strength, endurance, faction);
             case PREFECT -> new Prefect(name, sex, size, age, strength, endurance, faction);
+            case WARRIOR -> new Legionary(name, sex, size, age, strength, endurance, faction);
+            case UNKNOWN -> throw new IllegalArgumentException("Unknown job type: " + role);
         };
     }
 }

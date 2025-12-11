@@ -290,4 +290,11 @@ public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage
             return false;
         });
     }
+
+    /**
+     * Méthode pour créer un nouveau pack d'objets ou de personnages dans l'espace.
+     */
+    public void newPack() {
+        // Implementation here
+    }
 }

@@ -19,7 +19,6 @@ public class ConsoleView {
     private static final String RED = "\u001B[31m";
     private static final String GREEN = "\u001B[32m";
     private static final String BLUE = "\u001B[34m";
-    private static final String YELLOW = "\u001B[33m";
 
     /**
      * Constructeur de la classe ConsoleView.
@@ -106,7 +105,8 @@ public class ConsoleView {
             try {
                 String input = scanner.nextLine();
                 int value = Integer.parseInt(input);
-                if (value >= min && value <= max) return value;
+                if (value >= min && value <= max)
+                    return value;
                 System.out.print(RED + "Invalide (" + min + "-" + max + ") : " + RESET);
             } catch (NumberFormatException e) {
                 System.out.print(RED + "Entrez un nombre : " + RESET);

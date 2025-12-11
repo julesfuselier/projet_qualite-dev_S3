@@ -5,5 +5,7 @@ package fr.amu.iut.model.characters;
  */
 public enum Faction {
     GALISH,
-    ROMAN
+    ROMAN,
+    GAULOIS,
+    ROMAIN
 }

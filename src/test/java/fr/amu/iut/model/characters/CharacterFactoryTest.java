@@ -19,7 +19,7 @@ public class CharacterFactoryTest {
 
     @Test
     public void testCreateDruid() {
-        Character character = factory.createCharacter(Faction.GAULOIS, "druide", "Panoramix");
+        Character character = factory.createCharacter(Faction.GAULOIS, JobType.DRUID, "Panoramix");
         assertTrue(character instanceof Druid);
         assertEquals("Panoramix", character.getName());
         assertEquals(Faction.GAULOIS, character.getFaction());
@@ -28,7 +28,7 @@ public class CharacterFactoryTest {
 
     @Test
     public void testCreateBlacksmith() {
-        Character character = factory.createCharacter(Faction.GAULOIS, "forgeron", "Cetaumatix");
+        Character character = factory.createCharacter(Faction.GAULOIS, JobType.BLACKSMITH, "Cetaumatix");
         assertTrue(character instanceof Blacksmith);
         assertEquals("Cetaumatix", character.getName());
         assertEquals(Faction.GAULOIS, character.getFaction());
@@ -37,7 +37,7 @@ public class CharacterFactoryTest {
 
     @Test
     public void testCreateLegionary() {
-        Character character = factory.createCharacter(Faction.ROMAIN, "legionnaire", "Minus");
+        Character character = factory.createCharacter(Faction.ROMAIN, JobType.LEGIONARY, "Minus");
         assertTrue(character instanceof Legionary);
         assertEquals("Minus", character.getName());
         assertEquals(Faction.ROMAIN, character.getFaction());
@@ -47,7 +47,7 @@ public class CharacterFactoryTest {
 
     @Test
     public void testCreateGeneral() {
-        Character character = factory.createCharacter(Faction.ROMAIN, "général", "Ceasar");
+        Character character = factory.createCharacter(Faction.ROMAIN, JobType.GENERAL, "Ceasar");
         assertTrue(character instanceof General);
         assertEquals("Ceasar", character.getName());
         assertEquals(Faction.ROMAIN, character.getFaction());
@@ -58,7 +58,7 @@ public class CharacterFactoryTest {
     @Test
     public void testCreateUnknownRole() {
         assertThrows(IllegalArgumentException.class, () -> {
-            factory.createCharacter(Faction.GAULOIS, "unknown", "Nobody");
+            factory.createCharacter(Faction.GAULOIS, JobType.UNKNOWN, "Nobody"); // Updated to use JobType.UNKNOWN
         });
     }
 }

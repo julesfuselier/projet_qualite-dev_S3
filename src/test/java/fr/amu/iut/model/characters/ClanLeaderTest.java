@@ -1,6 +1,7 @@
 package fr.amu.iut.model.characters;
 
 import fr.amu.iut.model.characters.jobs.Druid;
+import fr.amu.iut.model.characters.JobType;
 import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.potion.MagicPotion;
@@ -51,8 +52,8 @@ public class ClanLeaderTest {
 
     @Test
     public void testCreateNewCharacterInVillage() {
-        when(characterFactory.createCharacter(Faction.GAULOIS, "Warrior", "Newbie")).thenReturn(character);
-        leader.createNewCharacterInVillage(Faction.GAULOIS, "Warrior", "Newbie");
+        when(characterFactory.createCharacter(Faction.GAULOIS, JobType.WARRIOR, "Newbie")).thenReturn(character);
+        leader.createNewCharacterInVillage(Faction.GAULOIS, JobType.WARRIOR, "Newbie");
         verify(location).addCharacter(character);
     }
 

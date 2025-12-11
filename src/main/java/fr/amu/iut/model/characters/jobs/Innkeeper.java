@@ -2,7 +2,6 @@ package fr.amu.iut.model.characters.jobs;
 
 import fr.amu.iut.model.characters.Character;
 import fr.amu.iut.model.characters.Faction;
-import fr.amu.iut.model.characters.Worker;
 import fr.amu.iut.util.GameEvents;
 
 /**
@@ -42,7 +41,6 @@ public class Innkeeper extends Craftsman {
      *
      * @param opponent L'adversaire à combattre.
      */
-    @Override
     public void fight(Character opponent) {
         System.out.println(getName() + " combat " + opponent.getName());
         // Implement combat logic here
