@@ -2,6 +2,7 @@ package fr.amu.iut.model.characters.jobs;
 
 import fr.amu.iut.model.characters.*;
 import fr.amu.iut.model.characters.Character;
+import fr.amu.iut.model.exceptions.InsufficientIngredientsException;
 import fr.amu.iut.model.items.Item;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.items.foods.FoodType;
@@ -11,28 +12,51 @@ import fr.amu.iut.model.items.potion.PotionType;
 
 import java.util.List;
 
+/**
+ * Classe représentant un druide dans le jeu.
+ * Le druide est un personnage qui peut mener, travailler dans la nature et combattre.
+ */
 public class Druid extends Warrior implements Leader, Worker, Fighter {
 
+    /**
+     * Constructeur de la classe Druid.
+     * @param name Le nom du druide
+     * @param sex Le sexe du druide
+     * @param size La taille du druide
+     * @param age L'âge du druide
+     * @param strength La force du druide
+     * @param endurance L'endurance du druide
+     * @param faction La faction à laquelle appartient le druide
+     */
     public Druid(String name, char sex, int size, int age, int strength, int endurance, Faction faction) {
         super(name, sex, size, age, strength, endurance, faction );
     }
 
+    /**
+     * Méthode représentant le fait de mener un autre personnage.
+     * Affiche un message indiquant que le druide mène le personnage spécifié.
+     * @param character Le personnage à mener
+     */
     @Override
     public void lead(Character character) {
         System.out.println(this.getName() + " is leading " + character.getName());
     }
 
+    /**
+     * Méthode représentant le travail du druide.
+     * Affiche un message indiquant que le druide travaille dans la nature.
+     */
     @Override
     public void work() {
-
+        System.out.println(this.getName() + " est en train de travailler dans la nature...");
     }
 
     /**
-     * Méthode utilitaire pour trouver un ingrédient spécifique dans l'inventaire.
-     * @param items La liste des objets de l'inventaire.
-     * @param type Le type de nourriture recherché.
-     * @param requiredStatus Le statut requis (ex: FRESH). Si null, on ignore la fraîcheur.
-     * @return L'objet trouvé, ou null s'il n'existe pas.
+     * Méthode utilitaire pour trouver un ingrédient spécifique dans une liste d'items.
+     * @param items La liste des items à rechercher
+     * @param type Le type de nourriture recherché
+     * @param requiredStatus Le statut de fraîcheur requis (peut être null)
+     * @return L'item trouvé ou null s'il n'existe pas
      */
     private Item findIngredient(List<Item> items, FoodType type, FreshnessStatus requiredStatus) {
         for (Item item : items) {
@@ -47,7 +71,14 @@ public class Druid extends Warrior implements Leader, Worker, Fighter {
         return null;
     }
 
-    public void craftMagicPotion(PotionType desiredType) {
+    /**
+     * Méthode pour concocter une potion magique.
+     * Vérifie la présence des ingrédients nécessaires dans l'inventaire du druide.
+     * Si tous les ingrédients sont présents, ils sont retirés de l'inventaire et une nouvelle potion est ajoutée.
+     * @param desiredType Le type de potion magique à concocter
+     * @throws InsufficientIngredientsException Si les ingrédients requis ne sont pas disponibles
+     */
+    public void craftMagicPotion(PotionType desiredType) throws InsufficientIngredientsException {
         List<Item> inventoryItems = this.getInventory().getItems();
 
         Item mistletoe = findIngredient(inventoryItems, FoodType.MISTLETOE, null);
@@ -81,29 +112,35 @@ public class Druid extends Warrior implements Leader, Worker, Fighter {
             hasSpecialIngredient = (specialIngredient != null);
         }
 
-        if (hasBaseIngredients && hasSpecialIngredient) {
-            this.getInventory().removeItem(mistletoe);
-            this.getInventory().removeItem(carrot);
-            this.getInventory().removeItem(salt);
-            this.getInventory().removeItem(freshClover);
-            this.getInventory().removeItem(freshFish);
-            this.getInventory().removeItem(honey);
-            this.getInventory().removeItem(mead);
-            this.getInventory().removeItem(secretIngredient);
-            this.getInventory().removeItem(oilOrBeet);
-
-            if (specialIngredient != null) {
-                this.getInventory().removeItem(specialIngredient);
-            }
-
-            MagicPotion newPotion = new MagicPotion(desiredType);
-            this.getInventory().addItem(newPotion);
-
-            System.out.println(this.getName() + " a réussi à concocter une " + newPotion.getName() + " !");
-        } else {
-            System.out.println("Échec : " + this.getName() + " n'a pas les ingrédients requis pour une potion de type " + desiredType + ".");
-            if (!hasBaseIngredients) System.out.println("(Ingrédients de base manquants)");
-            if (!hasSpecialIngredient) System.out.println("(Ingrédient spécial manquant)");
+        if (!hasBaseIngredients) {
+            throw new InsufficientIngredientsException(
+                    "Échec : " + this.getName() + " n'a pas les ingrédients de base requis (Gui, Poisson frais, etc.) pour une potion " + desiredType + "."
+            );
         }
+
+        if (!hasSpecialIngredient) {
+            throw new InsufficientIngredientsException(
+                    "Échec : " + this.getName() + " n'a pas l'ingrédient spécial requis pour la potion " + desiredType + "."
+            );
+        }
+
+        this.getInventory().removeItem(mistletoe);
+        this.getInventory().removeItem(carrot);
+        this.getInventory().removeItem(salt);
+        this.getInventory().removeItem(freshClover);
+        this.getInventory().removeItem(freshFish);
+        this.getInventory().removeItem(honey);
+        this.getInventory().removeItem(mead);
+        this.getInventory().removeItem(secretIngredient);
+        this.getInventory().removeItem(oilOrBeet);
+
+        if (specialIngredient != null) {
+            this.getInventory().removeItem(specialIngredient);
+        }
+
+        MagicPotion newPotion = new MagicPotion(desiredType);
+        this.getInventory().addItem(newPotion);
+
+        System.out.println(this.getName() + " a réussi à concocter une " + newPotion.getName() + " !");
     }
 }

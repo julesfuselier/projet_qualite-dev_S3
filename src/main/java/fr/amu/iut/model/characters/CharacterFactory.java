@@ -1,55 +1,54 @@
 package fr.amu.iut.model.characters;
 
-import fr.amu.iut.model.characters.jobs.*;
-
-
+import fr.amu.iut.GameConfig;
 import java.util.Random;
 
+/**
+ * Factory pour créer des personnages avec des attributs aléatoires basés sur leur faction et rôle.
+ * Utilise le pattern Factory pour encapsuler la logique de création des personnages.
+ * Exemple d'utilisation :
+ * Character character = new CharacterFactory().createCharacter(Faction.GAULOIS, "druide", "Panoramix");
+ */
 public class CharacterFactory {
-    private Random random = new Random();
+    private final Random random = new Random();
 
     /**
-     * Crée dynamiquement un personnage avec des stats aléatoires adaptées.
-     * @param faction La faction (GAULOIS ou ROMAIN)
-     * @param role Le métier ("Forgeron", "Druide", etc.)
-     * @param name Le nom du personnage
+     * Crée un personnage avec des attributs aléatoires basés sur la faction et le rôle.
+     * @param faction La faction du personnage.
+     * @param role Le rôle du personnage (e.g., "forgeron", "druide", "légionnaire", "général").
+     * @param name Le nom du personnage.
+     * @return Le personnage créé.
      */
     public Character createCharacter(Faction faction, String role, String name) {
-        int size = 160 + random.nextInt(40);
+        int size = GameConfig.BASE_SIZE + random.nextInt(GameConfig.SIZE_VARIATION);
         int age = 18 + random.nextInt(60);
-        int strength = 50 + random.nextInt(50);
-        int endurance = 50 + random.nextInt(50);
+        int baseStr = 50 + random.nextInt(50);
+        int baseEnd = 50 + random.nextInt(50);
         char sex = random.nextBoolean() ? 'M' : 'F';
 
-        // Switch sur le RÔLE / METIER
+        CharacterBuilder builder = new CharacterBuilder()
+                .setName(name)
+                .setFaction(faction)
+                .setSex(sex)
+                .setSize(size)
+                .setAge(age)
+                .setStrength(baseStr)
+                .setEndurance(baseEnd);
+
         switch (role.toLowerCase()) {
-            case "forgeron":
-                strength += 20;
-                return new Blacksmith(name, sex, size, age, strength, endurance, faction);
-            case "druide":
-                endurance += 20;
-                return new Druid(name, sex, size, age, strength, endurance, faction);
-            case "legionnaire":
-                strength += 10;
-                endurance += 15;
-                return new Legionary(name, sex, size, age, strength, endurance, faction);
-            case "général":
-                strength += 15;
-                endurance += 10;
-                return new General(name, sex, size, age, strength, endurance, faction);
-            case "aubergiste":
-                endurance += 25;
-                return new Innkeeper(name, sex, size, age, strength, endurance, faction);
-            case "marchand":
-                strength += 5;
-                endurance += 5;
-                return new Merchant(name, sex, size, age, strength, endurance, faction);
-            case "préfet":
-                strength += 10;
-                endurance += 10;
-                return new Prefect(name, sex, size, age, strength, endurance, faction);
-            default:
-                throw new IllegalArgumentException("Métier inconnu : " + role);
+            case "forgeron" -> builder.setStrength(baseStr + 20);
+            case "druide" -> builder.setEndurance(baseEnd + 20);
+            case "legionnaire" -> {
+                builder.setStrength(baseStr + 10);
+                builder.setEndurance(baseEnd + 15);
+            }
+            case "général" -> {
+                builder.setStrength(baseStr + 15);
+                builder.setEndurance(baseEnd + 10);
+            }
+            // TODO : Voir si on ajoute d'autre bonus
         }
+
+        return builder.build(role);
     }
 }

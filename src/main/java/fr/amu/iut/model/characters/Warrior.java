@@ -1,7 +1,9 @@
 package fr.amu.iut.model.characters;
 
-
-
+/**
+ * Classe abstraite représentant un guerrier dans le jeu.
+ * Un guerrier est un personnage capable de combattre.
+ */
 public abstract class Warrior extends Character implements Fighter {
 
     /**
@@ -20,22 +22,12 @@ public abstract class Warrior extends Character implements Fighter {
     }
 
     /**
-     * Méthode pour combattre un adversaire.
-     *
+     * Méthode permettant à un guerrier de combattre un adversaire.
      * @param opponent L'adversaire à combattre.
      */
     @Override
     public void fight(Character opponent) {
-        if (opponent.isActivePotion()) {
-            System.out.println(opponent.getName() + " est invincible grâce à la potion !");
-            return;
-        }
-        int rawDamage = this.getStrength() - opponent.getEndurance();
-        int realDamage = Math.max(1, rawDamage);
-
-        opponent.getHealth().add(-realDamage);
-        System.out.println(" [ ATTAQUE ] " + this.getName() + " attaque " + opponent.getName() +
-                " (Force " + getStrength() + " vs Endu " + opponent.getEndurance() + ") -> -" + realDamage + " PV");
+        this.performAttack(opponent);
     }
 
 

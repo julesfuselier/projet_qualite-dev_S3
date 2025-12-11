@@ -4,19 +4,33 @@ import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.jobs.Lycanthrope;
 import fr.amu.iut.model.items.foods.Food;
 import fr.amu.iut.model.characters.Character;
+import fr.amu.iut.model.characters.Faction;
 import fr.amu.iut.model.characters.Fighter;
 import fr.amu.iut.model.lycanthropes.Pack;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import static java.util.Collections.shuffle;
+import java.util.Set;
 
-public abstract class Space {
+import static java.util.Collections.shuffle;
+/**
+ * Classe abstraite représentant un espace dans le jeu.
+ * Les espaces peuvent être des champs de bataille, des enclos, des villages gaulois,
+ * des villages gallo-romains, des villes romaines ou des camps fortifiés romains.
+ * Chaque espace a un nom, une surface, un leader (optionnel), une liste de personnages présents
+ * et une liste de nourritures disponibles.
+ * Les espaces peuvent autoriser ou non l'entrée de certains personnages en fonction de leur faction.
+ * Ils peuvent également gérer les combats entre personnages présents dans un champ de bataille.
+ */
+public abstract sealed class Space permits Battlefield, Enclosure, GallicVillage, GalloRomanVillage, RomanCity, RomanFortifiedCamp {
     private final String name;
     private double surface;
     private Character leader;
-    private final List<Character> characters;
+
+    private final Set<Character> characters;
+
     private final List<Food> foods;
     private Random random;
     private Pack pack;
@@ -30,64 +44,137 @@ public abstract class Space {
         this.pack = pack;
     }
 
+    /**
+     * Constructeur de la classe Space.
+     *
+     * @param name    Le nom de l'espace.
+     * @param surface La surface de l'espace.
+     * @param leader  Le personnage leader de l'espace (optionnel).
+     */
     public Space(String name, double surface, Character leader) {
         this.name = name;
         this.surface = surface;
         this.leader = leader;
-        characters = new ArrayList<>();
-        foods = new ArrayList<>();
-    }
-
-    public Space(String name, double surface) {
-        this.name = name;
-        this.surface = surface;
-        characters = new ArrayList<>();
-        foods = new ArrayList<>();
-    }
-
-    public Space(String name) {
-        this.name = name;
-        this.characters = new ArrayList<>();
+        this.characters = new HashSet<>();
         this.foods = new ArrayList<>();
     }
 
+    /**
+     * Constructeur de la classe Space sans leader.
+     *
+     * @param name    Le nom de l'espace.
+     * @param surface La surface de l'espace.
+     */
+    public Space(String name, double surface) {
+        this.name = name;
+        this.surface = surface;
+        this.characters = new HashSet<>();
+        this.foods = new ArrayList<>();
+    }
+
+    /**
+     * Constructeur de la classe Space avec seulement le nom.
+     *
+     * @param name Le nom de l'espace.
+     */
+    public Space(String name) {
+        this.name = name;
+        this.characters = new HashSet<>();
+        this.foods = new ArrayList<>();
+    }
+
+    /**
+     * Méthode abstraite pour vérifier si un personnage est autorisé à entrer dans l'espace.
+     *
+     * @param c Le personnage à vérifier.
+     * @return Vrai si le personnage est autorisé, sinon faux.
+     */
     public abstract boolean authorized(Character c);
 
-    // Get village name
+    /**
+     * Getter pour le nom de l'espace.
+     * @return Le nom de l'espace.
+     */
     public String getName() {
         return name;
     }
 
-    // Get characters name
-    public List<Character> getCharacters() {
+    /**
+     * Getter pour la surface de l'espace.
+     * @return La surface de l'espace.
+     */
+    public double getSurface() {
+        return surface;
+    }
+
+    /**
+     * Setter pour la surface de l'espace.
+     * @param surface La nouvelle surface de l'espace.
+     */
+    public void setSurface(double surface) {
+        this.surface = surface;
+    }
+
+    /**
+     * Getter pour le leader de l'espace.
+     * @return Le leader de l'espace.
+     */
+    public Character getLeader() {
+        return leader;
+    }
+    /**
+     * Setter pour le leader de l'espace.
+     * @param leader Le nouveau leader de l'espace.
+     */
+    public void setLeader(Character leader) {
+        this.leader = leader;
+    }
+
+    /**
+     * Getter pour les personnages présents dans l'espace.
+     * @return L'ensemble des personnages présents dans l'espace.
+     */
+    public Set<Character> getCharacters() {
         return characters;
     }
 
-    // Get foods
+    /**
+     * Getter pour les nourritures disponibles dans l'espace.
+     * @return La liste des nourritures disponibles dans l'espace.
+     */
     public List<Food> getFoods() {
         return foods;
     }
 
-    // Add new food
+    /**
+     * Ajoute une nourriture à l'espace.
+     * @param food La nourriture à ajouter.
+     */
     public void addFood(Food food) {
         this.foods.add(food);
     }
 
-    // Remove food
+    /**
+     * Retire une nourriture de l'espace.
+     * @param food La nourriture à retirer.
+     */
     public void removeFood(Food food) {
         this.foods.remove(food);
     }
 
-    // True if location istanceof battlefield
+    /**
+     * Vérifie si l'espace est un champ de bataille.
+     * @return Vrai si l'espace est un champ de bataille, sinon faux.
+     */
     public boolean isBattlefield() {
-        if (!(this instanceof Battlefield)) {
-            return false;
-        } else {
-            return true;
-        }
+        return this instanceof Battlefield;
     }
 
-    // Add character to the space
+    /**
+     * Ajoute un personnage à l'espace s'il est autorisé.
+     * @param c Le personnage à ajouter.
+     * @return Vrai si le personnage a été ajouté, sinon faux.
+     */
     public boolean addCharacter(Character c) {
         if (!authorized(c)){
             return false;
@@ -110,14 +197,20 @@ public abstract class Space {
         return true;
     }
 
-    // Remove character from the space
+    /**
+     * Retire un personnage de l'espace.
+     * @param c Le personnage à retirer.
+     */
     public void removeCharacter(Character c) {
         if(characters.remove(c)) {
             c.setCurrentSpace(null);
         }
     }
 
-    // Show characteristics of the space
+    /**
+     * Affiche les caractéristiques de l'espace, y compris le nom, la surface,
+     * le leader (si applicable), les personnages présents et les nourritures disponibles.
+     */
     public void showCharacteristics(){
         System.out.println("Nom: " + name);
         System.out.println("Surface : " + surface);
@@ -126,7 +219,7 @@ public abstract class Space {
         }
         System.out.println("Personnages: " + characters.size());
         for(Character c : characters){
-            System.out.println("Personnages: " + c.getName());
+            System.out.println(" - " + c.getName());
         }
 
         for(Food f : foods){
@@ -134,7 +227,11 @@ public abstract class Space {
         }
     }
 
-    // Heal character
+    /**
+     * Soigne un personnage dans l'espace.
+     * @param c Le personnage à soigner.
+     * @param amount La quantité de soins à appliquer.
+     */
     public void healCharacter(Character c, int amount){
         if(!(characters.contains(c))){
             return;
@@ -142,7 +239,11 @@ public abstract class Space {
         c.beHealed(amount);
     }
 
-    // Faire manger un personnage
+    /**
+     * Permet à un personnage de manger une nourriture dans l'espace.
+     * @param c Le personnage qui mange.
+     * @param f La nourriture à manger.
+     */
     public void eatFood(Character c, Food f){
         if(!(foods.contains(f))){
             return;
@@ -153,10 +254,11 @@ public abstract class Space {
         foods.remove(f);
     }
 
-    /*
-     * Résout les combats entre les personnages de factions opposées présents dans cet espace.
-     * Les combats sont organisés en duels aléatoires entre membres des deux factions.
-     * Les personnages morts sont retirés de l'espace après les combats.
+    /**
+     * Résout les combats entre personnages dans un champ de bataille.
+     * Les personnages de la faction Gaulois combattent contre ceux de la faction Romain.
+     * Les combats sont effectués par paires jusqu'à ce qu'il n'y ait plus de combattants disponibles.
+     * Les personnages morts sont retirés du champ de bataille.
      */
     public void resolveCombat() {
         if (!isBattlefield() || getCharacters().size() < 2) {
@@ -182,11 +284,9 @@ public abstract class Space {
 
         System.out.println( "--- BASTON GÉNÉRALE à " + getName() + " ---");
 
-        // Duel aléatoire
         shuffle(teamGaulois);
         shuffle(teamRomain);
 
-        // Former des duos et les faire se battre
         int fightsCount = Math.min(teamGaulois.size(), teamRomain.size());
 
         for (int i = 0; i < fightsCount; i++) {
@@ -207,7 +307,7 @@ public abstract class Space {
     }
 
     /**
-     * Méthode helper pour retirer les personnages dont la santé est inférieure ou égale à 0.
+     * Retire les personnages morts du champ de bataille et affiche un message pour chaque personnage tombé au combat.
      */
     private void removeDeadCharacters() {
         getCharacters().removeIf(c -> {

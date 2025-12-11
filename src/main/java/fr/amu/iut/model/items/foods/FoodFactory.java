@@ -1,7 +1,20 @@
 package fr.amu.iut.model.items.foods;
 
+/**
+ * Classe factory pour créer des instances de Food en fonction du type de nourriture.
+ * @see Food
+ * @see FoodType
+ * @see FreshnessStatus
+ */
 public class FoodFactory {
 
+    /**
+     * Crée une instance de Food en fonction du type de nourriture spécifié.
+     *
+     * @param type Le type de nourriture à créer.
+     * @return Une instance de Food correspondant au type spécifié.
+     * @throws IllegalArgumentException Si le type de nourriture est inconnu.
+     */
     public Food createFood(FoodType type) {
         switch (type) {
             case FISH:
