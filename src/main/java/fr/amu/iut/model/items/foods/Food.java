@@ -8,52 +8,76 @@ import fr.amu.iut.model.items.Item;
 public class Food extends Item {
 
     private int nutritionValue;
-    private boolean isPerishable;
     private FreshnessStatus status;
     private FoodType type;
 
     /**
      * Constructeur de la classe Food.
      *
-     * @param name            Le nom de l'aliment.
-     * @param nutritionValue  La valeur nutritionnelle de l'aliment.
-     * @param isPerishable    Indique si l'aliment est périssable.
-     * @param status          Le statut de fraîcheur de l'aliment.
-     * @param type            Le type d'aliment.
+     * @param name           Le nom de l'aliment.
+     * @param nutritionValue La valeur nutritionnelle de l'aliment.
+     * @param status         Le statut de fraîcheur de l'aliment.
+     * @param type           Le type d'aliment.
      */
-    public Food(String name, int nutritionValue, boolean isPerishable, FreshnessStatus status, FoodType type) {
+    public Food(String name, int nutritionValue, FreshnessStatus status, FoodType type) {
         super(name);
         this.nutritionValue = nutritionValue;
-        this.isPerishable = isPerishable;
         this.status = status;
         this.type = type;
     }
 
-    /** Obtient la valeur nutritionnelle de l'aliment.
+    /**
+     * Constructeur surchargé de la classe Food.
+     *
+     * @param name           Le nom de l'aliment.
+     * @param nutritionValue La valeur nutritionnelle de l'aliment.
+     * @param isPerishable   Indique si l'aliment est périssable.
+     * @param status         Le statut de fraîcheur de l'aliment.
+     * @param type           Le type d'aliment.
+     */
+    public Food(String name, int nutritionValue, boolean isPerishable, FreshnessStatus status, FoodType type) {
+        this(name, nutritionValue, status, type);
+        // Le paramètre isPerishable est ignoré car non utilisé dans la classe.
+    }
+
+    /**
+     * Obtient la valeur nutritionnelle de l'aliment.
      *
      * @return La valeur nutritionnelle de l'aliment.
      */
-    public int getNutritionValue() { return nutritionValue; }
+    public int getNutritionValue() {
+        return nutritionValue;
+    }
 
-    /** Indique si l'aliment est périssable.
+    /**
+     * Indique si l'aliment est périssable.
      *
      * @return true si l'aliment est périssable, false sinon.
      */
-    public FreshnessStatus getStatus() { return status; }
+    public FreshnessStatus getStatus() {
+        return status;
+    }
 
-    /** Obtient le type d'aliment.
+    /**
+     * Obtient le type d'aliment.
      *
      * @return Le type d'aliment.
      */
-    public FoodType getType() { return type; }
+    public FoodType getType() {
+        return type;
+    }
 
-    /** Indique si l'aliment est frais.
+    /**
+     * Indique si l'aliment est frais.
      *
      * @return true si l'aliment est frais, false sinon.
      */
-    public boolean isFresh() { return status == FreshnessStatus.FRESH; }
+    public boolean isFresh() {
+        return status == FreshnessStatus.FRESH;
+    }
 
-    /** Définit le statut de fraîcheur de l'aliment.
+    /**
+     * Définit le statut de fraîcheur de l'aliment.
      *
      * @param status Le nouveau statut de fraîcheur.
      */

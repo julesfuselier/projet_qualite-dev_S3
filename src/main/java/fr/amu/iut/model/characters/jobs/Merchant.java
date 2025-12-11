@@ -7,10 +7,10 @@ import fr.amu.iut.util.GameEvents;
 
 /**
  * Classe représentant un marchand dans le jeu.
- * Le marchand est un personnage qui peut travailler en vendant des marchandises aux voyageurs.
+ * Le marchand est un personnage qui peut travailler en vendant des marchandises
+ * aux voyageurs.
  */
 public class Merchant extends Craftsman {
-
 
     /**
      * Constructeur de la classe Merchant.
@@ -29,10 +29,22 @@ public class Merchant extends Craftsman {
 
     /**
      * Méthode représentant le travail du marchand.
-     * Affiche un message indiquant que le marchand vend des marchandises aux voyageurs.
+     * Affiche un message indiquant que le marchand vend des marchandises aux
+     * voyageurs.
      */
     @Override
     public void work() {
         GameEvents.log(this.getName() + " vend des marchandises aux voyageurs.");
+    }
+
+    /**
+     * Permet au marchand de combattre un adversaire.
+     *
+     * @param opponent L'adversaire à combattre.
+     */
+    @Override
+    public void fight(Character opponent) {
+        System.out.println(getName() + " combat " + opponent.getName());
+        // Implement combat logic here
     }
 }

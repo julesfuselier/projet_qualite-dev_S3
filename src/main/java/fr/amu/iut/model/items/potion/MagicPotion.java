@@ -20,6 +20,12 @@ public class MagicPotion extends Item {
         this.type = type;
     }
 
+    public MagicPotion(PotionType type, int doses) {
+        super("Potion Magique (" + type + ")");
+        this.doses = doses;
+        this.type = type;
+    }
+
     /**
      * Permet de prendre une dose de la potion magique.
      *

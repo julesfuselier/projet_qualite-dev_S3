@@ -89,3 +89,10 @@ En plus des Gaulois et des Romains, une faction mystérieuse et puissante peuple
 -   **Hiérarchie (Rangs)** : La meute est organisée selon une hiérarchie stricte basée sur un facteur de domination. Les rangs vont de **Omega** (le plus bas) à **Alpha** (le plus haut).
 -   **Reproduction** : Le couple Alpha peut se reproduire pour donner naissance à de jeunes lycanthropes, assurant la croissance de la meute.
 -   **Transformation** : Les lycanthropes ont la capacité de se transformer en humains. Selon leur niveau, cette transformation peut être risquée et les amener à quitter définitivement leur meute.
+
+## Génération des tests unitaires
+
+Pour les exécuter, utilisez la commande suivante à la racine du projet :
+```bash
+mvn test
+```

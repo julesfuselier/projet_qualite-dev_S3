@@ -17,6 +17,16 @@ public abstract class Item {
     }
 
     /**
+     * Constructeur de la classe Item avec un nom et une description.
+     *
+     * @param name        Le nom de l'objet.
+     * @param description La description de l'objet.
+     */
+    public Item(String name, String description) {
+        this.name = name;
+    }
+
+    /**
      * Obtient le nom de l'objet.
      *
      * @return Le nom de l'objet.

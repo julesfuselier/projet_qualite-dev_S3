@@ -36,4 +36,15 @@ public class Prefect extends fr.amu.iut.model.characters.Character implements Le
     public void lead(Character character) {
         GameEvents.log(this.getName() + " dirige " + character.getName());
     }
+
+    /**
+     * Permet au préfet de combattre un adversaire.
+     *
+     * @param opponent L'adversaire à combattre.
+     */
+    @Override
+    public void fight(Character opponent) {
+        System.out.println(getName() + " combat " + opponent.getName());
+        // Implement combat logic here
+    }
 }

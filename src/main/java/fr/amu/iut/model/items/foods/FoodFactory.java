@@ -1,7 +1,9 @@
 package fr.amu.iut.model.items.foods;
 
 /**
- * Classe factory pour créer des instances de Food en fonction du type de nourriture.
+ * Classe factory pour créer des instances de Food en fonction du type de
+ * nourriture.
+ * 
  * @see Food
  * @see FoodType
  * @see FreshnessStatus
@@ -49,6 +51,14 @@ public class FoodFactory {
                 return new Food("Idefix Hair", 5, false, FreshnessStatus.FRESH, type);
             case SECRET_INGREDIENT:
                 return new Food("Secret Ingredient", 150, true, FreshnessStatus.FRESH, type);
+            case FRUIT:
+                return new Food("Fruit", 20, true, FreshnessStatus.FRESH, type);
+            case MEAT:
+                return new Food("Meat", 60, true, FreshnessStatus.FRESH, type);
+            case CEREAL:
+                return new Food("Cereal", 15, true, FreshnessStatus.FRESH, type);
+            case DAIRY:
+                return new Food("Dairy", 25, true, FreshnessStatus.FRESH, type);
             default:
                 throw new IllegalArgumentException("Unknown food type: " + type);
         }

@@ -75,6 +75,10 @@ public class Statistics {
      */
     public int getMax() { return max; }
 
+    public void set(int value) {
+        this.value = clamp(value);
+    }
+
     /**
      * Diminue la valeur des statistiques d'une quantité spécifiée.
      *
@@ -82,5 +86,14 @@ public class Statistics {
      */
     public void decreaseStats(int amount) {
         value -= amount;
+    }
+
+    /**
+     * Increases the value of the statistics by a specified amount.
+     *
+     * @param amount The amount to increase the value by.
+     */
+    public void increase(int amount) {
+        add(amount);
     }
 }

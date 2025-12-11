@@ -1,7 +1,8 @@
 package fr.amu.iut.model.items.foods;
 
 /**
- * Enumération représentant les différents types de nourriture disponibles dans le jeu.
+ * Enumération représentant les différents types de nourriture disponibles dans
+ * le jeu.
  */
 public enum FoodType {
     FISH,
@@ -19,5 +20,9 @@ public enum FoodType {
     MEAD, // hydromel
     TWO_HEADED_UNICORNN_MILK, // lait de licorne
     IDEFIX_HAIR, // poil d'Idéfix
-    SECRET_INGREDIENT // ingrédient secret
+    SECRET_INGREDIENT, // ingrédient secret
+    FRUIT,
+    MEAT,
+    CEREAL,
+    DAIRY
 }

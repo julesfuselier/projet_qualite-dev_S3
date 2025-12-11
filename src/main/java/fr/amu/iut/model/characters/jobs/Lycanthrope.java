@@ -66,7 +66,7 @@ public class Lycanthrope extends Character implements Fighter {
         if (damage > 0) {
             opponent.getHealth().add(-damage);
             if (opponent instanceof Lycanthrope && opponent.getHealth().get() < 1) {
-                opponent.getHealth().add(1);
+                opponent.getHealth().set(1);
             }
             GameEvents.log(getName() + " attaque sauvagement " + opponent.getName() + " (-" + damage + " HP)");
         } else {

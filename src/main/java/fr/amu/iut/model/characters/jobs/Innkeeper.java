@@ -7,7 +7,8 @@ import fr.amu.iut.util.GameEvents;
 
 /**
  * Classe représentant un aubergiste dans le jeu.
- * L'aubergiste est un personnage qui peut travailler en servant des boissons aux clients de l'auberge.
+ * L'aubergiste est un personnage qui peut travailler en servant des boissons
+ * aux clients de l'auberge.
  */
 public class Innkeeper extends Craftsman {
 
@@ -28,10 +29,22 @@ public class Innkeeper extends Craftsman {
 
     /**
      * Méthode représentant le travail de l'aubergiste.
-     * Affiche un message indiquant que l'aubergiste sert des boissons aux clients de l'auberge.
+     * Affiche un message indiquant que l'aubergiste sert des boissons aux clients
+     * de l'auberge.
      */
     @Override
     public void work() {
         GameEvents.log(this.getName() + " sert des boissons aux clients de l'auberge.");
+    }
+
+    /**
+     * Permet à l'aubergiste de combattre un adversaire.
+     *
+     * @param opponent L'adversaire à combattre.
+     */
+    @Override
+    public void fight(Character opponent) {
+        System.out.println(getName() + " combat " + opponent.getName());
+        // Implement combat logic here
     }
 }
